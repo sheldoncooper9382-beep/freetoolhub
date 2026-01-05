@@ -1,75 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Button Generator</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-
 <div class="container">
   <h1>Button Generator</h1>
 
-  <div class="preview">
-    <button id="previewButton">Click Me!</button>
+  <div class="generator-wrapper">
+    <!-- Left: Preview -->
+    <div class="preview">
+      <button id="previewButton">Click Me!</button>
+    </div>
+
+    <!-- Right: Controls -->
+    <div class="controls">
+      <label>Button Text</label>
+      <input type="text" id="btnText" value="Click Me!" oninput="updateButton()">
+
+      <label>Width (px)</label>
+      <input type="range" id="btnWidth" min="50" max="400" value="150" oninput="updateButton()">
+      <input type="number" id="btnWidthNum" min="50" max="400" value="150" oninput="updateButton()">
+
+      <label>Height (px)</label>
+      <input type="range" id="btnHeight" min="30" max="120" value="50" oninput="updateButton()">
+      <input type="number" id="btnHeightNum" min="30" max="120" value="50" oninput="updateButton()">
+
+      <label>Font Size (px)</label>
+      <input type="range" id="btnFont" min="12" max="48" value="16" oninput="updateButton()">
+      <input type="number" id="btnFontNum" min="12" max="48" value="16" oninput="updateButton()">
+
+      <label>Border Radius</label>
+      <input type="range" id="btnRadius" min="0" max="100" value="12" oninput="updateButton()">
+      <input type="number" id="btnRadiusNum" min="0" max="100" value="12" oninput="updateButton()">
+
+      <label>Gradient Start Color</label>
+      <input type="color" id="gradStart" value="#ff6ec4" oninput="updateButton()">
+
+      <label>Gradient End Color</label>
+      <input type="color" id="gradEnd" value="#7873f5" oninput="updateButton()">
+
+      <label>Shadow X Offset</label>
+      <input type="range" id="shadowX" min="-50" max="50" value="5" oninput="updateButton()">
+
+      <label>Shadow Y Offset</label>
+      <input type="range" id="shadowY" min="-50" max="50" value="5" oninput="updateButton()">
+
+      <label>Shadow Blur</label>
+      <input type="range" id="shadowBlur" min="0" max="50" value="15" oninput="updateButton()">
+
+      <label>
+        <input type="checkbox" id="frosted" onchange="updateButton()"> Frosted Glass
+      </label>
+
+      <label>
+        <input type="checkbox" id="neon" onchange="updateButton()"> Neon Effect
+      </label>
+
+      <label>
+        <input type="checkbox" id="depth3d" onchange="updateButton()"> 3D Depth
+      </label>
+
+      <button onclick="copyCSS()">Copy CSS</button>
+      <button onclick="downloadCSS()">Download CSS</button>
+      <button onclick="resetButton()">Reset</button>
+
+      <textarea id="cssOutput" readonly></textarea>
+    </div>
   </div>
-
-  <div class="controls">
-    <label>Button Text</label>
-    <input type="text" id="btnText" value="Click Me!" oninput="updateButton()">
-
-    <label>Width (px)</label>
-    <input type="range" id="btnWidth" min="50" max="400" value="150" oninput="updateButton()">
-    <input type="number" id="btnWidthNum" min="50" max="400" value="150" oninput="updateButton()">
-
-    <label>Height (px)</label>
-    <input type="range" id="btnHeight" min="30" max="120" value="50" oninput="updateButton()">
-    <input type="number" id="btnHeightNum" min="30" max="120" value="50" oninput="updateButton()">
-
-    <label>Font Size (px)</label>
-    <input type="range" id="btnFont" min="12" max="48" value="16" oninput="updateButton()">
-    <input type="number" id="btnFontNum" min="12" max="48" value="16" oninput="updateButton()">
-
-    <label>Border Radius</label>
-    <input type="range" id="btnRadius" min="0" max="100" value="12" oninput="updateButton()">
-    <input type="number" id="btnRadiusNum" min="0" max="100" value="12" oninput="updateButton()">
-
-    <label>Gradient Start Color</label>
-    <input type="color" id="gradStart" value="#ff6ec4" oninput="updateButton()">
-
-    <label>Gradient End Color</label>
-    <input type="color" id="gradEnd" value="#7873f5" oninput="updateButton()">
-
-    <label>Shadow X Offset</label>
-    <input type="range" id="shadowX" min="-50" max="50" value="5" oninput="updateButton()">
-
-    <label>Shadow Y Offset</label>
-    <input type="range" id="shadowY" min="-50" max="50" value="5" oninput="updateButton()">
-
-    <label>Shadow Blur</label>
-    <input type="range" id="shadowBlur" min="0" max="50" value="15" oninput="updateButton()">
-
-    <label>
-      <input type="checkbox" id="frosted" onchange="updateButton()"> Frosted Glass
-    </label>
-
-    <label>
-      <input type="checkbox" id="neon" onchange="updateButton()"> Neon Effect
-    </label>
-
-    <label>
-      <input type="checkbox" id="depth3d" onchange="updateButton()"> 3D Depth
-    </label>
-
-    <button onclick="copyCSS()">Copy CSS</button>
-    <button onclick="downloadCSS()">Download CSS</button>
-    <button onclick="resetButton()">Reset</button>
-  </div>
-
-  <textarea id="cssOutput" readonly></textarea>
 </div>
-
-<script src="main.js"></script>
-</body>
-</html>
