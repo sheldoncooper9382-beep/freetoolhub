@@ -117,6 +117,11 @@ button:hover {
     </div>
 
     <div class="control">
+      <label>Text Color</label>
+      <input type="color" id="textColor" value="#ffffff">
+    </div>
+
+    <div class="control">
       <label>X Offset</label>
       <input type="range" id="xOffset" min="-50" max="50" value="5">
     </div>
@@ -133,11 +138,11 @@ button:hover {
 
     <div class="control">
       <label>Shadow Color</label>
-      <input type="color" id="color" value="#000000">
+      <input type="color" id="shadowColor" value="#000000">
     </div>
 
     <div class="control">
-      <label>Opacity</label>
+      <label>Shadow Opacity</label>
       <input type="range" id="opacity" min="0" max="1" step="0.01" value="0.5">
     </div>
 
@@ -150,10 +155,11 @@ button:hover {
 <script>
 const preview = document.getElementById("previewText");
 const textInput = document.getElementById("textInput");
+const textColor = document.getElementById("textColor");
 const xOffset = document.getElementById("xOffset");
 const yOffset = document.getElementById("yOffset");
 const blur = document.getElementById("blur");
-const color = document.getElementById("color");
+const shadowColor = document.getElementById("shadowColor");
 const opacity = document.getElementById("opacity");
 const cssOutput = document.getElementById("cssOutput");
 const copyBtn = document.getElementById("copyBtn");
@@ -167,10 +173,16 @@ function hexToRgba(hex, alpha) {
 
 function updateShadow() {
   preview.textContent = textInput.value;
-  const rgba = hexToRgba(color.value, opacity.value);
+  preview.style.color = textColor.value;
+
+  const rgba = hexToRgba(shadowColor.value, opacity.value);
   const shadow = `${xOffset.value}px ${yOffset.value}px ${blur.value}px ${rgba}`;
+
   preview.style.textShadow = shadow;
-  cssOutput.textContent = `text-shadow: ${shadow};`;
+
+  cssOutput.textContent =
+`color: ${textColor.value};
+text-shadow: ${shadow};`;
 }
 
 document.querySelectorAll("input").forEach(input =>
