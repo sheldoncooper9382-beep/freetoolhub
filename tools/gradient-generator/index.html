@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Free CSS Gradient Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+  <h1>Gradient Generator</h1>
+
+  <div class="preview" id="preview"></div>
+
+  <div class="controls">
+    <label>Type</label>
+    <select id="type">
+      <option value="linear">Linear</option>
+      <option value="radial">Radial</option>
+    </select>
+
+    <label>Angle (Linear)</label>
+    <input type="range" id="angle" min="0" max="360" value="90">
+
+    <label>Color Stops</label>
+    <div id="stops"></div>
+
+    <button onclick="addStop()">Add Color</button>
+    <button onclick="reverseStops()">Reverse</button>
+    <button onclick="randomGradient()">Random</button>
+  </div>
+
+  <textarea id="cssOutput" readonly></textarea>
+  <button onclick="copyCSS()">Copy CSS</button>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
