@@ -1,7 +1,8 @@
+/* ------------------ Body & Background ------------------ */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #2b004d, #000000);
+  background: linear-gradient(135deg, #2b004d, #000000); /* Dark purple → black */
   color: #eee;
   display: flex;
   justify-content: center;
@@ -10,36 +11,48 @@ body {
   padding-top: 40px;
 }
 
+/* ------------------ Glassmorphic Container ------------------ */
 .container {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  padding: 24px;
-  border-radius: 16px;
+  background: rgba(255,255,255,0.05);      /* semi-transparent */
+  backdrop-filter: blur(20px);             /* strong frosted effect */
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
   width: 360px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  padding: 24px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.15); /* subtle glass border */
 }
 
+/* ------------------ Headings ------------------ */
 h1 {
   text-align: center;
   margin-bottom: 20px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
+/* ------------------ Preview Box ------------------ */
 .preview {
   height: 120px;
-  background: #1e1e1e;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.05);      /* frosted glass */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
   color: #fff;
   font-weight: bold;
-  transition: box-shadow 0.2s ease;
+  font-size: 1.1rem;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
+/* ------------------ Controls ------------------ */
 .controls label {
   display: block;
-  margin-top: 10px;
+  margin-top: 12px;
+  font-weight: 500;
 }
 
 .controls input[type="range"],
@@ -47,40 +60,67 @@ h1 {
 .controls input[type="color"] {
   width: 100%;
   margin: 6px 0;
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
   padding: 6px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
+  color: #fff;
 }
 
 .controls input[type="number"] {
   margin-top: 0;
 }
 
+.controls input[type="color"] {
+  cursor: pointer;
+}
+
+/* ------------------ Buttons ------------------ */
 .controls button {
   width: 48%;
   margin: 6px 1%;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
   background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(6px);
   color: #fff;
   cursor: pointer;
+  font-weight: 600;
   transition: transform 0.15s, box-shadow 0.15s;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .controls button:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(255,255,255,0.4);
+  box-shadow: 0 0 16px rgba(255,255,255,0.3);
 }
 
+/* ------------------ Textarea ------------------ */
 textarea {
   width: 100%;
   height: 80px;
   margin-top: 12px;
-  border-radius: 8px;
-  border: none;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
   padding: 10px;
-  background: rgba(0,0,0,0.3);
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
   color: #fff;
   resize: none;
+  font-family: monospace;
+}
+
+/* ------------------ Checkbox ------------------ */
+.controls input[type="checkbox"] {
+  accent-color: #a259ff; /* subtle purple accent */
+  cursor: pointer;
+}
+
+/* ------------------ Small Hover Effects ------------------ */
+input[type="range"]:hover,
+input[type="number"]:hover,
+input[type="color"]:hover {
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
 }
