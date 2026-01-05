@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Free Color Picker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="picker-card">
+  <h1>Free Color Picker</h1>
+
+  <input type="color" id="colorInput" value="#6366f1">
+
+  <div class="preview" id="preview"></div>
+
+  <div class="output">
+    <div class="row">
+      <input id="hex" readonly>
+      <button onclick="copy('hex')">Copy</button>
+    </div>
+
+    <div class="row">
+      <input id="rgb" readonly>
+      <button onclick="copy('rgb')">Copy</button>
+    </div>
+
+    <div class="row">
+      <input id="hsl" readonly>
+      <button onclick="copy('hsl')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
