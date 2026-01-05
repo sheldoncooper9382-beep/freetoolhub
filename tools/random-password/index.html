@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Password Generator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #4ade80, #6366f1);
+        color: #fff;
+    }
+    .container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 1.2em;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+    }
+    input[type="range"] {
+        width: 100%;
+        margin: 10px 0;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        background: #fff;
+        color: #6366f1;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+    button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px #fff;
+    }
+    .length-display {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Random Password Generator</h2>
+    <div class="length-display">Length: <span id="lengthValue">12</span></div>
+    <input type="range" id="lengthSlider" min="4" max="32" value="12">
+    <input type="text" id="password" readonly placeholder="Your password will appear here">
+    <br>
+    <button id="generateBtn">Generate Password</button>
+    <button id="copyBtn">Copy</button>
+</div>
+
+<script>
+const lengthSlider = document.getElementById('lengthSlider');
+const lengthValue = document.getElementById('lengthValue');
+const passwordField = document.getElementById('password');
+const generateBtn = document.getElementById('generateBtn');
+const copyBtn = document.getElementById('copyBtn');
+
+// Update slider value display
+lengthSlider.addEventListener('input', () => {
+    lengthValue.textContent = lengthSlider.value;
+});
+
+// Generate random password
+function generatePassword(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        password += chars[randomIndex];
+    }
+    return password;
+}
+
+// Generate button click
+generateBtn.addEventListener('click', () => {
+    const length = lengthSlider.value;
+    passwordField.value = generatePassword(length);
+});
+
+// Copy to clipboard
+copyBtn.addEventListener('click', () => {
+    if (passwordField.value) {
+        navigator.clipboard.writeText(passwordField.value);
+        alert('Password copied to clipboard!');
+    }
+});
+</script>
+
+</body>
+</html>
