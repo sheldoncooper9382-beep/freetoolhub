@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Shadow Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>CSS Shadow Generator</h1>
+
+  <div class="preview" id="preview">Preview Box</div>
+
+  <div class="controls">
+
+    <label>Horizontal Offset (px)</label>
+    <input type="range" id="xOffset" min="-50" max="50" value="5" oninput="updateShadow()">
+    <input type="number" id="xOffsetNum" min="-50" max="50" value="5" oninput="updateShadow()">
+
+    <label>Vertical Offset (px)</label>
+    <input type="range" id="yOffset" min="-50" max="50" value="5" oninput="updateShadow()">
+    <input type="number" id="yOffsetNum" min="-50" max="50" value="5" oninput="updateShadow()">
+
+    <label>Blur Radius (px)</label>
+    <input type="range" id="blur" min="0" max="100" value="15" oninput="updateShadow()">
+    <input type="number" id="blurNum" min="0" max="100" value="15" oninput="updateShadow()">
+
+    <label>Spread Radius (px)</label>
+    <input type="range" id="spread" min="-50" max="50" value="0" oninput="updateShadow()">
+    <input type="number" id="spreadNum" min="-50" max="50" value="0" oninput="updateShadow()">
+
+    <label>Shadow Color</label>
+    <input type="color" id="shadowColor" value="#000000" oninput="updateShadow()">
+    <input type="range" id="alpha" min="0" max="100" value="50" oninput="updateShadow()">Opacity
+
+    <label>
+      <input type="checkbox" id="inset" onchange="updateShadow()"> Inset
+    </label>
+
+    <button onclick="copyCSS()">Copy CSS</button>
+    <button onclick="resetShadow()">Reset</button>
+  </div>
+
+  <textarea id="cssOutput" readonly></textarea>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
