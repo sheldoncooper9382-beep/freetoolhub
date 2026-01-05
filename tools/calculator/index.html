@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scientific Calculator</title>
+
+  <!-- LOCAL CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="calculator-container">
+    <div class="calculator">
+
+      <!-- DISPLAY -->
+      <div id="screen" class="screen">0</div>
+
+      <!-- BUTTONS -->
+      <div class="buttons">
+
+        <!-- Memory / Control -->
+        <button data-action="MC">MC</button>
+        <button data-action="MR">MR</button>
+        <button data-action="M+">M+</button>
+        <button data-action="M-">M-</button>
+        <button data-action="C">C</button>
+
+        <!-- Constants / Parentheses -->
+        <button data-action="(">(</button>
+        <button data-action=")">)</button>
+        <button data-action="π">π</button>
+        <button data-action="e">e</button>
+        <button data-action="÷">÷</button>
+
+        <!-- Numbers -->
+        <button data-action="7">7</button>
+        <button data-action="8">8</button>
+        <button data-action="9">9</button>
+        <button data-action="√">√</button>
+        <button data-action="×">×</button>
+
+        <button data-action="4">4</button>
+        <button data-action="5">5</button>
+        <button data-action="6">6</button>
+        <button data-action="^">^</button>
+        <button data-action="-">-</button>
+
+        <button data-action="1">1</button>
+        <button data-action="2">2</button>
+        <button data-action="3">3</button>
+        <button data-action="!">x!</button>
+        <button data-action="+">+</button>
+
+        <button data-action="0">0</button>
+        <button data-action=".">.</button>
+        <button data-action="sin">sin</button>
+        <button data-action="cos">cos</button>
+        <button data-action="tan">tan</button>
+
+        <button data-action="asin">asin</button>
+        <button data-action="acos">acos</button>
+        <button data-action="atan">atan</button>
+        <button data-action="log">log</button>
+        <button data-action="ln">ln</button>
+
+        <button data-action="=" class="equals">=</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCAL JS -->
+  <script src="main.js"></script>
+</body>
+</html>
