@@ -1,53 +1,93 @@
+/* ------------------ Body & Background ------------------ */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #2b004d, #000000);
+  background: linear-gradient(135deg, #2b004d, #000000); /* Dark purple → black */
   color: #eee;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding-top: 40px;
+  padding: 40px 20px;
 }
 
+/* ------------------ Main Container ------------------ */
 .container {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.05);      /* glass effect */
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 20px;
-  width: 380px;
+  width: 100%;
+  max-width: 900px;
   padding: 24px;
   box-shadow: 0 16px 40px rgba(0,0,0,0.6);
   border: 1px solid rgba(255,255,255,0.15);
 }
 
-h1 { text-align: center; margin-bottom: 20px; }
+/* ------------------ Heading ------------------ */
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
 
+/* ------------------ Layout Wrapper ------------------ */
+.generator-wrapper {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap; /* responsive stacking on small screens */
+}
+
+/* ------------------ Left Column: Preview ------------------ */
 .preview {
+  flex: 1;
+  min-width: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  height: 400px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
+/* The button inside preview */
 #previewButton {
   padding: 10px 20px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: bold;
+  font-size: 16px;
   transition: all 0.2s ease;
+  color: #fff;
 }
 
-.controls label { display: block; margin-top: 12px; font-weight: 500; }
+/* ------------------ Right Column: Controls ------------------ */
+.controls {
+  flex: 1;
+  min-width: 250px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
 
+/* Labels */
+.controls label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* Inputs */
 .controls input[type="range"],
 .controls input[type="number"],
 .controls input[type="color"],
 .controls input[type="text"] {
   width: 100%;
   margin: 6px 0;
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
   padding: 6px;
   background: rgba(255,255,255,0.1);
@@ -55,20 +95,13 @@ h1 { text-align: center; margin-bottom: 20px; }
   color: #fff;
 }
 
-textarea {
-  width: 100%;
-  height: 120px;
-  margin-top: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 10px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  color: #fff;
-  font-family: monospace;
-  resize: none;
+/* Checkbox accent color */
+.controls input[type="checkbox"] {
+  accent-color: #a259ff;
+  cursor: pointer;
 }
 
+/* Buttons inside controls */
 .controls button {
   width: 30%;
   margin: 6px 1%;
@@ -87,4 +120,37 @@ textarea {
 .controls button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 16px rgba(255,255,255,0.3);
+}
+
+/* Textarea for CSS output */
+.controls textarea {
+  width: 100%;
+  height: 120px;
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-family: monospace;
+  resize: none;
+}
+
+/* ------------------ Sliders and Inputs Hover ------------------ */
+input[type="range"]:hover,
+input[type="number"]:hover,
+input[type="color"]:hover,
+input[type="text"]:hover {
+  box-shadow: 0 0 8px rgba(255,255,255,0.2);
+}
+
+/* ------------------ Responsive Adjustments ------------------ */
+@media screen and (max-width: 800px) {
+  .generator-wrapper {
+    flex-direction: column;
+  }
+  .preview {
+    height: 250px;
+  }
 }
