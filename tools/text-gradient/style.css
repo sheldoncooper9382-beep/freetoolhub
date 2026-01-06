@@ -1,11 +1,12 @@
 body {
   font-family: 'Arial', sans-serif;
-  background: #e0e5ec;
+  background: #111;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   padding: 20px;
+  color: #fff;
 }
 
 .container {
@@ -19,22 +20,31 @@ h1 {
 }
 
 .preview-panel {
-  background: rgba(255,255,255,0.25);
+  position: relative;
+  background: rgba(0,0,0,0.3);
   border-radius: 20px;
   backdrop-filter: blur(15px);
-  padding: 40px 20px;
+  padding: 20px;
   text-align: center;
   margin-bottom: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-.preview-panel h2 {
-  background: linear-gradient(90deg,#ff6ec4,#7873f5);
-  -webkit-background-clip: text;
-  color: transparent;
-  font-size: 48px;
-  margin: 0;
-  word-wrap: break-word;
+.preview-panel img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 10px;
+}
+
+.loading {
+  position: absolute;
+  font-size: 18px;
+  display: none;
+  color: #fff;
 }
 
 .controls label {
