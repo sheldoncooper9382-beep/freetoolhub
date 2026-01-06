@@ -1,47 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gradient Text Generator</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+const textInput = document.getElementById('textInput');
+const previewText = document.getElementById('previewText');
+const presetSelect = document.getElementById('presetSelect');
+const color1 = document.getElementById('color1');
+const color2 = document.getElementById('color2');
+const fontSize = document.getElementById('fontSize');
+const applyBtn = document.getElementById('applyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
 
-<div class="container">
-  <h1>Gradient Text Generator</h1>
+// Apply gradient and text settings
+applyBtn.addEventListener('click', () => {
+  previewText.textContent = textInput.value;
+  previewText.style.background = `linear-gradient(90deg, ${color1.value}, ${color2.value})`;
+  previewText.style.fontSize = fontSize.value + 'px';
+});
 
-  <!-- Glassmorphic Preview -->
-  <div class="preview-panel">
-    <h2 id="previewText">Your Text Here</h2>
-  </div>
+// Preset selection updates colors
+presetSelect.addEventListener('change', () => {
+  previewText.style.background = presetSelect.value;
+  // Extract colors from preset
+  const colors = presetSelect.value.match(/#([0-9a-f]{3,6})/gi);
+  if (colors) {
+    color1.value = colors[0];
+    color2.value = colors[1];
+  }
+});
 
-  <!-- Controls -->
-  <div class="controls">
-    <label>Enter Text</label>
-    <input type="text" id="textInput" value="Hello World!">
+// Download preview as PNG
+downloadBtn.addEventListener('click', () => {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  const fontSizePx = parseInt(fontSize.value);
+  canvas.width = previewText.offsetWidth * 2;
+  canvas.height = previewText.offsetHeight * 2;
 
-    <label>Choose Preset</label>
-    <select id="presetSelect">
-      <option value="linear-gradient(90deg,#ff6ec4,#7873f5)">Pink Purple</option>
-      <option value="linear-gradient(90deg,#4ade80,#22d3ee)">Green Blue</option>
-      <option value="linear-gradient(90deg,#facc15,#f97316)">Yellow Orange</option>
-      <option value="linear-gradient(90deg,#f43f5e,#8b5cf6)">Red Violet</option>
-    </select>
+  ctx.scale(2, 2);
+  ctx.font = `${fontSizePx}px Arial`;
+  
+  // Create gradient
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  gradient.addColorStop(0, color1.value);
+  gradient.addColorStop(1, color2.value);
+  
+  ctx.fillStyle = gradient;
+  ctx.fillText(textInput.value, 0, fontSizePx);
 
-    <label>Custom Gradient Start</label>
-    <input type="color" id="color1" value="#ff6ec4">
-    <label>Custom Gradient End</label>
-    <input type="color" id="color2" value="#7873f5">
-
-    <label>Font Size</label>
-    <input type="number" id="fontSize" value="48" min="20" max="200">
-
-    <button id="applyBtn">Apply Gradient</button>
-    <button id="downloadBtn">Download as PNG</button>
-  </div>
-</div>
-
-<script src="main.js"></script>
-</body>
-</html>
+  const link = document.createElement('a');
+  link.download = 'gradient-text.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
