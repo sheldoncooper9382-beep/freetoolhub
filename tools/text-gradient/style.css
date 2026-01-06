@@ -1,0 +1,137 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #2b004d, #000000);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 22px;
+  padding: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.generator {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.preview {
+  flex: 1;
+  min-width: 260px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(14px);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+#gradientText {
+  font-size: 64px;
+  font-weight: 600;
+  background: linear-gradient(to right, #ff6ec4, #7873f5, #4ade80);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: all 0.2s ease;
+  text-align: center;
+  word-break: break-word;
+}
+
+.controls {
+  flex: 1;
+  min-width: 300px;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.controls label {
+  margin-top: 12px;
+}
+
+.controls input,
+.controls select {
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+}
+
+.colors {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.colors input {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+button:hover {
+  box-shadow: 0 0 16px rgba(255,255,255,0.35);
+  transform: scale(1.05);
+}
+
+.copy {
+  background: linear-gradient(135deg, #ff6ec4, #7873f5);
+}
+
+.reset {
+  background: rgba(255,255,255,0.08);
+}
+
+textarea {
+  margin-top: 14px;
+  height: 120px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 10px;
+  resize: none;
+  font-family: monospace;
+}
+
+@media (max-width: 900px) {
+  .generator {
+    flex-direction: column;
+  }
+}
