@@ -1,64 +1,47 @@
-const previewText = document.getElementById("previewText");
-const textInput = document.getElementById("textInput");
-const fontSize = document.getElementById("fontSize");
-const fontWeight = document.getElementById("fontWeight");
-const italicToggle = document.getElementById("italicToggle");
-const direction = document.getElementById("direction");
-const colorList = document.getElementById("colorList");
-const addColor = document.getElementById("addColor");
-const removeColor = document.getElementById("removeColor");
-const copyCSS = document.getElementById("copyCSS");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gradient Text Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-function getColors() {
-  return [...colorList.querySelectorAll("input")].map(c => c.value);
-}
+<div class="container">
+  <h1>Gradient Text Generator</h1>
 
-function update() {
-  const gradient = `linear-gradient(${direction.value}, ${getColors().join(", ")})`;
+  <!-- Glassmorphic Preview -->
+  <div class="preview-panel">
+    <h2 id="previewText">Your Text Here</h2>
+  </div>
 
-  previewText.textContent = textInput.value || " ";
-  previewText.style.fontSize = fontSize.value + "px";
-  previewText.style.fontWeight = fontWeight.value;
-  previewText.style.fontStyle = italicToggle.checked ? "italic" : "normal";
-  previewText.style.background = gradient;
-}
+  <!-- Controls -->
+  <div class="controls">
+    <label>Enter Text</label>
+    <input type="text" id="textInput" value="Hello World!">
 
-addColor.onclick = () => {
-  if (colorList.children.length >= 6) return;
-  const c = document.createElement("input");
-  c.type = "color";
-  c.value = "#ffffff";
-  c.oninput = update;
-  colorList.appendChild(c);
-  update();
-};
+    <label>Choose Preset</label>
+    <select id="presetSelect">
+      <option value="linear-gradient(90deg,#ff6ec4,#7873f5)">Pink Purple</option>
+      <option value="linear-gradient(90deg,#4ade80,#22d3ee)">Green Blue</option>
+      <option value="linear-gradient(90deg,#facc15,#f97316)">Yellow Orange</option>
+      <option value="linear-gradient(90deg,#f43f5e,#8b5cf6)">Red Violet</option>
+    </select>
 
-removeColor.onclick = () => {
-  if (colorList.children.length <= 2) return;
-  colorList.removeChild(colorList.lastElementChild);
-  update();
-};
+    <label>Custom Gradient Start</label>
+    <input type="color" id="color1" value="#ff6ec4">
+    <label>Custom Gradient End</label>
+    <input type="color" id="color2" value="#7873f5">
 
-copyCSS.onclick = () => {
-  const css = `
-background: linear-gradient(${direction.value}, ${getColors().join(", ")});
--webkit-background-clip: text;
-background-clip: text;
-color: transparent;
-font-size: ${fontSize.value}px;
-font-weight: ${fontWeight.value};
-font-style: ${italicToggle.checked ? "italic" : "normal"};
-`.trim();
+    <label>Font Size</label>
+    <input type="number" id="fontSize" value="48" min="20" max="200">
 
-  navigator.clipboard.writeText(css);
-  copyCSS.textContent = "Copied!";
-  setTimeout(() => copyCSS.textContent = "Copy CSS", 1200);
-};
+    <button id="applyBtn">Apply Gradient</button>
+    <button id="downloadBtn">Download as PNG</button>
+  </div>
+</div>
 
-[textInput, fontSize, fontWeight, italicToggle, direction].forEach(el =>
-  el.addEventListener("input", update)
-);
-
-colorList.addEventListener("input", update);
-
-update();
+<script src="main.js"></script>
+</body>
+</html>
