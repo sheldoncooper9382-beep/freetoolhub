@@ -5,67 +5,43 @@ const fontWeight = document.getElementById("fontWeight");
 const italicToggle = document.getElementById("italicToggle");
 const direction = document.getElementById("direction");
 const colorList = document.getElementById("colorList");
-const addColorBtn = document.getElementById("addColor");
-const removeColorBtn = document.getElementById("removeColor");
-const copyCSSBtn = document.getElementById("copyCSS");
+const addColor = document.getElementById("addColor");
+const removeColor = document.getElementById("removeColor");
+const copyCSS = document.getElementById("copyCSS");
 
 function getColors() {
   return [...colorList.querySelectorAll("input")].map(c => c.value);
 }
 
-function updateGradient() {
-  const colors = getColors();
-  const dir = direction.value;
-  const gradient = `linear-gradient(${dir}, ${colors.join(", ")})`;
+function update() {
+  const gradient = `linear-gradient(${direction.value}, ${getColors().join(", ")})`;
 
-  previewText.style.background = gradient;
-  previewText.style.webkitBackgroundClip = "text";
-  previewText.style.backgroundClip = "text";
-  previewText.style.color = "transparent";
-}
-
-function updateText() {
   previewText.textContent = textInput.value || " ";
-}
-
-function updateFont() {
   previewText.style.fontSize = fontSize.value + "px";
   previewText.style.fontWeight = fontWeight.value;
   previewText.style.fontStyle = italicToggle.checked ? "italic" : "normal";
+  previewText.style.background = gradient;
 }
 
-function updateAll() {
-  updateText();
-  updateFont();
-  updateGradient();
-}
-
-addColorBtn.addEventListener("click", () => {
+addColor.onclick = () => {
   if (colorList.children.length >= 6) return;
-  const input = document.createElement("input");
-  input.type = "color";
-  input.value = "#ffffff";
-  input.addEventListener("input", updateGradient);
-  colorList.appendChild(input);
-  updateGradient();
-});
+  const c = document.createElement("input");
+  c.type = "color";
+  c.value = "#ffffff";
+  c.oninput = update;
+  colorList.appendChild(c);
+  update();
+};
 
-removeColorBtn.addEventListener("click", () => {
+removeColor.onclick = () => {
   if (colorList.children.length <= 2) return;
   colorList.removeChild(colorList.lastElementChild);
-  updateGradient();
-});
+  update();
+};
 
-[textInput, fontSize, fontWeight, italicToggle, direction].forEach(el =>
-  el.addEventListener("input", updateAll)
-);
-
-colorList.addEventListener("input", updateGradient);
-
-copyCSSBtn.addEventListener("click", () => {
-  const colors = getColors();
+copyCSS.onclick = () => {
   const css = `
-background: linear-gradient(${direction.value}, ${colors.join(", ")});
+background: linear-gradient(${direction.value}, ${getColors().join(", ")});
 -webkit-background-clip: text;
 background-clip: text;
 color: transparent;
@@ -75,8 +51,14 @@ font-style: ${italicToggle.checked ? "italic" : "normal"};
 `.trim();
 
   navigator.clipboard.writeText(css);
-  copyCSSBtn.textContent = "Copied!";
-  setTimeout(() => copyCSSBtn.textContent = "Copy CSS", 1200);
-});
+  copyCSS.textContent = "Copied!";
+  setTimeout(() => copyCSS.textContent = "Copy CSS", 1200);
+};
 
-updateAll();
+[textInput, fontSize, fontWeight, italicToggle, direction].forEach(el =>
+  el.addEventListener("input", update)
+);
+
+colorList.addEventListener("input", update);
+
+update();
