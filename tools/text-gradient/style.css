@@ -1,137 +1,138 @@
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #2b004d, #000000);
-  color: #fff;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-}
-
-.container {
-  width: 100%;
-  max-width: 1100px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  border-radius: 22px;
-  padding: 24px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.generator {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.preview {
-  flex: 1;
-  min-width: 260px;
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(14px);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: radial-gradient(circle at top, #2a003e, #0b0014);
+  color: #fff;
   padding: 20px;
 }
 
-#gradientText {
-  font-size: 64px;
-  font-weight: 600;
-  background: linear-gradient(to right, #ff6ec4, #7873f5, #4ade80);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  transition: all 0.2s ease;
+.title {
   text-align: center;
+  margin-bottom: 20px;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.app {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  gap: 24px;
+}
+
+/* PREVIEW */
+.preview-card {
+  min-height: 220px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  border-radius: 22px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.12),
+    0 30px 80px rgba(0,0,0,0.45);
+}
+
+#previewText {
+  font-size: 90px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: center;
+  background: linear-gradient(to right, #ff77c6, #8b7cff, #4ade80);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 35px rgba(255,255,255,0.15);
   word-break: break-word;
 }
 
+/* CONTROLS */
 .controls {
-  flex: 1;
-  min-width: 300px;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 20px;
+  display: grid;
+  gap: 16px;
 }
 
-.controls label {
-  margin-top: 12px;
+.control label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+  opacity: 0.9;
 }
 
-.controls input,
-.controls select {
-  margin-top: 6px;
-  padding: 8px;
+.control input[type="text"],
+.control select {
+  width: 100%;
+  padding: 10px;
   border-radius: 10px;
   border: none;
+  outline: none;
+}
+
+.control input[type="range"] {
+  width: 100%;
+}
+
+.control.checkbox {
+  display: flex;
+  align-items: center;
 }
 
 .colors {
   display: flex;
   gap: 10px;
-  margin-top: 6px;
   flex-wrap: wrap;
 }
 
 .colors input {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
   padding: 0;
 }
 
+/* BUTTONS */
 .buttons {
   display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 button {
-  margin-top: 12px;
-  padding: 10px;
+  padding: 12px 18px;
   border-radius: 14px;
   border: none;
   cursor: pointer;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.14);
   color: #fff;
-  border: 1px solid rgba(255,255,255,0.2);
 }
 
-button:hover {
-  box-shadow: 0 0 16px rgba(255,255,255,0.35);
-  transform: scale(1.05);
+button.primary {
+  background: linear-gradient(135deg, #ff77c6, #8b7cff);
 }
 
-.copy {
-  background: linear-gradient(135deg, #ff6ec4, #7873f5);
-}
+/* RESPONSIVE */
+@media (min-width: 900px) {
+  .app {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
 
-.reset {
-  background: rgba(255,255,255,0.08);
-}
+  .preview-card {
+    min-height: 320px;
+  }
 
-textarea {
-  margin-top: 14px;
-  height: 120px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.2);
-  color: #fff;
-  padding: 10px;
-  resize: none;
-  font-family: monospace;
-}
-
-@media (max-width: 900px) {
-  .generator {
-    flex-direction: column;
+  #previewText {
+    font-size: 110px;
   }
 }
