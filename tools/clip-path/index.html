@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clip Path Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Clip Path Generator</h1>
+
+  <div class="generator-wrapper">
+
+    <!-- Preview -->
+    <div class="preview">
+      <div id="shapePreview"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+
+      <label>Shape</label>
+      <select id="shapeType">
+        <option value="circle">Circle</option>
+        <option value="ellipse">Ellipse</option>
+        <option value="rounded">Rounded Rectangle</option>
+        <option value="triangle">Triangle</option>
+        <option value="pentagon">Pentagon</option>
+        <option value="hexagon">Hexagon</option>
+        <option value="polygon">Custom Polygon</option>
+      </select>
+
+      <div id="radiusControls">
+        <label>Radius (%)</label>
+        <input type="range" id="radius" min="0" max="50" value="25">
+      </div>
+
+      <div id="polygonControls" class="hidden">
+        <label>Number of Sides</label>
+        <input type="range" id="sides" min="3" max="10" value="5">
+      </div>
+
+      <div class="button-row">
+        <button onclick="copyCSS()">Copy CSS</button>
+        <button onclick="downloadCSS()">Download</button>
+        <button onclick="resetAll()">Reset</button>
+      </div>
+
+      <textarea id="cssOutput" readonly></textarea>
+
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
