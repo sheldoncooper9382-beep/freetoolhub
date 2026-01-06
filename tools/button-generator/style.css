@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #2b004d, #000000); /* Dark purple → black */
+  background: linear-gradient(135deg, #2b004d, #000000);
   color: #eee;
   display: flex;
   justify-content: center;
@@ -13,7 +13,7 @@ body {
 
 /* ------------------ Main Container ------------------ */
 .container {
-  background: rgba(255,255,255,0.05);      /* glass effect */
+  background: rgba(255,255,255,0.05);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 20px;
@@ -35,7 +35,7 @@ h1 {
 .generator-wrapper {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap; /* responsive stacking on small screens */
+  flex-wrap: wrap;
 }
 
 /* ------------------ Left Column: Preview ------------------ */
@@ -52,7 +52,7 @@ h1 {
   border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* The button inside preview */
+/* Button inside preview */
 #previewButton {
   padding: 10px 20px;
   border-radius: 12px;
@@ -62,6 +62,8 @@ h1 {
   font-size: 16px;
   transition: all 0.2s ease;
   color: #fff;
+  background: linear-gradient(135deg, #ff6ec4, #7873f5);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
 }
 
 /* ------------------ Right Column: Controls ------------------ */
@@ -135,14 +137,6 @@ h1 {
   color: #fff;
   font-family: monospace;
   resize: none;
-}
-
-/* ------------------ Sliders and Inputs Hover ------------------ */
-input[type="range"]:hover,
-input[type="number"]:hover,
-input[type="color"]:hover,
-input[type="text"]:hover {
-  box-shadow: 0 0 8px rgba(255,255,255,0.2);
 }
 
 /* ------------------ Responsive Adjustments ------------------ */
