@@ -1,76 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Text Gradient Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextStudio API Generator</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1 class="title">Text Gradient Generator</h1>
+<div class="container">
+  <h1>TextStudio API Text Generator</h1>
 
-  <div class="app">
-
-    <!-- PREVIEW -->
-    <div class="preview-card">
-      <span id="previewText">Gradient Text</span>
-    </div>
-
-    <!-- CONTROLS -->
-    <div class="controls">
-
-      <div class="control">
-        <label>Text</label>
-        <input type="text" id="textInput" value="Gradient Text" />
-      </div>
-
-      <div class="control">
-        <label>Font Size</label>
-        <input type="range" id="fontSize" min="24" max="140" value="90" />
-      </div>
-
-      <div class="control">
-        <label>Font Weight</label>
-        <input type="range" id="fontWeight" min="200" max="900" step="100" value="800" />
-      </div>
-
-      <div class="control checkbox">
-        <label>
-          <input type="checkbox" id="italicToggle" />
-          Italic
-        </label>
-      </div>
-
-      <div class="control">
-        <label>Gradient Direction</label>
-        <select id="direction">
-          <option value="to right">Left to Right</option>
-          <option value="to left">Right to Left</option>
-          <option value="to bottom">Top to Bottom</option>
-          <option value="45deg">Diagonal</option>
-        </select>
-      </div>
-
-      <div class="control">
-        <label>Colors</label>
-        <div id="colorList" class="colors">
-          <input type="color" value="#ff77c6">
-          <input type="color" value="#8b7cff">
-          <input type="color" value="#4ade80">
-        </div>
-      </div>
-
-      <div class="buttons">
-        <button id="addColor">Add Color</button>
-        <button id="removeColor">Remove Color</button>
-        <button id="copyCSS" class="primary">Copy CSS</button>
-      </div>
-
-    </div>
-
+  <!-- Glassmorphic Preview -->
+  <div class="preview-panel">
+    <img id="previewImage" src="" alt="Generated Text Preview">
+    <div id="loading" class="loading">Generating...</div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Controls -->
+  <div class="controls">
+    <label>Enter Text</label>
+    <input type="text" id="textInput" value="Hello World!">
+
+    <label>Style ID (preset or user style)</label>
+    <input type="text" id="styleId" value="261">
+
+    <label>Background</label>
+    <select id="background">
+      <option value="opaque">Opaque</option>
+      <option value="transparent">Transparent</option>
+    </select>
+
+    <label>Padding (%)</label>
+    <input type="number" id="padding" value="5" min="0" max="50">
+
+    <label>Quality</label>
+    <select id="quality">
+      <option value="lite">Lite (768px)</option>
+      <option value="pro">Pro (2048px)</option>
+      <option value="ultra">Ultra (4096px)</option>
+    </select>
+
+    <label>Format</label>
+    <select id="format">
+      <option value="png">PNG</option>
+      <option value="webp">WEBP</option>
+      <option value="jpg">JPG</option>
+    </select>
+
+    <label>Aspect Ratio</label>
+    <select id="aspectRatio">
+      <option value="fit">Fit</option>
+      <option value="1:1">1:1</option>
+      <option value="16:9">16:9</option>
+    </select>
+
+    <button id="generateBtn">Generate Image</button>
+    <button id="downloadBtn">Download Image</button>
+  </div>
+</div>
+
+<script src="main.js"></script>
 </body>
 </html>
