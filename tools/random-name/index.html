@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Name Generator</title>
+
+<style>
+:root {
+    --bg: #0f2027;
+    --card: rgba(255, 255, 255, 0.15);
+    --border: rgba(255, 255, 255, 0.3);
+    --text: #ffffff;
+    --accent: #00ffd5;
+    --dropdown-bg: #f2f2f2;
+    --dropdown-text: #111111;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.generator {
+    width: 350px;
+    padding: 30px;
+    border-radius: 20px;
+    background: var(--card);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-align: center;
+}
+
+.generator h1 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+}
+
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 15px;
+
+    /* HIGH CONTRAST */
+    background: var(--dropdown-bg);
+    color: var(--dropdown-text);
+}
+
+select:focus {
+    outline: 2px solid var(--accent);
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    background: linear-gradient(135deg, #00ffd5, #00bfff);
+    color: #000;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.name-output {
+    margin-top: 25px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    min-height: 2.2rem;
+    color: var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+<div class="generator">
+    <h1>Random Name Generator</h1>
+
+    <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="neutral">Gender Neutral</option>
+    </select>
+
+    <button onclick="generateName()">Generate Name</button>
+
+    <div class="name-output" id="result"></div>
+</div>
+
+<script>
+const maleNames = [
+    "James", "Liam", "Noah", "Ethan", "Oliver",
+    "Lucas", "Henry", "Jack", "Daniel", "Benjamin"
+];
+
+const femaleNames = [
+    "Emma", "Olivia", "Ava", "Sophia", "Isabella",
+    "Mia", "Charlotte", "Amelia", "Harper", "Evelyn"
+];
+
+const neutralNames = [
+    "Alex", "Jordan", "Taylor", "Casey", "Morgan",
+    "Riley", "Avery", "Quinn", "Parker", "Rowan"
+];
+
+function generateName() {
+    const gender = document.getElementById("gender").value;
+    let list;
+
+    if (gender === "male") list = maleNames;
+    if (gender === "female") list = femaleNames;
+    if (gender === "neutral") list = neutralNames;
+
+    const randomName = list[Math.floor(Math.random() * list.length)];
+    document.getElementById("result").textContent = randomName;
+}
+</script>
+
+</body>
+</html>
