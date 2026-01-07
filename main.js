@@ -5,7 +5,7 @@ fetch('tool-registry.json')
     tools.forEach(tool => {
       const card = document.createElement('div');
       card.className = 'tool-card';
-      card.onclick = () => window.location.href = tool.path;
+      card.onclick = () => window.location.href = tool.route;
       card.innerHTML = `
         <span>${tool.icon}</span>
         <h2>${tool.name}</h2>
@@ -15,3 +15,4 @@ fetch('tool-registry.json')
     });
   })
   .catch(err => console.error('Error loading tools:', err));
+
