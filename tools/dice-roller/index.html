@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dice Roller – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.15);
+  --glass-border: rgba(255,255,255,0.25);
+  --accent: #7dd3fc;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  color: var(--text);
+}
+
+.glass {
+  width: 460px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 10px;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+label {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.dice-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 18px 0;
+  flex-wrap: wrap;
+}
+
+.die {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.9);
+  color: #020617;
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: none;
+}
+
+.roll {
+  animation: roll 0.6s ease;
+}
+
+@keyframes roll {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(90deg) scale(1.1); }
+  50%  { transform: rotate(180deg) scale(0.95); }
+  75%  { transform: rotate(270deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.total {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--accent);
+  color: #020617;
+  transition: transform 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>🎲 Dice Roller</h1>
+
+  <div class="controls">
+    <label>Dice: <span id="countLabel">2</span></label>
+    <input type="range" id="diceCount" min="1" max="6" value="2">
+  </div>
+
+  <div class="dice-container" id="diceContainer"></div>
+
+  <div class="total" id="total">Total: 0</div>
+
+  <div class="actions">
+    <button onclick="rollDice()">Roll Dice</button>
+  </div>
+</div>
+
+<script>
+const diceCount = document.getElementById("diceCount");
+const countLabel = document.getElementById("countLabel");
+const diceContainer = document.getElementById("diceContainer");
+const totalEl = document.getElementById("total");
+
+diceCount.addEventListener("input", () => {
+  countLabel.textContent = diceCount.value;
+  renderDice();
+});
+
+function renderDice() {
+  diceContainer.innerHTML = "";
+  for (let i = 0; i < diceCount.value; i++) {
+    const die = document.createElement("div");
+    die.className = "die";
+    die.textContent = "🎲";
+    diceContainer.appendChild(die);
+  }
+  totalEl.textContent = "Total: 0";
+}
+
+function rollDice() {
+  const dice = document.querySelectorAll(".die");
+  let total = 0;
+
+  dice.forEach(die => {
+    die.classList.remove("roll");
+    void die.offsetWidth; // restart animation
+    die.classList.add("roll");
+
+    const value = Math.floor(Math.random() * 6) + 1;
+    setTimeout(() => {
+      die.textContent = value;
+    }, 300);
+
+    total += value;
+  });
+
+  setTimeout(() => {
+    totalEl.textContent = "Total: " + total;
+  }, 600);
+}
+
+renderDice();
+</script>
+
+</body>
+</html>
