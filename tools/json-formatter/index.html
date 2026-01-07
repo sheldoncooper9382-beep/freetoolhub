@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>JSON Formatter & Validator | Free Online JSON Pretty Printer</title>
+
+<meta name="description" content="Free JSON Formatter tool with syntax highlighting, tree view, validation, minify, download, and dark/light mode. Format JSON instantly online.">
+<meta name="keywords" content="json formatter, json validator, json pretty print, json tree viewer, online json tool">
+<meta name="robots" content="index, follow">
+
+<style>
+:root {
+    --bg: #0f2027;
+    --card: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.25);
+    --text: #ffffff;
+    --accent: #00ffd5;
+    --editor-bg: #1e1e1e;
+    --editor-text: #ffffff;
+    --error: #ff6b6b;
+    --success: #00ff9c;
+}
+
+.light {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --border: #ddd;
+    --text: #000;
+    --editor-bg: #fafafa;
+    --editor-text: #000;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Consolas, monospace;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg), #203a43);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 95%;
+    max-width: 1000px;
+    padding: 25px;
+    border-radius: 20px;
+    background: var(--card);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+h1 {
+    font-size: 1.5rem;
+}
+
+button.toggle {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.editor-wrapper {
+    position: relative;
+    display: flex;
+    margin-top: 15px;
+}
+
+.line-numbers {
+    background: #2b2b2b;
+    color: #aaa;
+    padding: 15px 10px;
+    text-align: right;
+    user-select: none;
+}
+
+textarea {
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    border: none;
+    resize: vertical;
+    background: var(--editor-bg);
+    color: var(--editor-text);
+    font-size: 0.95rem;
+}
+
+textarea:focus {
+    outline: 2px solid var(--accent);
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ffd5, #00bfff);
+    color: #000;
+}
+
+.message {
+    font-weight: bold;
+}
+
+.error { color: var(--error); }
+.success { color: var(--success); }
+
+pre {
+    background: #111;
+    padding: 15px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.key { color: #ffcb6b; }
+.string { color: #c3e88d; }
+.number { color: #f78c6c; }
+.boolean { color: #82aaff; }
+.null { color: #ff5370; }
+
+details {
+    margin-left: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<header>
+    <h1>JSON Formatter</h1>
+    <button class="toggle" onclick="toggleTheme()">🌗</button>
+</header>
+
+<div class="editor-wrapper">
+    <div class="line-numbers" id="lines">1</div>
+    <textarea id="jsonInput" placeholder='Paste JSON here...'></textarea>
+</div>
+
+<div class="buttons">
+    <button onclick="formatJSON()">Format</button>
+    <button onclick="minifyJSON()">Minify</button>
+    <button onclick="copyJSON()">Copy</button>
+    <button onclick="downloadJSON()">Download</button>
+    <button onclick="renderTree()">Tree View</button>
+</div>
+
+<div class="message" id="message"></div>
+
+<pre id="highlighted"></pre>
+<div id="tree"></div>
+</div>
+
+<script>
+const input = document.getElementById("jsonInput");
+const lines = document.getElementById("lines");
+const highlighted = document.getElementById("highlighted");
+const tree = document.getElementById("tree");
+const message = document.getElementById("message");
+
+input.addEventListener("input", updateLines);
+input.addEventListener("paste", () => setTimeout(formatJSON, 50));
+
+function updateLines() {
+    const count = input.value.split("\n").length;
+    lines.innerHTML = Array.from({length: count}, (_, i) => i + 1).join("<br>");
+}
+
+function syntaxHighlight(json) {
+    return json.replace(/"(.*?)":/g, '<span class="key">"$1"</span>:')
+        .replace(/"(.*?)"/g, '<span class="string">"$1"</span>')
+        .replace(/\b(true|false)\b/g, '<span class="boolean">$1</span>')
+        .replace(/\b(null)\b/g, '<span class="null">$1</span>')
+        .replace(/\b(\d+)\b/g, '<span class="number">$1</span>');
+}
+
+function formatJSON() {
+    try {
+        const obj = JSON.parse(input.value);
+        const pretty = JSON.stringify(obj, null, 4);
+        input.value = pretty;
+        highlighted.innerHTML = syntaxHighlight(pretty);
+        message.textContent = "Valid JSON formatted.";
+        message.className = "message success";
+        updateLines();
+    } catch (e) {
+        message.textContent = e.message;
+        message.className = "message error";
+    }
+}
+
+function minifyJSON() {
+    try {
+        const obj = JSON.parse(input.value);
+        input.value = JSON.stringify(obj);
+        highlighted.textContent = "";
+        message.textContent = "JSON minified.";
+        message.className = "message success";
+        updateLines();
+    } catch (e) {
+        message.textContent = e.message;
+        message.className = "message error";
+    }
+}
+
+function copyJSON() {
+    navigator.clipboard.writeText(input.value);
+    message.textContent = "Copied to clipboard.";
+    message.className = "message success";
+}
+
+function downloadJSON() {
+    const blob = new Blob([input.value], {type: "application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "data.json";
+    a.click();
+}
+
+function renderTree() {
+    try {
+        tree.innerHTML = "";
+        const obj = JSON.parse(input.value);
+        tree.appendChild(buildTree(obj));
+    } catch (e) {
+        message.textContent = e.message;
+        message.className = "message error";
+    }
+}
+
+function buildTree(obj) {
+    const details = document.createElement("details");
+    details.open = true;
+    const summary = document.createElement("summary");
+    summary.textContent = Array.isArray(obj) ? "Array" : "Object";
+    details.appendChild(summary);
+
+    for (let key in obj) {
+        const div = document.createElement("div");
+        if (typeof obj[key] === "object" && obj[key] !== null) {
+            div.innerHTML = `<strong>${key}:</strong>`;
+            div.appendChild(buildTree(obj[key]));
+        } else {
+            div.innerHTML = `<strong>${key}:</strong> ${obj[key]}`;
+        }
+        details.appendChild(div);
+    }
+    return details;
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>
