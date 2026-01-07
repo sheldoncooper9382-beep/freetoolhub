@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lorem Ipsum Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;
+  --accent-2: #c084fc;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
+  color: var(--text);
+}
+
+.glass {
+  width: 480px;
+  padding: 30px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.control {
+  background: rgba(255,255,255,0.25);
+  padding: 12px;
+  border-radius: 16px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+input, select {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.25);
+  color: white;
+}
+
+.options {
+  grid-column: span 3;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.output {
+  margin-top: 16px;
+  padding: 16px;
+  min-height: 140px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.35);
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #020617;
+  box-shadow:
+    0 0 18px rgba(34,240,255,0.6),
+    0 10px 25px rgba(0,0,0,0.45);
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>✍️ Lorem Ipsum Generator</h1>
+
+  <div class="controls">
+    <div class="control">
+      <label>Amount</label>
+      <input type="number" id="amount" value="3" min="1" max="50">
+    </div>
+
+    <div class="control">
+      <label>Type</label>
+      <select id="type">
+        <option value="paragraphs">Paragraphs</option>
+        <option value="sentences">Sentences</option>
+        <option value="words">Words</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Start With</label>
+      <select id="start">
+        <option value="lorem">Lorem ipsum…</option>
+        <option value="random">Random text</option>
+      </select>
+    </div>
+
+    <div class="options">
+      <label>
+        <input type="checkbox" id="lineBreaks" checked> Line breaks
+      </label>
+    </div>
+  </div>
+
+  <div class="output" id="output"></div>
+
+  <div class="actions">
+    <button onclick="generate()">Generate</button>
+    <button class="secondary" onclick="copyText()">Copy</button>
+  </div>
+</div>
+
+<script>
+const baseText = `
+lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt
+in culpa qui officia deserunt mollit anim id est laborum
+`.trim().split(" ");
+
+function randomWord() {
+  return baseText[Math.floor(Math.random() * baseText.length)];
+}
+
+function sentence() {
+  const len = Math.floor(Math.random() * 8) + 8;
+  let s = [];
+  for (let i = 0; i < len; i++) s.push(randomWord());
+  let result = s.join(" ");
+  return result.charAt(0).toUpperCase() + result.slice(1) + ".";
+}
+
+function paragraph() {
+  const len = Math.floor(Math.random() * 3) + 3;
+  let p = [];
+  for (let i = 0; i < len; i++) p.push(sentence());
+  return p.join(" ");
+}
+
+function generate() {
+  const amount = +document.getElementById("amount").value;
+  const type = document.getElementById("type").value;
+  const start = document.getElementById("start").value;
+  const lineBreaks = document.getElementById("lineBreaks").checked;
+  let result = [];
+
+  if (type === "words") {
+    for (let i = 0; i < amount; i++) result.push(randomWord());
+    document.getElementById("output").textContent = result.join(" ");
+    return;
+  }
+
+  if (type === "sentences") {
+    for (let i = 0; i < amount; i++) result.push(sentence());
+  }
+
+  if (type === "paragraphs") {
+    for (let i = 0; i < amount; i++) result.push(paragraph());
+  }
+
+  if (start === "lorem") {
+    result[0] = "Lorem ipsum dolor sit amet, " + result[0].slice(0,1).toLowerCase() + result[0].slice(1);
+  }
+
+  document.getElementById("output").textContent = result.join(lineBreaks ? "\n\n" : " ");
+}
+
+function copyText() {
+  const text = document.getElementById("output").textContent;
+  if (text) navigator.clipboard.writeText(text);
+}
+
+generate();
+</script>
+
+</body>
+</html>
