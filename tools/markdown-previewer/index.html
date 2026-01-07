@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown Previewer</title>
+
+<style>
+:root {
+    --bg: #0f2027;
+    --card: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.25);
+    --text: #ffffff;
+    --accent: #00ffd5;
+    --editor-bg: #1e1e1e;
+    --editor-text: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 95%;
+    max-width: 900px;
+    padding: 25px;
+    border-radius: 20px;
+    background: var(--card);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.editor-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    resize: vertical;
+    background: var(--editor-bg);
+    color: var(--editor-text);
+    font-size: 1rem;
+}
+
+textarea:focus {
+    outline: 2px solid var(--accent);
+}
+
+.preview {
+    min-height: 300px;
+    padding: 15px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #000000;
+    overflow-y: auto;
+}
+
+.preview h1, .preview h2, .preview h3 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.preview code {
+    background: #eee;
+    padding: 2px 5px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.preview pre {
+    background: #eee;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .editor-preview {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Markdown Previewer</h1>
+
+    <div class="editor-preview">
+        <textarea id="markdownInput" placeholder="# Type Markdown here...
+
+## Example
+- **Bold text**
+- *Italic text*
+- `inline code`
+
+```js
+console.log('Hello World');
