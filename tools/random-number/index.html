@@ -7,10 +7,11 @@
 
 <style>
 :root {
-  --glass-bg: rgba(255,255,255,0.15);
-  --glass-border: rgba(255,255,255,0.25);
-  --accent: #7dd3fc;
-  --text: #ffffff;
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;        /* neon cyan */
+  --accent-2: #c084fc;     /* neon purple */
+  --text: #f8fafc;
 }
 
 * {
@@ -24,25 +25,32 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at top left, #0f172a, #020617);
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
   color: var(--text);
 }
 
 .glass {
   width: 460px;
   padding: 28px;
-  border-radius: 20px;
+  border-radius: 22px;
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+  box-shadow:
+    0 25px 50px rgba(0,0,0,0.45),
+    inset 0 0 0 1px rgba(255,255,255,0.15);
 }
 
 h1 {
-  margin: 0 0 16px;
+  margin: 0 0 18px;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.55rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 .controls {
@@ -52,32 +60,33 @@ h1 {
 }
 
 .control {
-  background: rgba(255,255,255,0.2);
-  padding: 10px;
-  border-radius: 14px;
+  background: rgba(255,255,255,0.28);
+  padding: 12px;
+  border-radius: 16px;
 }
 
 label {
   font-size: 0.75rem;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 input[type="number"] {
   width: 100%;
   margin-top: 6px;
-  padding: 8px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 12px;
   border: none;
   outline: none;
-  background: rgba(255,255,255,0.25);
+  background: rgba(0,0,0,0.25);
   color: white;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
 }
 
 .options {
   grid-column: span 2;
   display: flex;
   justify-content: space-between;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .options label {
@@ -86,35 +95,50 @@ input[type="number"] {
 }
 
 .output {
-  margin-top: 16px;
-  padding: 14px;
+  margin-top: 18px;
+  padding: 16px;
   min-height: 100px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.15);
+  border-radius: 16px;
+  background: rgba(0,0,0,0.35);
   overflow-wrap: anywhere;
   font-family: monospace;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.15),
+    0 0 18px rgba(34,240,255,0.15);
 }
 
 .actions {
-  margin-top: 14px;
+  margin-top: 16px;
   display: flex;
   gap: 10px;
 }
 
 button {
   flex: 1;
-  padding: 12px;
-  border-radius: 14px;
+  padding: 13px;
+  border-radius: 16px;
   border: none;
   cursor: pointer;
-  font-weight: 600;
-  background: var(--accent);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
   color: #020617;
+  box-shadow:
+    0 0 18px rgba(34,240,255,0.45),
+    0 10px 30px rgba(0,0,0,0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 28px rgba(34,240,255,0.75),
+    0 16px 40px rgba(0,0,0,0.5);
 }
 
 button.secondary {
-  background: rgba(255,255,255,0.6);
+  background: linear-gradient(135deg, #e5e7eb, #cbd5f5);
+  box-shadow: 0 0 12px rgba(192,132,252,0.4);
 }
 </style>
 </head>
@@ -170,14 +194,12 @@ function generate() {
   let numbers = new Set();
 
   while (numbers.size < count) {
-    if (!unique && numbers.size >= count) break;
     numbers.add(randomNumber(digits));
     if (!unique && numbers.size >= count) break;
   }
 
-  let result = Array.from(numbers);
+  let result = unique ? Array.from(numbers) : [];
   if (!unique) {
-    result = [];
     for (let i = 0; i < count; i++) result.push(randomNumber(digits));
   }
 
