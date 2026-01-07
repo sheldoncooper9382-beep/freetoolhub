@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Word Counter – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;
+  --accent-2: #c084fc;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
+  color: var(--text);
+}
+
+.glass {
+  width: 460px;
+  padding: 30px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.control {
+  background: rgba(255,255,255,0.28);
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  min-height: 120px;
+  background: rgba(0,0,0,0.25);
+  color: white;
+  font-size: 0.95rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+.stats {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.35);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.stat {
+  background: rgba(255,255,255,0.2);
+  padding: 10px;
+  border-radius: 14px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #020617;
+  box-shadow:
+    0 0 18px rgba(34,240,255,0.6),
+    0 10px 25px rgba(0,0,0,0.45);
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>🧮 Word Counter</h1>
+
+  <div class="control">
+    <label>Enter Text</label>
+    <textarea id="text" placeholder="Type or paste text here..." oninput="countText()"></textarea>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="words">0</strong>
+      Words
+    </div>
+    <div class="stat">
+      <strong id="chars">0</strong>
+      Characters
+    </div>
+    <div class="stat">
+      <strong id="charsNoSpaces">0</strong>
+      Characters (No Spaces)
+    </div>
+    <div class="stat">
+      <strong id="sentences">0</strong>
+      Sentences
+    </div>
+    <div class="stat">
+      <strong id="paragraphs">0</strong>
+      Paragraphs
+    </div>
+    <div class="stat">
+      <strong id="readingTime">0 min</strong>
+      Reading Time
+    </div>
+  </div>
+
+  <div class="actions">
+    <button onclick="clearText()">Clear</button>
+  </div>
+</div>
+
+<script>
+function countText() {
+  const text = document.getElementById("text").value;
+
+  const chars = text.length;
+  const charsNoSpaces = text.replace(/\s/g, "").length;
+
+  const words = text.trim()
+    ? text.trim().split(/\s+/).length
+    : 0;
+
+  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length).length;
+
+  const paragraphs = text.split(/\n+/).filter(p => p.trim().length).length;
+
+  const readingTime = Math.max(1, Math.ceil(words / 200));
+
+  document.getElementById("words").textContent = words;
+  document.getElementById("chars").textContent = chars;
+  document.getElementById("charsNoSpaces").textContent = charsNoSpaces;
+  document.getElementById("sentences").textContent = sentences;
+  document.getElementById("paragraphs").textContent = paragraphs;
+  document.getElementById("readingTime").textContent =
+    words ? readingTime + " min" : "0 min";
+}
+
+function clearText() {
+  document.getElementById("text").value = "";
+  countText();
+}
+
+countText();
+</script>
+
+</body>
+</html>
