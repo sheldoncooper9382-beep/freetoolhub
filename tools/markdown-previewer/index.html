@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Markdown Previewer</title>
+
+<title>Markdown Previewer Online | Live Markdown Editor</title>
+<meta name="description" content="Free online Markdown Previewer with live preview, toolbar, dark mode, line numbers, and download support.">
+<meta name="keywords" content="markdown previewer, markdown editor, live markdown, markdown to html">
+<meta name="robots" content="index, follow">
 
 <style>
 :root {
@@ -16,6 +20,15 @@
     --editor-text: #ffffff;
 }
 
+.light {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --border: #ddd;
+    --text: #000;
+    --editor-bg: #fafafa;
+    --editor-text: #000;
+}
+
 * {
     box-sizing: border-box;
     font-family: "Segoe UI", sans-serif;
@@ -24,44 +37,72 @@
 body {
     margin: 0;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: linear-gradient(135deg, var(--bg), #203a43);
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .container {
     width: 95%;
-    max-width: 900px;
-    padding: 25px;
-    border-radius: 20px;
+    max-width: 1100px;
     background: var(--card);
-    backdrop-filter: blur(14px);
     border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 20px;
     color: var(--text);
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.editor-preview {
+header h1 {
+    font-size: 1.4rem;
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.toolbar button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ffd5, #00bfff);
+    color: #000;
+}
+
+.editor-area {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    grid-template-columns: auto 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.line-numbers {
+    background: #2b2b2b;
+    color: #aaa;
+    padding: 12px 8px;
+    text-align: right;
+    user-select: none;
 }
 
 textarea {
-    width: 100%;
-    min-height: 300px;
-    padding: 15px;
+    padding: 12px;
+    background: var(--editor-bg);
+    color: var(--editor-text);
     border-radius: 12px;
     border: none;
     resize: vertical;
-    background: var(--editor-bg);
-    color: var(--editor-text);
-    font-size: 1rem;
+    min-height: 300px;
 }
 
 textarea:focus {
@@ -69,36 +110,53 @@ textarea:focus {
 }
 
 .preview {
-    min-height: 300px;
-    padding: 15px;
-    border-radius: 12px;
     background: #ffffff;
     color: #000000;
+    border-radius: 12px;
+    padding: 15px;
     overflow-y: auto;
-}
-
-.preview h1, .preview h2, .preview h3 {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
-}
-
-.preview code {
-    background: #eee;
-    padding: 2px 5px;
-    border-radius: 5px;
-    font-family: monospace;
+    min-height: 300px;
 }
 
 .preview pre {
     background: #eee;
     padding: 10px;
     border-radius: 8px;
-    overflow-x: auto;
 }
 
-@media (max-width: 768px) {
-    .editor-preview {
-        grid-template-columns: 1fr;
+.preview code {
+    background: #eee;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.controls button {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ffd5, #00bfff);
+    color: #000;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .editor-area {
+        grid-template-columns: auto 1fr;
+    }
+    .preview {
+        grid-column: span 2;
     }
 }
 </style>
@@ -107,15 +165,110 @@ textarea:focus {
 <body>
 
 <div class="container">
+<header>
     <h1>Markdown Previewer</h1>
+    <button onclick="toggleTheme()">🌗</button>
+</header>
 
-    <div class="editor-preview">
-        <textarea id="markdownInput" placeholder="# Type Markdown here...
+<div class="toolbar">
+    <button onclick="wrap('**')">Bold</button>
+    <button onclick="wrap('*')">Italic</button>
+    <button onclick="insert('# ')">Heading</button>
+    <button onclick="wrap('`')">Code</button>
+    <button onclick="insert('[text](url)')">Link</button>
+</div>
 
-## Example
-- **Bold text**
-- *Italic text*
-- `inline code`
+<div class="editor-area">
+    <div class="line-numbers" id="lines">1</div>
+    <textarea id="markdownInput" placeholder="# Start writing Markdown..."></textarea>
+    <div class="preview" id="preview"></div>
+</div>
 
-```js
-console.log('Hello World');
+<div class="controls">
+    <button onclick="copyHTML()">Copy HTML</button>
+    <button onclick="downloadMD()">Download .md</button>
+    <button onclick="togglePreview()">Toggle Preview</button>
+</div>
+
+</div>
+
+<script>
+const input = document.getElementById("markdownInput");
+const preview = document.getElementById("preview");
+const lines = document.getElementById("lines");
+
+input.addEventListener("input", () => {
+    updateLines();
+    renderMarkdown();
+    syncScroll();
+});
+
+function updateLines() {
+    const count = input.value.split("\n").length;
+    lines.innerHTML = Array.from({length: count}, (_, i) => i + 1).join("<br>");
+}
+
+function renderMarkdown() {
+    let text = input.value;
+
+    text = text
+        .replace(/^### (.*$)/gim, "<h3>$1</h3>")
+        .replace(/^## (.*$)/gim, "<h2>$1</h2>")
+        .replace(/^# (.*$)/gim, "<h1>$1</h1>")
+        .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
+        .replace(/\*(.*?)\*/gim, "<em>$1</em>")
+        .replace(/`([^`]*)`/gim, "<code>$1</code>")
+        .replace(/```([\s\S]*?)```/gim, "<pre><code>$1</code></pre>")
+        .replace(/\n$/gim, "<br>");
+
+    preview.innerHTML = text;
+}
+
+function wrap(symbol) {
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const selected = input.value.substring(start, end);
+    input.setRangeText(symbol + selected + symbol);
+    input.focus();
+    renderMarkdown();
+}
+
+function insert(text) {
+    input.setRangeText(text, input.selectionStart, input.selectionEnd, "end");
+    input.focus();
+    renderMarkdown();
+}
+
+function copyHTML() {
+    navigator.clipboard.writeText(preview.innerHTML);
+    alert("Rendered HTML copied!");
+}
+
+function downloadMD() {
+    const blob = new Blob([input.value], {type: "text/markdown"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "document.md";
+    a.click();
+}
+
+function togglePreview() {
+    preview.classList.toggle("hidden");
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("light");
+}
+
+function syncScroll() {
+    const ratio = input.scrollTop / (input.scrollHeight - input.clientHeight);
+    preview.scrollTop = ratio * (preview.scrollHeight - preview.clientHeight);
+}
+
+// Initial render
+renderMarkdown();
+updateLines();
+</script>
+
+</body>
+</html>
