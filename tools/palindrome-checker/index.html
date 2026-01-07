@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Palindrome Checker – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;
+  --accent-2: #c084fc;
+  --success: #22c55e;
+  --error: #ef4444;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
+  color: var(--text);
+}
+
+.glass {
+  width: 420px;
+  padding: 30px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.control {
+  background: rgba(255,255,255,0.28);
+  padding: 14px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.25);
+  color: white;
+  font-size: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+.result {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.result.success {
+  background: rgba(34,197,94,0.25);
+  color: var(--success);
+}
+
+.result.error {
+  background: rgba(239,68,68,0.25);
+  color: var(--error);
+}
+
+.note {
+  margin-top: 12px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>🔁 Palindrome Checker</h1>
+
+  <div class="control">
+    <label>Enter text or number</label>
+    <input
+      type="text"
+      id="inputText"
+      placeholder="e.g. A man, a plan, a canal, Panama"
+      oninput="checkPalindrome()"
+    >
+  </div>
+
+  <div id="result" class="result">
+    Start typing to check...
+  </div>
+
+  <div class="note">
+    Spaces, punctuation, and letter case are ignored.
+  </div>
+</div>
+
+<script>
+function checkPalindrome() {
+  const input = document.getElementById("inputText").value;
+  const result = document.getElementById("result");
+
+  if (!input.trim()) {
+    result.className = "result";
+    result.textContent = "Start typing to check...";
+    return;
+  }
+
+  const cleaned = input
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+
+  const reversed = cleaned.split("").reverse().join("");
+
+  if (cleaned && cleaned === reversed) {
+    result.className = "result success";
+    result.textContent = "✅ This is a palindrome!";
+  } else {
+    result.className = "result error";
+    result.textContent = "❌ Not a palindrome";
+  }
+}
+</script>
+
+</body>
+</html>
