@@ -1,0 +1,135 @@
+:root {
+    --bg: #0f2027;
+    --card: rgba(255,255,255,0.12);
+    --border: rgba(255,255,255,0.25);
+    --text: #ffffff;
+    --accent: #00ffd5;
+    --editor-bg: #1e1e1e;
+    --editor-text: #ffffff;
+    --error: #ff6b6b;
+    --success: #00ff9c;
+}
+
+.light {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --border: #ddd;
+    --text: #000;
+    --editor-bg: #fafafa;
+    --editor-text: #000;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: Consolas, monospace;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--bg), #203a43);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 95%;
+    max-width: 1000px;
+    padding: 25px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toggle {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.editor-wrapper {
+    display: flex;
+    margin-top: 15px;
+}
+
+.line-numbers {
+    background: #2b2b2b;
+    color: #aaa;
+    padding: 15px 10px;
+    text-align: right;
+    user-select: none;
+}
+
+textarea {
+    width: 100%;
+    min-height: 300px;
+    padding: 15px;
+    border: none;
+    resize: vertical;
+    background: var(--editor-bg);
+    color: var(--editor-text);
+}
+
+textarea:focus {
+    outline: 2px solid var(--accent);
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+button {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: linear-gradient(135deg, #00ffd5, #00bfff);
+    color: #000;
+}
+
+.message { font-weight: bold; }
+.error { color: var(--error); }
+.success { color: var(--success); }
+
+.confidence {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+pre {
+    background: #111;
+    padding: 15px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.key { color: #ffcb6b; }
+.string { color: #c3e88d; }
+.number { color: #f78c6c; }
+.boolean { color: #82aaff; }
+.null { color: #ff5370; }
+
+.diff {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+details {
+    margin-left: 15px;
+}
