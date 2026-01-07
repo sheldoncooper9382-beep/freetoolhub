@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Loan Calculator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;
+  --accent-2: #c084fc;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
+  color: var(--text);
+}
+
+.glass {
+  width: 460px;
+  padding: 30px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.control {
+  background: rgba(255,255,255,0.28);
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.25);
+  color: white;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #020617;
+  box-shadow:
+    0 0 22px rgba(34,240,255,0.7),
+    0 12px 30px rgba(0,0,0,0.45);
+  transition: transform 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+.results {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.35);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.result-row strong {
+  color: var(--accent);
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>💰 Loan Calculator</h1>
+
+  <div class="control">
+    <label>Loan Amount</label>
+    <input type="number" id="amount" placeholder="e.g. 25000">
+  </div>
+
+  <div class="control">
+    <label>Annual Interest Rate (%)</label>
+    <input type="number" id="rate" step="0.01" placeholder="e.g. 5.5">
+  </div>
+
+  <div class="control">
+    <label>Loan Term (Years)</label>
+    <input type="number" id="years" placeholder="e.g. 5">
+  </div>
+
+  <button onclick="calculateLoan()">Calculate</button>
+
+  <div class="results" id="results">
+    <div class="result-row">
+      <span>Monthly Payment</span>
+      <strong id="monthly">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Total Interest</span>
+      <strong id="interest">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Total Paid</span>
+      <strong id="total">—</strong>
+    </div>
+  </div>
+
+  <div class="note">
+    Results are estimates and for informational purposes only.
+  </div>
+</div>
+
+<script>
+function calculateLoan() {
+  const amount = parseFloat(document.getElementById("amount").value);
+  const rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  const years = parseFloat(document.getElementById("years").value);
+
+  if (!amount || !rate || !years) return;
+
+  const months = years * 12;
+  const monthly =
+    (amount * rate) / (1 - Math.pow(1 + rate, -months));
+
+  const totalPaid = monthly * months;
+  const totalInterest = totalPaid - amount;
+
+  document.getElementById("monthly").textContent =
+    "$" + monthly.toFixed(2);
+
+  document.getElementById("interest").textContent =
+    "$" + totalInterest.toFixed(2);
+
+  document.getElementById("total").textContent =
+    "$" + totalPaid.toFixed(2);
+}
+</script>
+
+</body>
+</html>
