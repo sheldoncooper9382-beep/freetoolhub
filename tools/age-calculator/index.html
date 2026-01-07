@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Age Calculator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.22);
+  --glass-border: rgba(255,255,255,0.45);
+  --accent: #22f0ff;
+  --accent-2: #c084fc;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    radial-gradient(circle at bottom right, #3b0764, transparent);
+  color: var(--text);
+}
+
+.glass {
+  width: 420px;
+  padding: 30px;
+  border-radius: 24px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.control {
+  background: rgba(255,255,255,0.28);
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+input[type="date"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.25);
+  color: white;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+}
+
+button {
+  margin-top: 16px;
+  width: 100%;
+  padding: 14px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #020617;
+  box-shadow:
+    0 0 22px rgba(34,240,255,0.7),
+    0 12px 30px rgba(0,0,0,0.45);
+  transition: transform 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+.results {
+  margin-top: 18px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.35);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.result-row strong {
+  color: var(--accent);
+}
+
+.highlight {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  opacity: 0.8;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>🎂 Age Calculator</h1>
+
+  <div class="control">
+    <label>Date of Birth</label>
+    <input type="date" id="dob">
+  </div>
+
+  <button onclick="calculateAge()">Calculate Age</button>
+
+  <div class="results" id="results" style="display:none;">
+    <div class="highlight" id="ageText"></div>
+
+    <div class="result-row">
+      <span>Years</span>
+      <strong id="years">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Months</span>
+      <strong id="months">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Days</span>
+      <strong id="days">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Total Days Lived</span>
+      <strong id="totalDays">—</strong>
+    </div>
+    <div class="result-row">
+      <span>Next Birthday In</span>
+      <strong id="nextBday">—</strong>
+    </div>
+  </div>
+
+  <div class="note">
+    Age is calculated based on today’s date.
+  </div>
+</div>
+
+<script>
+function calculateAge() {
+  const dobInput = document.getElementById("dob").value;
+  if (!dobInput) return;
+
+  const dob = new Date(dobInput);
+  const today = new Date();
+
+  let years = today.getFullYear() - dob.getFullYear();
+  let months = today.getMonth() - dob.getMonth();
+  let days = today.getDate() - dob.getDate();
+
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  const totalDays = Math.floor((today - dob) / (1000 * 60 * 60 * 24));
+
+  const nextBirthday = new Date(
+    today.getFullYear(),
+    dob.getMonth(),
+    dob.getDate()
+  );
+
+  if (nextBirthday < today) {
+    nextBirthday.setFullYear(today.getFullYear() + 1);
+  }
+
+  const daysUntilBirthday = Math.ceil(
+    (nextBirthday - today) / (1000 * 60 * 60 * 24)
+  );
+
+  document.getElementById("results").style.display = "block";
+  document.getElementById("ageText").textContent =
+    `${years} Years, ${months} Months, ${days} Days`;
+
+  document.getElementById("years").textContent = years;
+  document.getElementById("months").textContent = months;
+  document.getElementById("days").textContent = days;
+  document.getElementById("totalDays").textContent = totalDays;
+  document.getElementById("nextBday").textContent =
+    daysUntilBirthday + " days";
+}
+</script>
+
+</body>
+</html>
