@@ -48,9 +48,10 @@
   { "name": "Hex to RGB Converter", "description": "Convert hex colors to RGB", "icon": "🎨", "path": "tools/hex-rgb/" },
   { "name": "RGB to Hex Converter", "description": "Convert RGB to hex colors", "icon": "🎨", "path": "tools/rgb-hex/" },
   { "name": "CSS Minifier", "description": "Minify CSS code", "icon": "🧩", "path": "tools/css-minifier/" },
-  { "name": "JS Minifier", "description": "Minify JavaScript code", "icon": "🧩", "path": "tools/js-minifier/" }
-  { "name": "Radio Button", "description" "Radio Button Generator", "icon": "◯", "path" " "tools/radio-button/" },
-
+  { "name": "JS Minifier", "description": "Minify JavaScript code", "icon": "🧩", "path": "tools/js-minifier/" },
+  { "name": "Radio Button", "description" "Radio Button Generator", "icon": "◯", "path": "tools/radio-button/" }
 ]
+
+
 
 
