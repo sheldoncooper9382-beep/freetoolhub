@@ -1,27 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hex Palette Generator</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Hex Color Palette Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.15);
+  --glass-border: rgba(255,255,255,0.25);
+  --accent: #7dd3fc;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  color: var(--text);
+}
+
+.glass {
+  width: 520px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+h1 {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.control {
+  background: rgba(255,255,255,0.2);
+  padding: 10px;
+  border-radius: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+.palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.color {
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+
+.color:hover {
+  transform: translateY(-2px);
+}
+
+.color span {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  background: rgba(0,0,0,0.35);
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.lock {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--accent);
+  color: #020617;
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.6);
+}
+</style>
 </head>
+
 <body>
 
-<div class="app">
-  <h1>Hex Palette Generator</h1>
+<div class="glass">
+  <h1>🎨 Hex Color Palette Generator</h1>
 
-  <select id="mode">
-    <option value="ui">UI / Neutral</option>
-    <option value="mono">Monochrome</option>
-    <option value="analogous">Analogous</option>
-    <option value="complementary">Complementary</option>
-  </select>
+  <div class="controls">
+    <div class="control">
+      <label>Palette Size</label>
+      <input type="range" id="size" min="2" max="6" value="5">
+    </div>
+    <div class="control">
+      <label>Colors: <span id="count">5</span></label>
+    </div>
+  </div>
 
-  <button id="generate">Generate Palette</button>
+  <div class="palette" id="palette"></div>
 
-  <div id="palette"></div>
+  <div class="actions">
+    <button onclick="generate()">Generate</button>
+    <button class="secondary" onclick="copyAll()">Copy Palette</button>
+  </div>
 </div>
 
-<script src="app.js"></script>
+<script>
+const paletteEl = document.getElementById("palette");
+const sizeEl = document.getElementById("size");
+const countEl = document.getElementById("count");
+
+let colors = [];
+
+function randomHex() {
+  return "#" + Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, "0");
+}
+
+function generate() {
+  colors = colors.map(c => c.locked ? c : { hex: randomHex(), locked: false });
+
+  while (colors.length < sizeEl.value) {
+    colors.push({ hex: randomHex(), locked: false });
+  }
+
+  colors = colors.slice(0, sizeEl.value);
+  render();
+}
+
+function render() {
+  countEl.textContent = sizeEl.value;
+  paletteEl.innerHTML = "";
+
+  colors.forEach((c, i) => {
+    const div = document.createElement("div");
+    div.className = "color";
+    div.style.background = c.hex;
+    div.onclick = () => copyHex(c.hex);
+
+    const lock = document.createElement("div");
+    lock.className = "lock";
+    lock.textContent = c.locked ? "🔒" : "🔓";
+    lock.onclick = e => {
+      e.stopPropagation();
+      c.locked = !c.locked;
+      render();
+    };
+
+    const span = document.createElement("span");
+    span.textContent = c.hex;
+
+    div.appendChild(lock);
+    div.appendChild(span);
+    paletteEl.appendChild(div);
+  });
+}
+
+function copyHex(hex) {
+  navigator.clipboard.writeText(hex);
+}
+
+function copyAll() {
+  navigator.clipboard.writeText(colors.map(c => c.hex).join(", "));
+}
+
+sizeEl.addEventListener("input", generate);
+generate();
+</script>
+
 </body>
 </html>
