@@ -19,7 +19,7 @@
   { "name": "Hex Color Palette Generator", "description": "Generate color palettes", "icon": "🟩", "path": "tools/hex-palette/" },
   { "name": "Clipboard Copy Tool", "description": "Copy text to clipboard easily", "icon": "📋", "path": "tools/clipboard-copy/" },
   { "name": "Todo List", "description": "Create simple offline todos", "icon": "✅", "path": "tools/todo-list/" },
-  { "name": "Stopwatch", "description": "Track time offline", "icon": "⏱️", "path": "tools/stopwatch/" },
+  { "name": "Stopwatch", "description": "Track time offline", "icon": "⏱️", "path": "tools/stopwatch-tool/" },
   { "name": "Countdown Timer", "description": "Set timers quickly", "icon": "⏳", "path": "tools/countdown-timer/" },
   { "name": "Random Number Generator", "description": "Generate numbers randomly", "icon": "🎲", "path": "tools/random-number/" },
   { "name": "Dice Roller", "description": "Roll dice for games", "icon": "🎲", "path": "tools/dice-roller/" },
@@ -51,6 +51,7 @@
   { "name": "JS Minifier", "description": "Minify JavaScript code", "icon": "🧩", "path": "tools/js-minifier/" },
   { "name": "Radio Button", "description" "Radio Button Generator", "icon": "◯", "path": "tools/radio-button/" }
 ]
+
 
 
 
