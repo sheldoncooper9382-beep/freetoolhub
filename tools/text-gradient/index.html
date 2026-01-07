@@ -2,64 +2,206 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Text Gradient Generator – FreeToolHub</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TextStudio API Generator</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.15);
+  --glass-border: rgba(255,255,255,0.25);
+  --accent: #7dd3fc;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  color: var(--text);
+}
+
+.glass {
+  width: 480px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+h1 {
+  text-align: center;
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+
+.controls {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.control {
+  background: rgba(255,255,255,0.2);
+  padding: 10px;
+  border-radius: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+input[type="color"],
+input[type="range"],
+select {
+  width: 100%;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.preview {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.15);
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--accent);
+  color: #020617;
+}
+
+button.secondary {
+  background: rgba(255,255,255,0.6);
+}
+</style>
 </head>
+
 <body>
 
-<div class="container">
-  <h1>TextStudio API Text Generator</h1>
+<div class="glass">
+  <h1>🌈 Text Gradient Generator</h1>
 
-  <!-- Glassmorphic Preview -->
-  <div class="preview-panel">
-    <img id="previewImage" src="" alt="Generated Text Preview">
-    <div id="loading" class="loading">Generating...</div>
+  <textarea id="textInput">FreeToolHub</textarea>
+
+  <div class="controls">
+    <div class="control">
+      <label>Gradient Type</label>
+      <select id="type">
+        <option value="linear">Linear</option>
+        <option value="radial">Radial</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Angle (Linear)</label>
+      <input type="range" id="angle" min="0" max="360" value="90">
+    </div>
+
+    <div class="control">
+      <label>Color 1</label>
+      <input type="color" id="c1" value="#22d3ee">
+    </div>
+
+    <div class="control">
+      <label>Color 2</label>
+      <input type="color" id="c2" value="#a855f7">
+    </div>
   </div>
 
-  <!-- Controls -->
-  <div class="controls">
-    <label>Enter Text</label>
-    <input type="text" id="textInput" value="Hello World!">
+  <div class="preview" id="preview">FreeToolHub</div>
 
-    <label>Style ID (preset or user style)</label>
-    <input type="text" id="styleId" value="261">
-
-    <label>Background</label>
-    <select id="background">
-      <option value="opaque">Opaque</option>
-      <option value="transparent">Transparent</option>
-    </select>
-
-    <label>Padding (%)</label>
-    <input type="number" id="padding" value="5" min="0" max="50">
-
-    <label>Quality</label>
-    <select id="quality">
-      <option value="lite">Lite (768px)</option>
-      <option value="pro">Pro (2048px)</option>
-      <option value="ultra">Ultra (4096px)</option>
-    </select>
-
-    <label>Format</label>
-    <select id="format">
-      <option value="png">PNG</option>
-      <option value="webp">WEBP</option>
-      <option value="jpg">JPG</option>
-    </select>
-
-    <label>Aspect Ratio</label>
-    <select id="aspectRatio">
-      <option value="fit">Fit</option>
-      <option value="1:1">1:1</option>
-      <option value="16:9">16:9</option>
-    </select>
-
-    <button id="generateBtn">Generate Image</button>
-    <button id="downloadBtn">Download Image</button>
+  <div class="actions">
+    <button onclick="copyCSS()">Copy CSS</button>
+    <button class="secondary" onclick="copyHTML()">Copy HTML</button>
   </div>
 </div>
 
-<script src="main.js"></script>
+<script>
+const textInput = document.getElementById("textInput");
+const preview = document.getElementById("preview");
+const type = document.getElementById("type");
+const angle = document.getElementById("angle");
+const c1 = document.getElementById("c1");
+const c2 = document.getElementById("c2");
+
+function update() {
+  const gradient =
+    type.value === "linear"
+      ? `linear-gradient(${angle.value}deg, ${c1.value}, ${c2.value})`
+      : `radial-gradient(circle, ${c1.value}, ${c2.value})`;
+
+  preview.textContent = textInput.value || "";
+  preview.style.background = gradient;
+  preview.style.webkitBackgroundClip = "text";
+  preview.style.backgroundClip = "text";
+  preview.style.color = "transparent";
+}
+
+function copyCSS() {
+  const css = `
+background: ${preview.style.background};
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;`.trim();
+
+  navigator.clipboard.writeText(css);
+}
+
+function copyHTML() {
+  const html = `<span style="
+${preview.style.cssText}
+">${preview.textContent}</span>`;
+  navigator.clipboard.writeText(html);
+}
+
+document.querySelectorAll("input, select, textarea")
+  .forEach(el => el.addEventListener("input", update));
+
+update();
+</script>
+
 </body>
 </html>
