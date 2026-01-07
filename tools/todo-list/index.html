@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>To-Do List – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --accent: #7dd3fc;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #0f172a, #020617);
+  color: var(--text);
+}
+
+.glass {
+  width: 420px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+h1 {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.add-task {
+  display: flex;
+  gap: 10px;
+}
+
+.add-task input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.2);
+  color: white;
+  font-size: 0.95rem;
+}
+
+.add-task input::placeholder {
+  color: rgba(255,255,255,0.75);
+}
+
+.add-task button {
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--accent);
+  color: #020617;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-task button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.2);
+}
+
+li.completed span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+li span {
+  flex: 1;
+  cursor: pointer;
+}
+
+li button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="glass">
+  <h1>📝 To-Do List</h1>
+
+  <div class="add-task">
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <button onclick="addTask()">Add</button>
+  </div>
+
+  <ul id="taskList"></ul>
+</div>
+
+<script>
+const taskInput = document.getElementById("taskInput");
+const taskList = document.getElementById("taskList");
+
+let tasks = JSON.parse(localStorage.getItem("fth_tasks")) || [];
+
+function saveTasks() {
+  localStorage.setItem("fth_tasks", JSON.stringify(tasks));
+}
+
+function renderTasks() {
+  taskList.innerHTML = "";
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
+    if (task.completed) li.classList.add("completed");
+
+    const span = document.createElement("span");
+    span.textContent = task.text;
+    span.onclick = () => toggleTask(index);
+
+    const del = document.createElement("button");
+    del.innerHTML = "🗑️";
+    del.onclick = () => deleteTask(index);
+
+    li.appendChild(span);
+    li.appendChild(del);
+    taskList.appendChild(li);
+  });
+}
+
+function addTask() {
+  if (!taskInput.value.trim()) return;
+  tasks.push({ text: taskInput.value, completed: false });
+  taskInput.value = "";
+  saveTasks();
+  renderTasks();
+}
+
+function toggleTask(index) {
+  tasks[index].completed = !tasks[index].completed;
+  saveTasks();
+  renderTasks();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveTasks();
+  renderTasks();
+}
+
+taskInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") addTask();
+});
+
+renderTasks();
+</script>
+
+</body>
+</html>
