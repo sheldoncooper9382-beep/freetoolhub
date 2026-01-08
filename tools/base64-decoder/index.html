@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Decoder | FreeToolHub</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+}
+
+textarea {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+button {
+    background: linear-gradient(90deg,#22d3ee,#a855f7);
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 6px;
+}
+</style>
+</head>
+
+<body class="flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-4xl rounded-2xl p-8 text-white">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-unlock-keyhole"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold">Base64 Decoder</h1>
+            <p class="text-sm text-gray-300">Decode Base64 strings into readable text</p>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <div class="glass rounded-xl p-4 mb-6">
+        <h3 class="font-semibold mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-code text-cyan-400"></i> Base64 Input
+        </h3>
+        <textarea id="base64Input" rows="7"
+            placeholder="Paste Base64 string here..."
+            class="w-full p-4 rounded-lg text-white outline-none scrollbar"></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap gap-4 mb-4">
+        <button onclick="decodeBase64()"
+            class="px-6 py-3 rounded-lg font-semibold text-slate-900 hover:opacity-90 transition">
+            <i class="fa-solid fa-arrow-down"></i> Decode
+        </button>
+
+        <button onclick="copyOutput()"
+            class="px-6 py-3 rounded-lg font-semibold bg-white/20 text-white hover:bg-white/30 transition">
+            <i class="fa-solid fa-copy"></i> Copy Output
+        </button>
+    </div>
+
+    <!-- Output -->
+    <div class="glass rounded-xl p-4">
+        <h3 class="font-semibold mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-file-lines text-purple-400"></i> Decoded Output
+        </h3>
+        <textarea id="decodedOutput" rows="6"
+            placeholder="Decoded text will appear here..."
+            class="w-full p-4 rounded-lg text-white outline-none scrollbar"></textarea>
+    </div>
+
+    <!-- Status -->
+    <p id="status" class="mt-4 text-sm text-gray-300"></p>
+
+    <!-- Footer -->
+    <div class="mt-6 text-sm text-gray-400 flex justify-between">
+        <span>FreeToolHub • Base64 Decoder</span>
+        <span>100% client-side</span>
+    </div>
+
+</div>
+
+<script>
+const input = document.getElementById("base64Input");
+const output = document.getElementById("decodedOutput");
+const status = document.getElementById("status");
+
+function decodeBase64() {
+    try {
+        const decoded = decodeURIComponent(escape(atob(input.value.trim())));
+        output.value = decoded;
+        status.textContent = "✔ Successfully decoded";
+        status.className = "mt-4 text-sm text-green-400";
+    } catch (e) {
+        output.value = "";
+        status.textContent = "⚠ Invalid Base64 input";
+        status.className = "mt-4 text-sm text-red-400";
+    }
+}
+
+function copyOutput() {
+    if (!output.value) return;
+    navigator.clipboard.writeText(output.value);
+    status.textContent = "📋 Decoded text copied to clipboard";
+    status.className = "mt-4 text-sm text-cyan-400";
+}
+</script>
+
+</body>
+</html>
