@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radio Button Generator | FreeToolHub</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+}
+
+input, textarea, select {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+button.primary {
+    background: linear-gradient(90deg,#22d3ee,#a855f7);
+}
+
+.preview label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.preview input[type="radio"] {
+    accent-color: var(--accent);
+}
+</style>
+</head>
+
+<body class="flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-6xl rounded-2xl p-8 text-white">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-circle-dot"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold">Radio Button Generator</h1>
+            <p class="text-sm text-gray-300">Generate customizable radio button groups instantly</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+        <div class="glass rounded-xl p-4 space-y-4">
+            <div>
+                <label class="text-sm">Group Name</label>
+                <input id="groupName" value="options"
+                    class="w-full p-3 rounded-lg text-white outline-none">
+            </div>
+
+            <div>
+                <label class="text-sm">Options (one per line)</label>
+                <textarea id="options" rows="5"
+                    class="w-full p-3 rounded-lg text-white outline-none">Option One
+Option Two
+Option Three</textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm">Layout</label>
+                    <select id="layout" class="w-full p-3 rounded-lg text-white outline-none">
+                        <option value="column">Vertical</option>
+                        <option value="row">Horizontal</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm">Accent Color</label>
+                    <input id="color" type="color" value="#22d3ee"
+                        class="w-full h-12 rounded-lg">
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <label class="flex items-center gap-2">
+                    <input id="required" type="checkbox">
+                    Required
+                </label>
+                <label class="flex items-center gap-2">
+                    <input id="disabled" type="checkbox">
+                    Disabled
+                </label>
+            </div>
+
+            <button onclick="generate()"
+                class="primary w-full py-3 rounded-lg font-semibold text-slate-900">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate
+            </button>
+        </div>
+
+        <!-- Preview -->
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-3">
+                <i class="fa-solid fa-eye"></i> Live Preview
+            </h3>
+            <div id="preview" class="preview"></div>
+        </div>
+
+    </div>
+
+    <!-- Output -->
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2">HTML</h3>
+            <textarea id="htmlOutput" rows="8"
+                class="w-full p-3 rounded-lg text-white outline-none"></textarea>
+        </div>
+
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2">CSS</h3>
+            <textarea id="cssOutput" rows="8"
+                class="w-full p-3 rounded-lg text-white outline-none"></textarea>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function generate() {
+    const name = document.getElementById("groupName").value || "options";
+    const opts = document.getElementById("options").value.split("\n").filter(Boolean);
+    const layout = document.getElementById("layout").value;
+    const color = document.getElementById("color").value;
+    const required = document.getElementById("required").checked ? "required" : "";
+    const disabled = document.getElementById("disabled").checked ? "disabled" : "";
+
+    let html = `<div class="radio-group">\n`;
+    opts.forEach((o, i) => {
+        html += `  <label><input type="radio" name="${name}" value="${o}" ${required} ${disabled}> ${o}</label>\n`;
+    });
+    html += `</div>`;
+
+    const css = `
+.radio-group {
+  display: flex;
+  flex-direction: ${layout};
+  gap: 10px;
+  --accent: ${color};
+}
+.radio-group input[type="radio"] {
+  accent-color: var(--accent);
+}
+`;
+
+    document.getElementById("htmlOutput").value = html;
+    document.getElementById("cssOutput").value = css;
+
+    const preview = document.getElementById("preview");
+    preview.style.setProperty("--accent", color);
+    preview.innerHTML = html;
+    preview.querySelector(".radio-group").style.flexDirection = layout;
+}
+</script>
+
+</body>
+</html>
