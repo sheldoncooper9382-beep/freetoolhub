@@ -3,367 +3,211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JSON Formatter & Auto-Fix Tool</title>
-<meta name="description" content="Format, validate, minify, and auto-fix JSON with a modern frosted glass UI.">
+<title>JSON Formatter – Frosted Glass</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/highlight.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
 
 <style>
-/* =========================
-   ROOT / THEME VARIABLES
-========================= */
-:root {
-  --bg-gradient:
-    radial-gradient(circle at 10% 10%, #60a5fa33, transparent 40%),
-    radial-gradient(circle at 90% 90%, #c084fc33, transparent 45%),
-    linear-gradient(135deg, #020617, #0f172a);
-
-  --glass-bg: rgba(255,255,255,0.08);
-  --glass-strong: rgba(255,255,255,0.14);
-  --glass-border: rgba(255,255,255,0.28);
-
-  --blur-strong: blur(22px);
-  --blur-soft: blur(14px);
-
-  --text-main: #e5e7eb;
-  --text-muted: #94a3b8;
-
-  --accent-blue: #60a5fa;
-  --accent-green: #34d399;
-  --accent-purple: #c084fc;
-  --accent-red: #fb7185;
-
-  --shadow: 0 25px 60px rgba(0,0,0,.55);
-}
-
-/* =========================
-   BASE RESET
-========================= */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, Segoe UI, sans-serif;
-  background: var(--bg-gradient);
-  color: var(--text-main);
-  padding: 24px;
+    background: linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);
+    min-height:100vh;
 }
-
-/* =========================
-   LAYOUT
-========================= */
-.container {
-  max-width: 1400px;
-  margin: auto;
-  display: grid;
-  gap: 24px;
+.glass {
+    background: rgba(255,255,255,.08);
+    backdrop-filter: blur(16px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:16px;
 }
-
-header {
-  text-align: center;
-  padding: 32px;
-  background: var(--glass-strong);
-  backdrop-filter: var(--blur-strong);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
+.error-line {
+    background:rgba(239,68,68,.15);
+    border-left:4px solid #ef4444;
 }
-
-header h1 {
-  font-size: 2.4rem;
-  background: linear-gradient(90deg,var(--accent-blue),var(--accent-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-header p {
-  margin-top: 10px;
-  color: var(--text-muted);
-}
-
-main {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-@media (max-width: 900px) {
-  main { grid-template-columns: 1fr; }
-}
-
-/* =========================
-   GLASS PANELS
-========================= */
-.panel {
-  background: var(--glass-bg);
-  backdrop-filter: var(--blur-soft);
-  border: 1px solid var(--glass-border);
-  border-radius: 22px;
-  padding: 18px;
-  box-shadow: var(--shadow);
-}
-
-/* =========================
-   TOOLBAR
-========================= */
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-button {
-  background: rgba(255,255,255,0.12);
-  border: 1px solid var(--glass-border);
-  color: var(--text-main);
-  padding: 10px 14px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: .25s ease;
-  backdrop-filter: var(--blur-soft);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,0.18);
-}
-
-.primary { color: var(--accent-blue); }
-.success { color: var(--accent-green); }
-.warn { color: #fbbf24; }
-
-/* =========================
-   EDITOR
-========================= */
-.editor {
-  display: flex;
-  border-radius: 18px;
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-  background: rgba(0,0,0,0.25);
-}
-
-.lines {
-  padding: 14px 8px;
-  text-align: right;
-  font-family: monospace;
-  font-size: .9rem;
-  color: #94a3b8;
-  user-select: none;
-}
-
-textarea {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  padding: 14px;
-  font-family: monospace;
-  font-size: .95rem;
-  resize: vertical;
-  outline: none;
-}
-
-/* =========================
-   STATUS
-========================= */
-.status {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  font-size: .9rem;
-  color: var(--text-muted);
-}
-
-/* =========================
-   TABS
-========================= */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.tab {
-  flex: 1;
-  padding: 10px;
-  text-align: center;
-  border-radius: 12px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid var(--glass-border);
-}
-
-.tab.active {
-  background: rgba(96,165,250,0.25);
-  color: var(--accent-blue);
-}
-
-.output {
-  display: none;
-}
-
-.output.active {
-  display: block;
-}
-
-pre {
-  max-height: 420px;
-  overflow: auto;
-  background: rgba(0,0,0,0.25);
-  padding: 14px;
-  border-radius: 14px;
-  border: 1px solid var(--glass-border);
-  font-family: monospace;
-}
-
-/* =========================
-   DIFF
-========================= */
-.diff {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-@media (max-width: 700px) {
-  .diff { grid-template-columns: 1fr; }
+.fix-line {
+    background:rgba(34,197,94,.15);
+    border-left:4px solid #22c55e;
 }
 </style>
 </head>
 
-<body>
-<div class="container">
+<body class="flex items-center justify-center p-6">
 
-<header>
-  <h1>JSON Formatter & Auto-Fix Tool</h1>
-  <p>Validate, format, minify, and repair JSON instantly</p>
-</header>
+<div class="w-full max-w-4xl">
+    <h1 class="text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 mb-4">
+        JSON Formatter
+    </h1>
+    <p class="text-center text-gray-300 mb-6">
+        Format • Validate • Auto-Fix
+    </p>
 
-<main>
+    <div class="glass p-6 space-y-4">
 
-<!-- LEFT -->
-<section class="panel">
-  <div class="toolbar">
-    <button class="primary" onclick="formatJSON()">Format</button>
-    <button onclick="minifyJSON()">Minify</button>
-    <button onclick="validateJSON()">Validate</button>
-    <button class="success" onclick="autoFix()">Auto-Fix</button>
-    <button onclick="undoFix()">Undo</button>
-  </div>
+        <textarea id="json-input"
+            class="w-full h-48 p-4 rounded-xl bg-black bg-opacity-30 text-white font-mono resize-none focus:outline-none"
+            placeholder="Paste JSON here..."></textarea>
 
-  <div class="editor">
-    <div class="lines" id="lines">1</div>
-    <textarea id="input" placeholder='Paste JSON here...'></textarea>
-  </div>
+        <div class="flex gap-3 flex-wrap">
+            <button id="format-btn" class="px-5 py-2 bg-blue-600 rounded-xl text-white">
+                <i class="fa fa-wrench mr-1"></i> Format
+            </button>
+            <button id="validate-btn" class="px-5 py-2 bg-green-600 rounded-xl text-white">
+                <i class="fa fa-check mr-1"></i> Validate
+            </button>
+            <button id="clear-btn" class="px-5 py-2 bg-gray-600 rounded-xl text-white">
+                <i class="fa fa-trash mr-1"></i> Clear
+            </button>
+        </div>
 
-  <div class="status">
-    <span id="status">Ready</span>
-    <span id="confidence">Confidence: -%</span>
-  </div>
-</section>
+        <!-- ERROR -->
+        <div id="error-container" class="hidden glass p-4 border-l-4 border-red-500">
+            <p id="error-message" class="text-red-300 text-sm"></p>
+        </div>
 
-<!-- RIGHT -->
-<section class="panel">
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab(0)">Formatted</div>
-    <div class="tab" onclick="switchTab(1)">Tree</div>
-    <div class="tab" onclick="switchTab(2)">Diff</div>
-  </div>
+        <!-- ERROR LINE -->
+        <div id="error-line-container" class="hidden">
+            <p class="text-gray-300 text-sm mb-1">Problematic Line</p>
+            <pre id="error-line" class="error-line p-3 text-red-200 font-mono rounded"></pre>
+        </div>
 
-  <div id="out0" class="output active">
-    <pre id="formatted">Formatted JSON will appear here</pre>
-  </div>
+        <!-- FIX -->
+        <div id="fix-container" class="hidden">
+            <p class="text-gray-300 text-sm mb-1">Suggested Fix</p>
+            <pre id="fix-suggestion" class="fix-line p-3 text-green-200 font-mono rounded"></pre>
+        </div>
 
-  <div id="out1" class="output">
-    <pre id="tree">Tree view will appear here</pre>
-  </div>
+        <!-- CONTEXT FIX -->
+        <div id="context-fix-container" class="hidden">
+            <p class="text-gray-300 text-sm mb-1">Fixed JSON</p>
+            <pre id="context-fix" class="p-4 bg-black bg-opacity-30 rounded text-gray-100 overflow-auto"></pre>
+        </div>
 
-  <div id="out2" class="output">
-    <div class="diff">
-      <pre id="before">Before</pre>
-      <pre id="after">After</pre>
+        <!-- OUTPUT -->
+        <div id="output-container" class="hidden">
+            <p class="text-gray-300 text-sm mb-1">Formatted Output</p>
+            <pre id="json-output" class="p-4 bg-black bg-opacity-30 rounded text-gray-100 overflow-auto"></pre>
+        </div>
+
+        <!-- SUCCESS -->
+        <div id="success-container" class="hidden glass p-4 border-l-4 border-green-500">
+            <p class="text-green-400 font-semibold">✔ JSON is valid</p>
+        </div>
     </div>
-  </div>
-</section>
-
-</main>
 </div>
 
 <script>
-const input = document.getElementById("input");
-const lines = document.getElementById("lines");
-const formatted = document.getElementById("formatted");
-const tree = document.getElementById("tree");
-const before = document.getElementById("before");
-const after = document.getElementById("after");
-const status = document.getElementById("status");
-const confidence = document.getElementById("confidence");
+const input = document.getElementById('json-input');
+const output = document.getElementById('json-output');
+const errorMsg = document.getElementById('error-message');
+const errorLine = document.getElementById('error-line');
+const fixSuggestion = document.getElementById('fix-suggestion');
+const contextFix = document.getElementById('context-fix');
 
-let original = "";
+const containers = {
+    error: document.getElementById('error-container'),
+    errorLine: document.getElementById('error-line-container'),
+    fix: document.getElementById('fix-container'),
+    context: document.getElementById('context-fix-container'),
+    output: document.getElementById('output-container'),
+    success: document.getElementById('success-container')
+};
 
-input.addEventListener("input", () => {
-  lines.textContent = input.value.split("\n").map((_,i)=>i+1).join("\n");
-});
-
-function switchTab(i){
-  document.querySelectorAll(".tab").forEach((t,n)=>t.classList.toggle("active",n===i));
-  document.querySelectorAll(".output").forEach((o,n)=>o.classList.toggle("active",n===i));
+function hideAll() {
+    Object.values(containers).forEach(c => c.classList.add('hidden'));
 }
 
-function formatJSON(){
-  try{
-    const obj = JSON.parse(input.value);
-    const out = JSON.stringify(obj,null,2);
-    formatted.textContent = out;
-    tree.textContent = JSON.stringify(obj,null,2);
-    status.textContent = "Formatted successfully";
-  }catch(e){
-    status.textContent = e.message;
-  }
+/* ---------------- SMART AUTO-FIX ENGINE ---------------- */
+function generateFix(problemLine, index, lines, message) {
+    let fixed = null;
+    const t = problemLine.trim();
+
+    // Missing comma
+    if (!t.endsWith(',') && index + 1 < lines.length && lines[index + 1].trim().startsWith('"')) {
+        fixed = problemLine + ',';
+    }
+
+    // Trailing comma
+    else if (t.endsWith(',') && message.includes('}')) {
+        fixed = problemLine.replace(/,+\s*$/, '');
+    }
+
+    // Unquoted key
+    else if (/^\s*[a-zA-Z_]\w*\s*:/.test(problemLine)) {
+        fixed = problemLine.replace(/^\s*([a-zA-Z_]\w*)\s*:/, '"$1":');
+    }
+
+    // Unquoted string value
+    else if (/:\s*[a-zA-Z_]\w*\s*,?$/.test(problemLine)) {
+        fixed = problemLine.replace(/:\s*([a-zA-Z_]\w*)(\s*,?)$/, ': "$1"$2');
+    }
+
+    // Unterminated string
+    else if (problemLine.includes('"') && !t.endsWith('"') && !t.endsWith('",')) {
+        fixed = problemLine + '"';
+    }
+
+    return fixed;
 }
 
-function minifyJSON(){
-  try{
-    const obj = JSON.parse(input.value);
-    input.value = JSON.stringify(obj);
-    formatJSON();
-  }catch(e){ status.textContent = e.message; }
+function showError(err) {
+    hideAll();
+    containers.error.classList.remove('hidden');
+    containers.errorLine.classList.remove('hidden');
+
+    const pos = Number(err.message.match(/\d+/)?.[0] || 0);
+    const lines = input.value.split('\n');
+
+    let count = 0, lineIndex = 0;
+    for (let i = 0; i < lines.length; i++) {
+        count += lines[i].length + 1;
+        if (count >= pos) { lineIndex = i; break; }
+    }
+
+    const badLine = lines[lineIndex];
+    errorMsg.textContent = err.message;
+    errorLine.textContent = badLine;
+
+    const fixed = generateFix(badLine, lineIndex, lines, err.message);
+    if (fixed) {
+        containers.fix.classList.remove('hidden');
+        fixSuggestion.textContent = fixed;
+        lines[lineIndex] = fixed;
+
+        try {
+            const parsed = JSON.parse(lines.join('\n'));
+            contextFix.textContent = JSON.stringify(parsed, null, 2);
+            containers.context.classList.remove('hidden');
+        } catch {}
+    }
 }
 
-function validateJSON(){
-  try{
-    JSON.parse(input.value);
-    status.textContent = "Valid JSON";
-  }catch(e){ status.textContent = "Invalid JSON"; }
-}
+document.getElementById('format-btn').onclick = () => {
+    hideAll();
+    try {
+        const parsed = JSON.parse(input.value);
+        output.textContent = JSON.stringify(parsed, null, 2);
+        containers.output.classList.remove('hidden');
+        hljs.highlightElement(output);
+    } catch (e) {
+        showError(e);
+    }
+};
 
-function autoFix(){
-  original = input.value;
-  before.textContent = original;
-  let fixed = original
-    .replace(/'/g,'"')
-    .replace(/,\s*([}\]])/g,"$1");
-  try{
-    const obj = JSON.parse(fixed);
-    input.value = JSON.stringify(obj,null,2);
-    after.textContent = input.value;
-    confidence.textContent = "Confidence: 80%";
-    status.textContent = "Auto-fix applied";
-  }catch(e){
-    status.textContent = "Auto-fix failed";
-  }
-}
+document.getElementById('validate-btn').onclick = () => {
+    hideAll();
+    try {
+        JSON.parse(input.value);
+        containers.success.classList.remove('hidden');
+    } catch (e) {
+        showError(e);
+    }
+};
 
-function undoFix(){
-  input.value = original;
-  status.textContent = "Reverted";
-}
+document.getElementById('clear-btn').onclick = () => {
+    input.value = '';
+    hideAll();
+};
 </script>
-
 </body>
 </html>
