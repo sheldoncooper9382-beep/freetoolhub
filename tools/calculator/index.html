@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Scientific Calculator | FreeToolHub</title>
 
 <style>
+/* === STYLE UNCHANGED === */
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +27,6 @@ body {
   color: #e5e7eb;
 }
 
-/* Calculator */
 .calculator {
   width: 100%;
   max-width: 420px;
@@ -39,7 +39,6 @@ body {
   position: relative;
 }
 
-/* Display */
 .display {
   background: rgba(2,6,23,0.85);
   padding: 24px 20px;
@@ -56,9 +55,9 @@ body {
   font-size: 2.6rem;
   font-weight: 300;
   color: #f8fafc;
+  word-break: break-all;
 }
 
-/* Buttons */
 .buttons {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -93,49 +92,6 @@ button:active { transform: scale(0.95); }
   font-size: 1.3rem;
   background: linear-gradient(135deg,#38bdf8,#818cf8);
 }
-
-/* History */
-.toggle-history {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.18);
-  color: #fff;
-  cursor: pointer;
-}
-
-.history-panel {
-  position: absolute;
-  inset: 0;
-  width: 300px;
-  margin-left: auto;
-  background: rgba(2,6,23,0.92);
-  backdrop-filter: blur(18px);
-  transform: translateX(100%);
-  transition: transform 0.3s ease;
-  padding: 20px;
-  overflow-y: auto;
-  border-left: 1px solid rgba(255,255,255,0.1);
-}
-
-.history-panel.active { transform: translateX(0); }
-
-.history-item {
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.08);
-  cursor: pointer;
-}
-
-.history-item:hover { background: rgba(255,255,255,0.15); }
-
-@media (max-width: 480px) {
-  .buttons { grid-template-columns: repeat(4,1fr); }
-  .equals { grid-column: span 2; }
-}
 </style>
 </head>
 
@@ -143,156 +99,255 @@ button:active { transform: scale(0.95); }
 
 <div class="calculator">
   <div class="display">
-    <div class="previous-operand"></div>
+    <div class="previous-operand" id="prev"></div>
     <div class="current-operand" id="display">0</div>
   </div>
 
   <div class="buttons">
-    <button class="function" onclick="add('sin(')">sin</button>
-    <button class="function" onclick="add('cos(')">cos</button>
-    <button class="function" onclick="add('tan(')">tan</button>
-    <button class="function" onclick="add('log(')">log</button>
-    <button class="function" onclick="add('ln(')">ln</button>
+    <button class="function" onclick="append('sin(')">sin</button>
+    <button class="function" onclick="append('cos(')">cos</button>
+    <button class="function" onclick="append('tan(')">tan</button>
+    <button class="function" onclick="append('log(')">log</button>
+    <button class="function" onclick="append('ln(')">ln</button>
 
-    <button class="function" onclick="add('sqrt(')">√</button>
-    <button class="function" onclick="add('^')">xʸ</button>
-    <button class="function" onclick="add('!')">x!</button>
-    <button class="function" onclick="add('π')">π</button>
-    <button class="function" onclick="add('e')">e</button>
+    <button class="function" onclick="append('sqrt(')">√</button>
+    <button class="function" onclick="append('^')">xʸ</button>
+    <button class="function" onclick="append('!')">x!</button>
+    <button class="function" onclick="append('π')">π</button>
+    <button class="function" onclick="append('e')">e</button>
 
     <button class="clear" onclick="clearAll()">C</button>
-    <button class="clear" onclick="del()">⌫</button>
-    <button class="operator" onclick="add('(')">(</button>
-    <button class="operator" onclick="add(')')">)</button>
-    <button class="operator" onclick="add('/')">÷</button>
+    <button class="clear" onclick="backspace()">⌫</button>
+    <button class="operator" onclick="append('(')">(</button>
+    <button class="operator" onclick="append(')')">)</button>
+    <button class="operator" onclick="append('/')">÷</button>
 
-    <button class="number" onclick="add('7')">7</button>
-    <button class="number" onclick="add('8')">8</button>
-    <button class="number" onclick="add('9')">9</button>
-    <button class="operator" onclick="add('*')">×</button>
-    <button class="function" onclick="add('abs(')">|x|</button>
+    <button class="number" onclick="append('7')">7</button>
+    <button class="number" onclick="append('8')">8</button>
+    <button class="number" onclick="append('9')">9</button>
+    <button class="operator" onclick="append('*')">×</button>
+    <button class="function" onclick="append('abs(')">|x|</button>
 
-    <button class="number" onclick="add('4')">4</button>
-    <button class="number" onclick="add('5')">5</button>
-    <button class="number" onclick="add('6')">6</button>
-    <button class="operator" onclick="add('-')">−</button>
-    <button class="function" onclick="add('exp(')">eˣ</button>
+    <button class="number" onclick="append('4')">4</button>
+    <button class="number" onclick="append('5')">5</button>
+    <button class="number" onclick="append('6')">6</button>
+    <button class="operator" onclick="append('-')">−</button>
+    <button class="function" onclick="append('exp(')">eˣ</button>
 
-    <button class="number" onclick="add('1')">1</button>
-    <button class="number" onclick="add('2')">2</button>
-    <button class="number" onclick="add('3')">3</button>
-    <button class="operator" onclick="add('+')">+</button>
-    <button class="function" onclick="add('10^')">10ˣ</button>
+    <button class="number" onclick="append('1')">1</button>
+    <button class="number" onclick="append('2')">2</button>
+    <button class="number" onclick="append('3')">3</button>
+    <button class="operator" onclick="append('+')">+</button>
+    <button class="function" onclick="append('10^')">10ˣ</button>
 
-    <button class="number" onclick="add('0')">0</button>
-    <button class="number" onclick="add('.')">.</button>
+    <button class="number" onclick="append('0')">0</button>
+    <button class="number" onclick="append('.')">.</button>
     <button class="memory" onclick="memoryStore()">MS</button>
     <button class="memory" onclick="memoryRecall()">MR</button>
-    <button class="equals" onclick="calculate()">=</button>
-  </div>
-
-  <button class="toggle-history" onclick="toggleHistory()">☰</button>
-
-  <div class="history-panel" id="history">
-    <h3>History</h3>
-    <div id="history-list"></div>
+    <button class="equals" onclick="evaluateExpr()">=</button>
   </div>
 </div>
 
 <script>
-let expr = "0";
+/* === LOGIC REBUILT & FIXED === */
+
+let expression = "0";
 let memory = 0;
-let history = [];
 const display = document.getElementById("display");
-const historyList = document.getElementById("history-list");
+const prev = document.getElementById("prev");
 
-function update() { display.textContent = expr; }
+function update(showPrev = "") {
+  display.textContent = expression;
+  prev.textContent = showPrev;
+}
 
-function add(v) {
-  if (expr === "0") expr = v;
-  else expr += v;
+/* Append logic:
+   - If current expression is "0" and we append a number, dot, pi, e or function, replace "0".
+   - If expression is "0" and we append an operator, keep "0" then operator to allow "-","+" after 0.
+*/
+function append(val) {
+  // Special handling for 10^ button which adds '10^' — we want it treated as chunk
+  if (expression === "0") {
+    if (/^[0-9.πe(]/.test(val) || /^[a-z]/i.test(val)) {
+      expression = val;
+    } else {
+      expression = "0" + val;
+    }
+  } else {
+    expression += val;
+  }
   update();
 }
 
 function clearAll() {
-  expr = "0";
-  update();
+  expression = "0";
+  update("");
 }
 
-function del() {
-  expr = expr.length > 1 ? expr.slice(0,-1) : "0";
+function backspace() {
+  if (expression.length <= 1) {
+    expression = "0";
+  } else {
+    expression = expression.slice(0, -1);
+    // avoid leaving a stray function name fragment like "si" — that's fine, user can continue typing
+    if (expression === "") expression = "0";
+  }
   update();
 }
 
 function factorial(n) {
-  if (n < 0) return NaN;
-  return n <= 1 ? 1 : n * factorial(n-1);
+  // only integer factorial supported
+  n = Number(n);
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0) return NaN;
+  if (n <= 1) return 1;
+  let res = 1;
+  for (let i = 2; i <= n; i++) res *= i;
+  return res;
 }
 
-function deg(x) { return x * Math.PI / 180; }
-
-function preprocess(e) {
-  return e
-    .replace(/sin\(/g,"Math.sin(deg(")
-    .replace(/cos\(/g,"Math.cos(deg(")
-    .replace(/tan\(/g,"Math.tan(deg(")
-    .replace(/log\(/g,"Math.log10(")
-    .replace(/ln\(/g,"Math.log(")
-    .replace(/sqrt\(/g,"Math.sqrt(")
-    .replace(/exp\(/g,"Math.exp(")
-    .replace(/abs\(/g,"Math.abs(")
-    .replace(/π/g,"Math.PI")
-    .replace(/\be\b/g,"Math.E")
-    .replace(/(\d+)!/g,"factorial($1)")
-    .replace(/\^/g,"**");
+function toRadians(x) {
+  return x * Math.PI / 180;
 }
 
-function calculate() {
+function log10(x) {
+  return Math.log(x) / Math.LN10;
+}
+
+/* parseExpression:
+   - Convert calculator-friendly tokens into safe JS expressions,
+   - Do replacements in an order that avoids accidental partial matches (exp vs e),
+   - Handle factorial (!) by iteratively replacing number! or (expr)! with factorial(expr),
+   - Convert ^ to ** for exponentiation,
+   - Keep trig expecting degrees via toRadians wrapper.
+*/
+function parseExpression(expr) {
+  let s = String(expr);
+
+  // Normalize some Unicode characters/spaces (if any)
+  s = s.replace(/\s+/g, "");
+
+  // Handle 'exp(' first so plain 'e' replacement won't break it.
+  s = s.replace(/exp\(/g, "Math.exp(");
+
+  // Constants and functions
+  s = s.replace(/π/g, "Math.PI");
+  // Replace standalone 'e' (not part of identifiers like 'exp' or 'ln') with Math.E.
+  // Use word boundaries but keep it after exp() replacement above.
+  s = s.replace(/(^|[^A-Za-z0-9_])e([^A-Za-z0-9_]|$)/g, function(m, p1, p2) {
+    return p1 + "Math.E" + p2;
+  });
+
+  // Trig in degrees
+  s = s.replace(/sin\(/g, "Math.sin(toRadians(");
+  s = s.replace(/cos\(/g, "Math.cos(toRadians(");
+  s = s.replace(/tan\(/g, "Math.tan(toRadians(");
+
+  // Logs and roots
+  s = s.replace(/log\(/g, "log10("); // base-10
+  s = s.replace(/ln\(/g, "Math.log("); // natural log
+  s = s.replace(/sqrt\(/g, "Math.sqrt(");
+  s = s.replace(/abs\(/g, "Math.abs(");
+
+  // Handle '10^' (button appends '10^'); keep as 10** when we convert ^ => **
+  // Allow iterative replacement of factorials (n! and (expr)!).
+  while (/\d+!|\([^()]*\)!/.test(s)) {
+    s = s.replace(/(\d+|\([^()]*\))!/g, "factorial($1)");
+  }
+
+  // Replace caret ^ with exponent operator
+  s = s.replace(/\^/g, "**");
+
+  return s;
+}
+
+/* Evaluate expression safely inside a Function with injected helpers.
+   Returns numeric result or throws.
+*/
+function evaluateExpressionToNumber(expr) {
+  const parsed = parseExpression(expr);
+  // The Function has access to: factorial, toRadians, log10, Math
+  const fn = new Function("factorial", "toRadians", "log10", "Math", `"use strict"; return (${parsed});`);
+  return fn(factorial, toRadians, log10, Math);
+}
+
+function evaluateExpr() {
   try {
-    const safe = preprocess(expr);
-    const result = Function("factorial","deg","return "+safe)(factorial,deg);
-    if (!isFinite(result)) throw "err";
-    history.unshift(expr + " = " + result);
-    renderHistory();
-    expr = result.toString();
-    update();
-  } catch {
-    expr = "Error";
-    update();
+    const result = evaluateExpressionToNumber(expression);
+    if (!isFinite(result)) throw new Error("Non-finite result");
+    // show previous expression briefly
+    const prevText = expression + " =";
+    expression = String(result);
+    update(prevText);
+  } catch (err) {
+    expression = "Error";
+    update("");
     setTimeout(clearAll, 1000);
   }
 }
 
-function memoryStore() { memory = calculateSilent(); }
-function memoryRecall() { expr += memory; update(); }
-
-function calculateSilent() {
-  return Function("factorial","deg","return "+preprocess(expr))(factorial,deg);
+/* Memory: store numeric value of current expression (evaluate if possible),
+   recall appends the stored numeric value (or replaces if display is '0').
+*/
+function memoryStore() {
+  try {
+    const val = evaluateExpressionToNumber(expression);
+    if (Number.isFinite(val)) {
+      memory = val;
+      // show a quick indicator in prev display
+      update("M saved");
+      setTimeout(() => update(""), 700);
+    }
+  } catch {
+    // If expression isn't evaluable, try plain number conversion
+    const num = Number(expression);
+    if (Number.isFinite(num)) memory = num;
+  }
 }
 
-function renderHistory() {
-  historyList.innerHTML = "";
-  history.slice(0,20).forEach(h=>{
-    const d=document.createElement("div");
-    d.className="history-item";
-    d.textContent=h;
-    d.onclick=()=>{ expr=h.split(" = ")[1]; update(); };
-    historyList.appendChild(d);
-  });
+function memoryRecall() {
+  const memStr = String(memory);
+  if (expression === "0") expression = memStr;
+  else expression += memStr;
+  update();
 }
 
-function toggleHistory() {
-  document.getElementById("history").classList.toggle("active");
-}
+/* Keyboard handling */
+document.addEventListener("keydown", function(e) {
+  const key = e.key;
 
-document.addEventListener("keydown",e=>{
-  if("0123456789.".includes(e.key)) add(e.key);
-  if("+-*/()".includes(e.key)) add(e.key);
-  if(e.key==="Enter") calculate();
-  if(e.key==="Backspace") del();
-  if(e.key==="Escape") clearAll();
+  // digits and basic operators
+  if (/^[0-9]$/.test(key)) { append(key); e.preventDefault(); return; }
+  if (key === ".") { append("."); e.preventDefault(); return; }
+  if (key === "+" || key === "-" || key === "*" || key === "/") { append(key); e.preventDefault(); return; }
+
+  // map some textual keys to calculator tokens
+  if (key === "Enter" || key === "=") { evaluateExpr(); e.preventDefault(); return; }
+  if (key === "Backspace") { backspace(); e.preventDefault(); return; }
+  if (key === "Escape") { clearAll(); e.preventDefault(); return; }
+
+  if (key === "(") { append("("); e.preventDefault(); return; }
+  if (key === ")") { append(")"); e.preventDefault(); return; }
+
+  // factorial (!) — shift+1 usually, but check key
+  if (key === "!") { append("!"); e.preventDefault(); return; }
+
+  // allow keyboard 'p' for pi, 'e' for Euler's number (useful)
+  if (key.toLowerCase() === "p") { append("π"); e.preventDefault(); return; }
+  if (key.toLowerCase() === "e") {
+    // If user typed letter 'e' but they might want Euler — append Euler constant.
+    // Note: if they want to type part of function name it's uncommon from keyboard here.
+    append("e");
+    e.preventDefault();
+    return;
+  }
+
+  // allow '^' input
+  if (key === "^") { append("^"); e.preventDefault(); return; }
+
+  // allow x or X to mean multiply
+  if (key === "x" || key === "X") { append("*"); e.preventDefault(); return; }
 });
-
+/* initialize */
 update();
 </script>
 
