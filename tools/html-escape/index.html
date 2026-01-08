@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML Escape Tool | FreeToolHub</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+}
+
+textarea {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+button.primary {
+    background: linear-gradient(90deg,#22d3ee,#a855f7);
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 6px;
+}
+</style>
+</head>
+
+<body class="flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-5xl rounded-2xl p-8 text-white">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold">HTML Escape / Unescape</h1>
+            <p class="text-sm text-gray-300">Safely encode or decode HTML characters</p>
+        </div>
+    </div>
+
+    <!-- Inputs -->
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <!-- Input -->
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-pen text-cyan-400"></i> Input
+            </h3>
+            <textarea id="inputText" rows="8"
+                placeholder="Enter raw HTML or escaped text..."
+                class="w-full p-4 rounded-lg text-white outline-none scrollbar"></textarea>
+        </div>
+
+        <!-- Output -->
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-purple-400"></i> Output
+            </h3>
+            <textarea id="outputText" rows="8"
+                placeholder="Escaped / unescaped result..."
+                class="w-full p-4 rounded-lg text-white outline-none scrollbar"></textarea>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-4 mt-6">
+        <button onclick="escapeHTML()"
+            class="primary px-6 py-3 rounded-lg font-semibold text-slate-900 hover:opacity-90 transition">
+            <i class="fa-solid fa-lock"></i> Escape
+        </button>
+
+        <button onclick="unescapeHTML()"
+            class="primary px-6 py-3 rounded-lg font-semibold text-slate-900 hover:opacity-90 transition">
+            <i class="fa-solid fa-unlock"></i> Unescape
+        </button>
+
+        <button onclick="copyOutput()"
+            class="px-6 py-3 rounded-lg font-semibold bg-white/20 text-white hover:bg-white/30 transition">
+            <i class="fa-solid fa-copy"></i> Copy Output
+        </button>
+    </div>
+
+    <!-- Status -->
+    <p id="status" class="mt-4 text-sm text-gray-300"></p>
+
+    <!-- Footer -->
+    <div class="mt-6 text-sm text-gray-400 flex justify-between">
+        <span>FreeToolHub • HTML Escape Tool</span>
+        <span>Client-side only</span>
+    </div>
+
+</div>
+
+<script>
+const input = document.getElementById("inputText");
+const output = document.getElementById("outputText");
+const status = document.getElementById("status");
+
+function escapeHTML() {
+    const div = document.createElement("div");
+    div.textContent = input.value;
+    output.value = div.innerHTML;
+    status.textContent = "✔ HTML successfully escaped";
+    status.className = "mt-4 text-sm text-green-400";
+}
+
+function unescapeHTML() {
+    const div = document.createElement("div");
+    div.innerHTML = input.value;
+    output.value = div.textContent;
+    status.textContent = "✔ HTML successfully unescaped";
+    status.className = "mt-4 text-sm text-green-400";
+}
+
+function copyOutput() {
+    if (!output.value) return;
+    navigator.clipboard.writeText(output.value);
+    status.textContent = "📋 Output copied to clipboard";
+    status.className = "mt-4 text-sm text-cyan-400";
+}
+</script>
+
+</body>
+</html>
