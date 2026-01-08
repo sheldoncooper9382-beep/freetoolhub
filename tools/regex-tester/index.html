@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regex Tester | FreeToolHub</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+
+textarea, input {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.highlight span {
+    background: linear-gradient(90deg,#22d3ee,#a855f7);
+    color:#020617;
+    padding:2px 4px;
+    border-radius:4px;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 6px;
+}
+</style>
+</head>
+
+<body class="flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-5xl rounded-2xl p-8 text-white">
+    
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold">Regex Tester</h1>
+            <p class="text-sm text-gray-300">Test & debug regular expressions instantly</p>
+        </div>
+    </div>
+
+    <!-- Regex Input -->
+    <div class="grid md:grid-cols-3 gap-4 mb-4">
+        <input id="pattern" placeholder="Regex pattern (without / /)"
+            class="col-span-2 p-3 rounded-lg text-white outline-none">
+        <input id="flags" placeholder="Flags (gimsyu)"
+            class="p-3 rounded-lg text-white outline-none">
+    </div>
+
+    <!-- Test String -->
+    <textarea id="testString" rows="6"
+        placeholder="Enter your test string here..."
+        class="w-full p-4 rounded-lg text-white outline-none mb-4 scrollbar"></textarea>
+
+    <!-- Output -->
+    <div class="grid md:grid-cols-2 gap-6">
+        
+        <!-- Highlighted Result -->
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-highlighter text-cyan-400"></i> Highlighted Matches
+            </h3>
+            <div id="highlighted"
+                class="highlight whitespace-pre-wrap break-words text-sm text-gray-200"></div>
+        </div>
+
+        <!-- Match Info -->
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-list text-purple-400"></i> Match Details
+            </h3>
+            <div id="info" class="text-sm text-gray-300"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-between items-center mt-6 text-sm text-gray-400">
+        <span>FreeToolHub • Regex Tester</span>
+        <button onclick="copyRegex()" class="hover:text-white transition">
+            <i class="fa-solid fa-copy"></i> Copy Regex
+        </button>
+    </div>
+
+</div>
+
+<script>
+const patternInput = document.getElementById("pattern");
+const flagsInput = document.getElementById("flags");
+const testStringInput = document.getElementById("testString");
+const highlighted = document.getElementById("highlighted");
+const info = document.getElementById("info");
+
+function update() {
+    const pattern = patternInput.value;
+    const flags = flagsInput.value;
+    const text = testStringInput.value;
+
+    highlighted.textContent = text;
+    info.textContent = "";
+
+    if (!pattern) return;
+
+    try {
+        const regex = new RegExp(pattern, flags);
+        let matches = [...text.matchAll(regex)];
+
+        if (!matches.length) {
+            info.innerHTML = "<span class='text-yellow-400'>No matches found</span>";
+            return;
+        }
+
+        // Highlight matches
+        let output = text;
+        matches.reverse().forEach(m => {
+            output =
+                output.slice(0, m.index) +
+                `<span>${m[0]}</span>` +
+                output.slice(m.index + m[0].length);
+        });
+        highlighted.innerHTML = output;
+
+        // Info
+        info.innerHTML = `
+            <p><strong>Total Matches:</strong> ${matches.length}</p>
+            <p class="mt-2"><strong>Matches:</strong></p>
+            <ul class="list-disc ml-5 mt-1">
+                ${matches.map(m => `<li>${m[0]}</li>`).join("")}
+            </ul>
+        `;
+    } catch (e) {
+        info.innerHTML = `<span class="text-red-400">⚠ ${e.message}</span>`;
+    }
+}
+
+function copyRegex() {
+    const value = `/${patternInput.value}/${flagsInput.value}`;
+    navigator.clipboard.writeText(value);
+}
+
+patternInput.addEventListener("input", update);
+flagsInput.addEventListener("input", update);
+testStringInput.addEventListener("input", update);
+</script>
+
+</body>
+</html>
