@@ -1,76 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scientific Calculator</title>
-
-  <!-- LOCAL CSS -->
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Advanced Scientific Calculator</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <div class="calculator-container">
-    <div class="calculator">
-
-      <!-- DISPLAY -->
-      <div id="screen" class="screen">0</div>
-
-      <!-- BUTTONS -->
-      <div class="buttons">
-
-        <!-- Memory / Control -->
-        <button data-action="MC">MC</button>
-        <button data-action="MR">MR</button>
-        <button data-action="M+">M+</button>
-        <button data-action="M-">M-</button>
-        <button data-action="C">C</button>
-
-        <!-- Constants / Parentheses -->
-        <button data-action="(">(</button>
-        <button data-action=")">)</button>
-        <button data-action="π">π</button>
-        <button data-action="e">e</button>
-        <button data-action="÷">÷</button>
-
-        <!-- Numbers -->
-        <button data-action="7">7</button>
-        <button data-action="8">8</button>
-        <button data-action="9">9</button>
-        <button data-action="√">√</button>
-        <button data-action="×">×</button>
-
-        <button data-action="4">4</button>
-        <button data-action="5">5</button>
-        <button data-action="6">6</button>
-        <button data-action="^">^</button>
-        <button data-action="-">-</button>
-
-        <button data-action="1">1</button>
-        <button data-action="2">2</button>
-        <button data-action="3">3</button>
-        <button data-action="!">x!</button>
-        <button data-action="+">+</button>
-
-        <button data-action="0">0</button>
-        <button data-action=".">.</button>
-        <button data-action="sin">sin</button>
-        <button data-action="cos">cos</button>
-        <button data-action="tan">tan</button>
-
-        <button data-action="asin">asin</button>
-        <button data-action="acos">acos</button>
-        <button data-action="atan">atan</button>
-        <button data-action="log">log</button>
-        <button data-action="ln">ln</button>
-
-        <button data-action="=" class="equals">=</button>
-
-      </div>
-    </div>
+<div class="calculator">
+  <div class="display">
+    <div id="mode">DEG</div>
+    <input id="screen" type="text" readonly value="0">
   </div>
 
-  <!-- LOCAL JS -->
-  <script src="main.js"></script>
+  <div class="keys">
+    <button data-action="shift" class="shift">SHIFT</button>
+    <button data-action="mode">MODE</button>
+    <button data-action="mc">MC</button>
+    <button data-action="mr">MR</button>
+    <button data-action="mplus">M+</button>
+    <button data-action="mminus">M−</button>
+
+    <button data-fn="sin">sin</button>
+    <button data-fn="cos">cos</button>
+    <button data-fn="tan">tan</button>
+    <button data-fn="log">log</button>
+    <button data-fn="ln">ln</button>
+    <button data-const="pi">π</button>
+
+    <button data-fn="pow">xʸ</button>
+    <button data-fn="square">x²</button>
+    <button data-fn="sqrt">√</button>
+    <button data-fn="inv">x⁻¹</button>
+    <button data-fn="fact">!</button>
+    <button data-const="e">e</button>
+
+    <button>(</button>
+    <button>)</button>
+    <button data-fn="nPr">nPr</button>
+    <button data-fn="nCr">nCr</button>
+    <button data-action="clear">AC</button>
+    <button data-action="ce">CE</button>
+
+    <button>7</button><button>8</button><button>9</button><button>/</button>
+    <button>4</button><button>5</button><button>6</button><button>*</button>
+    <button>1</button><button>2</button><button>3</button><button>-</button>
+    <button>0</button><button>.</button><button data-action="sign">±</button><button>+</button>
+
+    <button class="equals" data-action="equals">=</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
