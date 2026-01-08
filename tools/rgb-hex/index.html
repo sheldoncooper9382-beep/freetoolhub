@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RGB to HEX Converter | FreeToolHub</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body {
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+}
+
+input {
+    background: rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+button.primary {
+    background: linear-gradient(90deg,#22d3ee,#a855f7);
+}
+
+.color-preview {
+    height: 100px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+</style>
+</head>
+
+<body class="flex items-center justify-center p-6">
+
+<div class="glass w-full max-w-3xl rounded-2xl p-8 text-white">
+
+    <!-- Header -->
+    <div class="flex items-center gap-4 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-400 to-cyan-500 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-palette"></i>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold">RGB to HEX Converter</h1>
+            <p class="text-sm text-gray-300">Convert RGB color values into HEX codes</p>
+        </div>
+    </div>
+
+    <!-- Input -->
+    <div class="glass rounded-xl p-4 mb-6">
+        <h3 class="font-semibold mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-cyan-400"></i> RGB Values
+        </h3>
+        <input id="rgbInput"
+            placeholder="255, 87, 51"
+            class="w-full p-4 rounded-lg text-white outline-none">
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-wrap gap-4 mb-4">
+        <button onclick="convertRGB()"
+            class="primary px-6 py-3 rounded-lg font-semibold text-slate-900 hover:opacity-90 transition">
+            <i class="fa-solid fa-arrow-right"></i> Convert
+        </button>
+
+        <button onclick="copyOutput()"
+            class="px-6 py-3 rounded-lg font-semibold bg-white/20 text-white hover:bg-white/30 transition">
+            <i class="fa-solid fa-copy"></i> Copy HEX
+        </button>
+    </div>
+
+    <!-- Output -->
+    <div class="grid md:grid-cols-2 gap-6">
+
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-hashtag text-purple-400"></i> HEX Output
+            </h3>
+            <input id="hexOutput"
+                placeholder="#ff5733"
+                readonly
+                class="w-full p-4 rounded-lg text-white outline-none">
+        </div>
+
+        <div class="glass rounded-xl p-4">
+            <h3 class="font-semibold mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-eye text-cyan-400"></i> Preview
+            </h3>
+            <div id="preview" class="color-preview"></div>
+        </div>
+
+    </div>
+
+    <!-- Status -->
+    <p id="status" class="mt-4 text-sm text-gray-300"></p>
+
+    <!-- Footer -->
+    <div class="mt-6 text-sm text-gray-400 flex justify-between">
+        <span>FreeToolHub • Color Tools</span>
+        <span>Client-side only</span>
+    </div>
+
+</div>
+
+<script>
+const rgbInput = document.getElementById("rgbInput");
+const hexOutput = document.getElementById("hexOutput");
+const preview = document.getElementById("preview");
+const status = document.getElementById("status");
+
+function convertRGB() {
+    const values = rgbInput.value.match(/\d+/g);
+
+    if (!values || values.length !== 3) {
+        showError("Invalid RGB format");
+        return;
+    }
+
+    const [r, g, b] = values.map(Number);
+
+    if ([r,g,b].some(v => v < 0 || v > 255)) {
+        showError("RGB values must be between 0 and 255");
+        return;
+    }
+
+    const hex = "#" + [r,g,b]
+        .map(v => v.toString(16).padStart(2, "0"))
+        .join("");
+
+    hexOutput.value = hex;
+    preview.style.background = hex;
+
+    status.textContent = "✔ Successfully converted to HEX";
+    status.className = "mt-4 text-sm text-green-400";
+}
+
+function showError(msg) {
+    hexOutput.value = "";
+    preview.style.background = "transparent";
+    status.textContent = "⚠ " + msg;
+    status.className = "mt-4 text-sm text-red-400";
+}
+
+function copyOutput() {
+    if (!hexOutput.value) return;
+    navigator.clipboard.writeText(hexOutput.value);
+    status.textContent = "📋 HEX value copied to clipboard";
+    status.className = "mt-4 text-sm text-cyan-400";
+}
+</script>
+
+</body>
+</html>
