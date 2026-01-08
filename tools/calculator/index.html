@@ -1,57 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Advanced Scientific Calculator</title>
-<link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator | FreeToolHub</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #0ea5e9, transparent 40%),
+    radial-gradient(circle at bottom right, #8b5cf6, transparent 40%),
+    linear-gradient(135deg, #020617, #020617);
+  padding: 20px;
+  color: #e5e7eb;
+}
+
+/* Calculator */
+.calculator {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Display */
+.display {
+  background: rgba(2,6,23,0.85);
+  padding: 24px 20px;
+  text-align: right;
+}
+
+.previous-operand {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.5);
+  min-height: 20px;
+}
+
+.current-operand {
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: #f8fafc;
+}
+
+/* Buttons */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 16px;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 16px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+button:hover { background: rgba(255,255,255,0.18); }
+button:active { transform: scale(0.95); }
+
+.number { background: rgba(255,255,255,0.14); }
+.operator { background: linear-gradient(135deg,#38bdf8,#818cf8); }
+.function { background: linear-gradient(135deg,#a855f7,#ec4899); }
+.memory { background: linear-gradient(135deg,#10b981,#22c55e); }
+.clear { background: linear-gradient(135deg,#fb923c,#f97316); }
+
+.equals {
+  grid-column: span 2;
+  font-size: 1.3rem;
+  background: linear-gradient(135deg,#38bdf8,#818cf8);
+}
+
+/* History */
+.toggle-history {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  cursor: pointer;
+}
+
+.history-panel {
+  position: absolute;
+  inset: 0;
+  width: 300px;
+  margin-left: auto;
+  background: rgba(2,6,23,0.92);
+  backdrop-filter: blur(18px);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.history-panel.active { transform: translateX(0); }
+
+.history-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+}
+
+.history-item:hover { background: rgba(255,255,255,0.15); }
+
+@media (max-width: 480px) {
+  .buttons { grid-template-columns: repeat(4,1fr); }
+  .equals { grid-column: span 2; }
+}
+</style>
 </head>
+
 <body>
 
 <div class="calculator">
   <div class="display">
-    <div id="mode">DEG</div>
-    <input id="screen" type="text" readonly value="0">
+    <div class="previous-operand"></div>
+    <div class="current-operand" id="display">0</div>
   </div>
 
-  <div class="keys">
-    <button data-action="shift" class="shift">SHIFT</button>
-    <button data-action="mode">MODE</button>
-    <button data-action="mc">MC</button>
-    <button data-action="mr">MR</button>
-    <button data-action="mplus">M+</button>
-    <button data-action="mminus">M−</button>
+  <div class="buttons">
+    <button class="function" onclick="add('sin(')">sin</button>
+    <button class="function" onclick="add('cos(')">cos</button>
+    <button class="function" onclick="add('tan(')">tan</button>
+    <button class="function" onclick="add('log(')">log</button>
+    <button class="function" onclick="add('ln(')">ln</button>
 
-    <button data-fn="sin">sin</button>
-    <button data-fn="cos">cos</button>
-    <button data-fn="tan">tan</button>
-    <button data-fn="log">log</button>
-    <button data-fn="ln">ln</button>
-    <button data-const="pi">π</button>
+    <button class="function" onclick="add('sqrt(')">√</button>
+    <button class="function" onclick="add('^')">xʸ</button>
+    <button class="function" onclick="add('!')">x!</button>
+    <button class="function" onclick="add('π')">π</button>
+    <button class="function" onclick="add('e')">e</button>
 
-    <button data-fn="pow">xʸ</button>
-    <button data-fn="square">x²</button>
-    <button data-fn="sqrt">√</button>
-    <button data-fn="inv">x⁻¹</button>
-    <button data-fn="fact">!</button>
-    <button data-const="e">e</button>
+    <button class="clear" onclick="clearAll()">C</button>
+    <button class="clear" onclick="del()">⌫</button>
+    <button class="operator" onclick="add('(')">(</button>
+    <button class="operator" onclick="add(')')">)</button>
+    <button class="operator" onclick="add('/')">÷</button>
 
-    <button>(</button>
-    <button>)</button>
-    <button data-fn="nPr">nPr</button>
-    <button data-fn="nCr">nCr</button>
-    <button data-action="clear">AC</button>
-    <button data-action="ce">CE</button>
+    <button class="number" onclick="add('7')">7</button>
+    <button class="number" onclick="add('8')">8</button>
+    <button class="number" onclick="add('9')">9</button>
+    <button class="operator" onclick="add('*')">×</button>
+    <button class="function" onclick="add('abs(')">|x|</button>
 
-    <button>7</button><button>8</button><button>9</button><button>/</button>
-    <button>4</button><button>5</button><button>6</button><button>*</button>
-    <button>1</button><button>2</button><button>3</button><button>-</button>
-    <button>0</button><button>.</button><button data-action="sign">±</button><button>+</button>
+    <button class="number" onclick="add('4')">4</button>
+    <button class="number" onclick="add('5')">5</button>
+    <button class="number" onclick="add('6')">6</button>
+    <button class="operator" onclick="add('-')">−</button>
+    <button class="function" onclick="add('exp(')">eˣ</button>
 
-    <button class="equals" data-action="equals">=</button>
+    <button class="number" onclick="add('1')">1</button>
+    <button class="number" onclick="add('2')">2</button>
+    <button class="number" onclick="add('3')">3</button>
+    <button class="operator" onclick="add('+')">+</button>
+    <button class="function" onclick="add('10^')">10ˣ</button>
+
+    <button class="number" onclick="add('0')">0</button>
+    <button class="number" onclick="add('.')">.</button>
+    <button class="memory" onclick="memoryStore()">MS</button>
+    <button class="memory" onclick="memoryRecall()">MR</button>
+    <button class="equals" onclick="calculate()">=</button>
+  </div>
+
+  <button class="toggle-history" onclick="toggleHistory()">☰</button>
+
+  <div class="history-panel" id="history">
+    <h3>History</h3>
+    <div id="history-list"></div>
   </div>
 </div>
 
-<script src="app.js"></script>
+<script>
+let expr = "0";
+let memory = 0;
+let history = [];
+const display = document.getElementById("display");
+const historyList = document.getElementById("history-list");
+
+function update() { display.textContent = expr; }
+
+function add(v) {
+  if (expr === "0") expr = v;
+  else expr += v;
+  update();
+}
+
+function clearAll() {
+  expr = "0";
+  update();
+}
+
+function del() {
+  expr = expr.length > 1 ? expr.slice(0,-1) : "0";
+  update();
+}
+
+function factorial(n) {
+  if (n < 0) return NaN;
+  return n <= 1 ? 1 : n * factorial(n-1);
+}
+
+function deg(x) { return x * Math.PI / 180; }
+
+function preprocess(e) {
+  return e
+    .replace(/sin\(/g,"Math.sin(deg(")
+    .replace(/cos\(/g,"Math.cos(deg(")
+    .replace(/tan\(/g,"Math.tan(deg(")
+    .replace(/log\(/g,"Math.log10(")
+    .replace(/ln\(/g,"Math.log(")
+    .replace(/sqrt\(/g,"Math.sqrt(")
+    .replace(/exp\(/g,"Math.exp(")
+    .replace(/abs\(/g,"Math.abs(")
+    .replace(/π/g,"Math.PI")
+    .replace(/\be\b/g,"Math.E")
+    .replace(/(\d+)!/g,"factorial($1)")
+    .replace(/\^/g,"**");
+}
+
+function calculate() {
+  try {
+    const safe = preprocess(expr);
+    const result = Function("factorial","deg","return "+safe)(factorial,deg);
+    if (!isFinite(result)) throw "err";
+    history.unshift(expr + " = " + result);
+    renderHistory();
+    expr = result.toString();
+    update();
+  } catch {
+    expr = "Error";
+    update();
+    setTimeout(clearAll, 1000);
+  }
+}
+
+function memoryStore() { memory = calculateSilent(); }
+function memoryRecall() { expr += memory; update(); }
+
+function calculateSilent() {
+  return Function("factorial","deg","return "+preprocess(expr))(factorial,deg);
+}
+
+function renderHistory() {
+  historyList.innerHTML = "";
+  history.slice(0,20).forEach(h=>{
+    const d=document.createElement("div");
+    d.className="history-item";
+    d.textContent=h;
+    d.onclick=()=>{ expr=h.split(" = ")[1]; update(); };
+    historyList.appendChild(d);
+  });
+}
+
+function toggleHistory() {
+  document.getElementById("history").classList.toggle("active");
+}
+
+document.addEventListener("keydown",e=>{
+  if("0123456789.".includes(e.key)) add(e.key);
+  if("+-*/()".includes(e.key)) add(e.key);
+  if(e.key==="Enter") calculate();
+  if(e.key==="Backspace") del();
+  if(e.key==="Escape") clearAll();
+});
+
+update();
+</script>
+
 </body>
 </html>
