@@ -1,3 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glassmorphic Scientific Calculator</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #141e30, #243b55);
+  font-family: system-ui, sans-serif;
+  color: #fff;
+}
+
+/* ===== GLASS CONTAINER ===== */
+.calculator {
+  width: 340px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ===== DISPLAY ===== */
+.display {
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+}
+
+#prev {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  min-height: 18px;
+}
+
+#display {
+  font-size: 1.6rem;
+  text-align: right;
+  word-wrap: break-word;
+}
+
+/* ===== BUTTON GRID ===== */
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+button {
+  height: 52px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+.operator {
+  background: rgba(0, 140, 255, 0.35);
+}
+
+.equal {
+  background: rgba(0, 200, 120, 0.45);
+  grid-column: span 2;
+}
+
+.clear {
+  background: rgba(255, 80, 80, 0.45);
+}
+
+@media (max-width: 420px) {
+  .calculator {
+    width: 92%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+  <div class="display">
+    <div id="prev"></div>
+    <div id="display">0</div>
+  </div>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearAll()">C</button>
+    <button onclick="backspace()">⌫</button>
+    <button onclick="append('(')">(</button>
+    <button onclick="append(')')">)</button>
+
+    <button onclick="append('sin(')">sin</button>
+    <button onclick="append('cos(')">cos</button>
+    <button onclick="append('tan(')">tan</button>
+    <button onclick="append('^')" class="operator">^</button>
+
+    <button onclick="append('7')">7</button>
+    <button onclick="append('8')">8</button>
+    <button onclick="append('9')">9</button>
+    <button onclick="append('/')" class="operator">÷</button>
+
+    <button onclick="append('4')">4</button>
+    <button onclick="append('5')">5</button>
+    <button onclick="append('6')">6</button>
+    <button onclick="append('*')" class="operator">×</button>
+
+    <button onclick="append('1')">1</button>
+    <button onclick="append('2')">2</button>
+    <button onclick="append('3')">3</button>
+    <button onclick="append('-')" class="operator">−</button>
+
+    <button onclick="append('0')">0</button>
+    <button onclick="append('.')">.</button>
+    <button onclick="append('+')" class="operator">+</button>
+    <button onclick="evaluateExpr()" class="equal">=</button>
+  </div>
+</div>
+
 <script>
 let expression = "0";
 let memory = 0;
@@ -11,8 +159,8 @@ function update(prevText = "") {
 }
 
 function append(val) {
-  if (expression === "0") {
-    expression = val.match(/[0-9.(πe]|sin|cos|tan|log|ln|sqrt|abs|exp/) ? val : "0" + val;
+  if (expression === "0" && /[0-9.(]/.test(val)) {
+    expression = val;
   } else {
     expression += val;
   }
@@ -54,9 +202,7 @@ function autoCloseParens(expr) {
 function parseExpression(expr) {
   let s = expr.replace(/\s+/g, "");
 
-  s = s.replace(/exp\(/g, "Math.exp(");
   s = s.replace(/π/g, "Math.PI");
-
   s = s.replace(/(^|[^a-zA-Z])e([^a-zA-Z]|$)/g, "$1Math.E$2");
 
   s = s.replace(/sin\(/g, "Math.sin(toRadians(");
@@ -67,6 +213,7 @@ function parseExpression(expr) {
   s = s.replace(/ln\(/g, "Math.log(");
   s = s.replace(/sqrt\(/g, "Math.sqrt(");
   s = s.replace(/abs\(/g, "Math.abs(");
+  s = s.replace(/exp\(/g, "Math.exp(");
 
   while (/(\d+|\([^()]*\))!/.test(s)) {
     s = s.replace(/(\d+|\([^()]*\))!/g, "factorial($1)");
@@ -75,39 +222,6 @@ function parseExpression(expr) {
   s = s.replace(/\^/g, "**");
 
   return autoCloseParens(s);
-}
-
-function evaluateExpr() {
-  try {
-    const parsed = parseExpression(expression);
-    const result = Function(
-      "factorial",
-      "toRadians",
-      "log10",
-      "Math",
-      `"use strict"; return (${parsed});`
-    )(factorial, toRadians, log10, Math);
-
-    if (!isFinite(result)) throw 0;
-
-    update(expression + " =");
-    expression = String(result);
-  } catch {
-    expression = "Error";
-    update("");
-    setTimeout(clearAll, 1000);
-  }
-}
-
-function memoryStore() {
-  try {
-    memory = evaluateExprToNumber(expression);
-  } catch {}
-}
-
-function memoryRecall() {
-  expression = expression === "0" ? String(memory) : expression + memory;
-  update();
 }
 
 function evaluateExprToNumber(expr) {
@@ -120,6 +234,19 @@ function evaluateExprToNumber(expr) {
   )(factorial, toRadians, log10, Math);
 }
 
+function evaluateExpr() {
+  try {
+    const result = evaluateExprToNumber(expression);
+    if (!isFinite(result)) throw 0;
+    update(expression + " =");
+    expression = String(result);
+  } catch {
+    expression = "Error";
+    update("");
+    setTimeout(clearAll, 1000);
+  }
+}
+
 document.addEventListener("keydown", e => {
   if ("0123456789.+-*/()^!".includes(e.key)) append(e.key);
   if (e.key === "Enter") evaluateExpr();
@@ -129,3 +256,6 @@ document.addEventListener("keydown", e => {
 
 update();
 </script>
+
+</body>
+</html>
