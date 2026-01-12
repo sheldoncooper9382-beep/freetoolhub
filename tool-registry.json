@@ -90,9 +90,10 @@
   { "name": "CSS Loader Generator", "description": "Generate loading spinners", "icon": "⏳", "path": "tools/loader-generator/" },
   { "name": "HTML Comment Remover", "description": "Remove comments from HTML", "icon": "🧹", "path": "tools/html-comment-remover/" },
   { "name": "CSS Specificity Calculator", "description": "Calculate CSS selector weight", "icon": "⚙️", "path": "tools/css-specificity/" },
-  { "name": "Code Diff Viewer", "description": "Compare code versions visually", "icon": "🔀", "path": "tools/code-diff/" }
-   { "name": "Sudoku Theme Generator", "description": "Generate Sudoku Faces","icon": "🔲" "path": "tools/sudoku/" },
+  { "name": "Code Diff Viewer", "description": "Compare code versions visually", "icon": "🔀", "path": "tools/code-diff/" },
+  { "name": "Sudoku Theme Generator", "description": "Generate Sudoku Faces","icon": "🔲" "path": "tools/sudoku/" }
 ]
+
 
 
 
