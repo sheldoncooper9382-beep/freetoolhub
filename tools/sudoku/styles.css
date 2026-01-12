@@ -1,99 +1,179 @@
+/* ======================================================
+   CSS VARIABLES (Theme Engine)
+====================================================== */
 :root {
-  --cell-bg: rgba(255,255,255,0.12);
-  --grid-line: rgba(255,255,255,0.4);
+  --cell-bg: rgba(255, 255, 255, 0.14);
+  --grid-line: rgba(255, 255, 255, 0.35);
   --grid-thick: 3px;
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --accent: #60a5fa;
 }
 
+/* ======================================================
+   Reset
+====================================================== */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
+/* ======================================================
+   Page Background (FreeToolHub Style)
+====================================================== */
 body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  background: radial-gradient(circle at top, #1e293b, #020617);
-  color: white;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(96, 165, 250, 0.25), transparent 40%),
+    radial-gradient(circle at bottom, rgba(167, 139, 250, 0.2), transparent 40%),
+    linear-gradient(180deg, #020617, #020617);
+  color: #fff;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
 }
 
+/* ======================================================
+   App Container (Glass Card)
+====================================================== */
 .app {
-  width: min(900px, 95vw);
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(16px);
-  border-radius: 20px;
-  padding: 20px;
+  width: min(960px, 96vw);
+  padding: 24px;
+  border-radius: 26px;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 20px;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
 }
 
+/* ======================================================
+   Headings
+====================================================== */
 h1 {
   grid-column: span 2;
-  margin-bottom: 0;
+  font-size: 28px;
+  letter-spacing: 0.6px;
 }
 
 .subtitle {
   grid-column: span 2;
-  opacity: 0.75;
-  margin-bottom: 10px;
-}
-
-/* Controls */
-.controls label {
-  display: flex;
-  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.7;
   margin-bottom: 12px;
 }
 
-.controls input {
-  margin-left: 10px;
+/* ======================================================
+   Controls Panel (Glass)
+====================================================== */
+.controls {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* Labels */
+.controls label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+/* Inputs */
+.controls input[type="color"],
+.controls input[type="range"] {
+  cursor: pointer;
+}
+
+/* ======================================================
+   Buttons (Jelly / 3D)
+====================================================== */
 button {
   width: 100%;
-  margin-top: 8px;
-  padding: 10px;
+  padding: 12px;
+  margin-top: 10px;
+
   border-radius: 999px;
   border: none;
+
+  font-size: 14px;
   font-weight: 700;
-  cursor: pointer;
+  color: #fff;
+
   background: linear-gradient(145deg, #5b7cfa, #2b47d9);
-  color: white;
+  box-shadow:
+    0 8px 0 rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(96, 165, 250, 0.35);
+
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 button:active {
-  transform: scale(0.95);
+  transform: translateY(6px) scaleX(1.05) scaleY(0.95);
+  box-shadow: none;
 }
 
-/* Preview Grid */
+/* Preset buttons spacing */
+.preset-buttons {
+  margin-top: 10px;
+}
+
+/* ======================================================
+   Preview Area
+====================================================== */
 .preview {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* Sudoku Grid */
 #grid {
-  width: 360px;
-  height: 360px;
+  width: min(420px, 60vh);
+  height: min(420px, 60vh);
+
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   grid-template-rows: repeat(9, 1fr);
-  background: rgba(255,255,255,0.05);
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
+/* Cells */
 .cell {
   display: flex;
   align-items: center;
   justify-content: center;
+
   background: var(--cell-bg);
   border: 1px solid var(--grid-line);
-  font-weight: bold;
+
+  font-weight: 700;
+  color: white;
+  user-select: none;
 }
 
-/* Thick 3x3 lines */
+/* Thick 3×3 Lines */
 .cell:nth-child(3n) {
   border-right: var(--grid-thick) solid var(--grid-line);
 }
@@ -103,16 +183,22 @@ button:active {
   border-bottom: var(--grid-thick) solid var(--grid-line);
 }
 
-/* Output */
+/* ======================================================
+   Export Output
+====================================================== */
 textarea {
   grid-column: span 2;
-  margin-top: 10px;
+  margin-top: 14px;
   width: 100%;
-  height: 120px;
-  background: rgba(0,0,0,0.4);
-  color: #9ae6ff;
-  border: none;
-  padding: 10px;
-  border-radius: 12px;
+  height: 140px;
+
+  background: rgba(2, 6, 23, 0.85);
+  color: #93c5fd;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 12px;
+
   font-family: monospace;
+  resize: none;
 }
