@@ -14,11 +14,11 @@
 
   <div class="layout">
 
-    <!-- CONTROLS -->
+    <!-- CONTROL PANEL -->
     <div class="panel">
       <label>
         Cell Background
-        <input type="color" id="cellBg" value="#3a176d">
+        <input type="color" id="cellBg" value="#7a28c8">
       </label>
 
       <label>
@@ -43,24 +43,16 @@
     </div>
 
     <!-- SUDOKU GRID -->
-    <div class="sudoku-wrap">
-      <table class="sudoku">
-        <tbody>
-          <!-- 9x9 -->
-          <!-- Numbers are placeholders -->
-          <!-- JS-ready -->
-          <script>
-            for (let r = 0; r < 9; r++) {
-              document.write("<tr>");
-              for (let c = 1; c <= 9; c++) {
-                document.write(`<td>${c}</td>`);
-              }
-              document.write("</tr>");
-            }
-          </script>
-        </tbody>
-      </table>
-    </div>
+    <table class="sudoku">
+      <tbody>
+        <!-- 9 rows -->
+        <!-- Each cell just shows sample numbers -->
+        <!-- Perfect 9×9 grid -->
+        ${[...Array(9)].map(() =>
+          `<tr>${[1,2,3,4,5,6,7,8,9].map(n => `<td>${n}</td>`).join("")}</tr>`
+        ).join("")}
+      </tbody>
+    </table>
 
   </div>
 </div>
