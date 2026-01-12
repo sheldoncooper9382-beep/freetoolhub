@@ -9,6 +9,7 @@
   --thick-line: 4px;
 }
 
+/* RESET */
 * {
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
@@ -24,6 +25,7 @@ body {
   align-items: center;
 }
 
+/* APP */
 .app {
   max-width: 900px;
   padding: 32px;
@@ -77,7 +79,7 @@ body {
 .minimal { background: #333; }
 .export { background: linear-gradient(135deg, #ffb347, #ff7b00); }
 
-/* SUDOKU */
+/* SUDOKU GRID */
 .sudoku {
   width: var(--board-size);
   height: var(--board-size);
@@ -85,6 +87,7 @@ body {
   table-layout: fixed;
   border: var(--thick-line) solid var(--line-color);
   background: rgba(0,0,0,0.25);
+  color: var(--text-color);
 }
 
 .sudoku td {
@@ -94,13 +97,13 @@ body {
   vertical-align: middle;
   font-size: 18px;
   font-weight: 600;
-  color: var(--text-color);
-  .sudoku td {
   color: inherit;
   background: var(--cell-bg);
   border: var(--thin-line) solid var(--line-color);
+  padding: 0;
 }
 
+/* 3×3 GRID LINES */
 .sudoku td:nth-child(3n) {
   border-right: var(--thick-line) solid var(--line-color);
 }
@@ -109,6 +112,7 @@ body {
   border-bottom: var(--thick-line) solid var(--line-color);
 }
 
+/* REMOVE EXTRA BORDERS */
 .sudoku tr td:last-child {
   border-right: none;
 }
