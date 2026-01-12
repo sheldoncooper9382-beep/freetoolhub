@@ -8,102 +8,63 @@
 </head>
 <body>
 
-  <div class="app">
-    <h1>Sudoku Theme Generator</h1>
-    <p class="subtitle">Design custom Sudoku grid styles in real time</p>
+<div class="app">
+  <h1>Sudoku Theme Generator</h1>
+  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
 
-    <div class="layout">
-      <!-- CONTROLS -->
-      <div class="panel">
-        <label>
-          Cell Background
-          <input type="color" value="#2b0a52">
-        </label>
+  <div class="layout">
 
-        <label>
-          Grid Line Color
-          <input type="color" value="#cfc3ff">
-        </label>
+    <!-- CONTROLS -->
+    <div class="panel">
+      <label>
+        Cell Background
+        <input type="color" id="cellBg" value="#3a176d">
+      </label>
 
-        <label>
-          Thick Line Size
-          <input type="range" min="2" max="6" value="4">
-        </label>
+      <label>
+        Grid Line Color
+        <input type="color" id="gridLine" value="#ffffff">
+      </label>
 
-        <button class="btn glass">Glass</button>
-        <button class="btn neon">Neon</button>
-        <button class="btn minimal">Minimal</button>
-        <button class="btn export">Export CSS</button>
-      </div>
+      <label>
+        Text Color
+        <input type="color" id="textColor" value="#ffffff">
+      </label>
 
-      <!-- SUDOKU GRID -->
-      <div class="sudoku-wrap">
-        <table class="sudoku">
-          <tbody>
-            <!-- 9 rows -->
-            <!-- Numbers are placeholders -->
-            <!-- Replace later with JS -->
-            <!-- ROW 1 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 2 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 3 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
+      <label>
+        Thick Line Size
+        <input type="range" id="thickSize" min="2" max="8" value="4">
+      </label>
 
-            <!-- ROW 4 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 5 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 6 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-
-            <!-- ROW 7 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 8 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-            <!-- ROW 9 -->
-            <tr>
-              <td>1</td><td>2</td><td>3</td>
-              <td>4</td><td>5</td><td>6</td>
-              <td>7</td><td>8</td><td>9</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <button class="btn glass">Glass</button>
+      <button class="btn neon">Neon</button>
+      <button class="btn minimal">Minimal</button>
+      <button class="btn export">Export CSS</button>
     </div>
-  </div>
 
+    <!-- SUDOKU GRID -->
+    <div class="sudoku-wrap">
+      <table class="sudoku">
+        <tbody>
+          <!-- 9x9 -->
+          <!-- Numbers are placeholders -->
+          <!-- JS-ready -->
+          <script>
+            for (let r = 0; r < 9; r++) {
+              document.write("<tr>");
+              for (let c = 1; c <= 9; c++) {
+                document.write(`<td>${c}</td>`);
+              }
+              document.write("</tr>");
+            }
+          </script>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
