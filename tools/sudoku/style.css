@@ -1,10 +1,12 @@
 :root {
-  --board-size: 360px;     /* divisible by 9 = PERFECT alignment */
-  --cell-bg: rgba(120, 40, 200, 0.35);
+  --board-size: 360px;
+
+  --cell-bg: rgba(120, 40, 200, 0.4);
+  --line-color: #ffffff;
+  --text-color: #ffffff;
+
   --thin-line: 1px;
   --thick-line: 4px;
-  --line-color: #cfc3ff;
-  --thick-color: #ffffff;
 }
 
 * {
@@ -16,24 +18,18 @@ body {
   margin: 0;
   min-height: 100vh;
   background: radial-gradient(circle at top, #1a1a40, #070711);
-  color: #fff;
+  color: white;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .app {
-  width: 100%;
   max-width: 900px;
   padding: 32px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  background: rgba(255,255,255,0.08);
   border-radius: 20px;
   backdrop-filter: blur(14px);
-}
-
-h1 {
-  margin: 0;
-  font-size: 28px;
 }
 
 .subtitle {
@@ -46,19 +42,18 @@ h1 {
   gap: 32px;
 }
 
-/* CONTROL PANEL */
+/* PANEL */
 .panel {
   width: 260px;
   padding: 20px;
   background: rgba(255,255,255,0.08);
   border-radius: 16px;
-  backdrop-filter: blur(12px);
 }
 
 .panel label {
   display: block;
-  margin-bottom: 16px;
   font-size: 14px;
+  margin-bottom: 14px;
 }
 
 .panel input {
@@ -70,34 +65,26 @@ h1 {
   width: 100%;
   padding: 12px;
   margin-top: 12px;
-  border: none;
   border-radius: 999px;
-  cursor: pointer;
+  border: none;
   font-weight: 600;
+  cursor: pointer;
   color: white;
 }
 
 .glass { background: linear-gradient(135deg, #5a7cff, #6a4cff); }
-.neon  { background: linear-gradient(135deg, #00ffd5, #00aaff); }
+.neon { background: linear-gradient(135deg, #00ffd5, #00aaff); }
 .minimal { background: #333; }
 .export { background: linear-gradient(135deg, #ffb347, #ff7b00); }
 
-/* SUDOKU GRID */
-.sudoku-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* SUDOKU */
 .sudoku {
   width: var(--board-size);
   height: var(--board-size);
-  border-collapse: collapse;  /* 🔑 avoids double borders */
+  border-collapse: collapse;
   table-layout: fixed;
+  border: var(--thick-line) solid var(--line-color);
   background: rgba(0,0,0,0.25);
-  border: var(--thick-line) solid var(--thick-color);
-  border-radius: 12px;
-  overflow: hidden;
 }
 
 .sudoku td {
@@ -105,25 +92,25 @@ h1 {
   height: calc(100% / 9);
   text-align: center;
   vertical-align: middle;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
   background: var(--cell-bg);
   border: var(--thin-line) solid var(--line-color);
-  font-size: 18px;
 }
 
-/* Thick vertical block lines */
 .sudoku td:nth-child(3n) {
-  border-right: var(--thick-line) solid var(--thick-color);
+  border-right: var(--thick-line) solid var(--line-color);
 }
 
-/* Thick horizontal block lines */
 .sudoku tr:nth-child(3n) td {
-  border-bottom: var(--thick-line) solid var(--thick-color);
+  border-bottom: var(--thick-line) solid var(--line-color);
 }
 
-/* Clean edges (outer border already exists) */
 .sudoku tr td:last-child {
   border-right: none;
 }
+
 .sudoku tr:last-child td {
   border-bottom: none;
 }
