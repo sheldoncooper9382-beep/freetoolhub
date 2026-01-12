@@ -95,6 +95,8 @@ body {
   font-size: 18px;
   font-weight: 600;
   color: var(--text-color);
+  .sudoku td {
+  color: inherit;
   background: var(--cell-bg);
   border: var(--thin-line) solid var(--line-color);
 }
