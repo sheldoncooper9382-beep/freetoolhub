@@ -1,204 +1,129 @@
-/* ======================================================
-   CSS VARIABLES (Theme Engine)
-====================================================== */
 :root {
-  --cell-bg: rgba(255, 255, 255, 0.14);
-  --grid-line: rgba(255, 255, 255, 0.35);
-  --grid-thick: 3px;
-
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --accent: #60a5fa;
+  --board-size: 360px;     /* divisible by 9 = PERFECT alignment */
+  --cell-bg: rgba(120, 40, 200, 0.35);
+  --thin-line: 1px;
+  --thick-line: 4px;
+  --line-color: #cfc3ff;
+  --thick-color: #ffffff;
 }
 
-/* ======================================================
-   Reset
-====================================================== */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  font-family: system-ui, sans-serif;
 }
 
-/* ======================================================
-   Page Background (FreeToolHub Style)
-====================================================== */
 body {
+  margin: 0;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(96, 165, 250, 0.25), transparent 40%),
-    radial-gradient(circle at bottom, rgba(167, 139, 250, 0.2), transparent 40%),
-    linear-gradient(180deg, #020617, #020617);
+  background: radial-gradient(circle at top, #1a1a40, #070711);
   color: #fff;
-
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-/* ======================================================
-   App Container (Glass Card)
-====================================================== */
 .app {
-  width: min(960px, 96vw);
-  padding: 24px;
-  border-radius: 26px;
-
-  background: var(--glass-bg);
-  backdrop-filter: blur(18px);
-  border: 1px solid var(--glass-border);
-
-  box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.7),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border-radius: 20px;
+  backdrop-filter: blur(14px);
 }
 
-/* ======================================================
-   Headings
-====================================================== */
 h1 {
-  grid-column: span 2;
+  margin: 0;
   font-size: 28px;
-  letter-spacing: 0.6px;
 }
 
 .subtitle {
-  grid-column: span 2;
-  font-size: 14px;
   opacity: 0.7;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
-/* ======================================================
-   Controls Panel (Glass)
-====================================================== */
-.controls {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-/* Labels */
-.controls label {
+.layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-  font-size: 14px;
+  gap: 32px;
 }
 
-/* Inputs */
-.controls input[type="color"],
-.controls input[type="range"] {
-  cursor: pointer;
-}
-
-/* ======================================================
-   Buttons (Jelly / 3D)
-====================================================== */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-
-  border-radius: 999px;
-  border: none;
-
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-
-  background: linear-gradient(145deg, #5b7cfa, #2b47d9);
-  box-shadow:
-    0 8px 0 rgba(0, 0, 0, 0.35),
-    0 0 20px rgba(96, 165, 250, 0.35);
-
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-button:active {
-  transform: translateY(6px) scaleX(1.05) scaleY(0.95);
-  box-shadow: none;
-}
-
-/* Preset buttons spacing */
-.preset-buttons {
-  margin-top: 10px;
-}
-
-/* ======================================================
-   Preview Area
-====================================================== */
-.preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Sudoku Grid */
-#grid {
-  width: min(420px, 60vh);
-  height: min(420px, 60vh);
-
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(9, 1fr);
-
-  border-radius: 18px;
-  overflow: hidden;
-
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-}
-
-/* Cells */
-.cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: var(--cell-bg);
-  border: 1px solid var(--grid-line);
-
-  font-weight: 700;
-  color: white;
-  user-select: none;
-}
-
-/* Thick 3×3 Lines */
-.cell:nth-child(3n) {
-  border-right: var(--grid-thick) solid var(--grid-line);
-}
-
-.cell:nth-child(n + 19):nth-child(-n + 27),
-.cell:nth-child(n + 46):nth-child(-n + 54) {
-  border-bottom: var(--grid-thick) solid var(--grid-line);
-}
-
-/* ======================================================
-   Export Output
-====================================================== */
-textarea {
-  grid-column: span 2;
-  margin-top: 14px;
-  width: 100%;
-  height: 140px;
-
-  background: rgba(2, 6, 23, 0.85);
-  color: #93c5fd;
-
-  border: 1px solid rgba(255, 255, 255, 0.12);
+/* CONTROL PANEL */
+.panel {
+  width: 260px;
+  padding: 20px;
+  background: rgba(255,255,255,0.08);
   border-radius: 16px;
-  padding: 12px;
+  backdrop-filter: blur(12px);
+}
 
-  font-family: monospace;
-  resize: none;
+.panel label {
+  display: block;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.panel input {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  color: white;
+}
+
+.glass { background: linear-gradient(135deg, #5a7cff, #6a4cff); }
+.neon  { background: linear-gradient(135deg, #00ffd5, #00aaff); }
+.minimal { background: #333; }
+.export { background: linear-gradient(135deg, #ffb347, #ff7b00); }
+
+/* SUDOKU GRID */
+.sudoku-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sudoku {
+  width: var(--board-size);
+  height: var(--board-size);
+  border-collapse: collapse;  /* 🔑 avoids double borders */
+  table-layout: fixed;
+  background: rgba(0,0,0,0.25);
+  border: var(--thick-line) solid var(--thick-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sudoku td {
+  width: calc(100% / 9);
+  height: calc(100% / 9);
+  text-align: center;
+  vertical-align: middle;
+  background: var(--cell-bg);
+  border: var(--thin-line) solid var(--line-color);
+  font-size: 18px;
+}
+
+/* Thick vertical block lines */
+.sudoku td:nth-child(3n) {
+  border-right: var(--thick-line) solid var(--thick-color);
+}
+
+/* Thick horizontal block lines */
+.sudoku tr:nth-child(3n) td {
+  border-bottom: var(--thick-line) solid var(--thick-color);
+}
+
+/* Clean edges (outer border already exists) */
+.sudoku tr td:last-child {
+  border-right: none;
+}
+.sudoku tr:last-child td {
+  border-bottom: none;
 }
