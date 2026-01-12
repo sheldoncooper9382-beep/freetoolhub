@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sudoku Theme Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+  <h1>Sudoku Theme Generator</h1>
+  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
+
+  <!-- Controls -->
+  <div class="controls">
+    <label>
+      Cell Background
+      <input type="color" id="cellBg">
+    </label>
+
+    <label>
+      Grid Line Color
+      <input type="color" id="gridColor">
+    </label>
+
+    <label>
+      Thick Line Size
+      <input type="range" min="1" max="6" value="3" id="thickSize">
+    </label>
+
+    <div class="preset-buttons">
+      <button onclick="applyTheme('glass')">Glass</button>
+      <button onclick="applyTheme('neon')">Neon</button>
+      <button onclick="applyTheme('minimal')">Minimal</button>
+    </div>
+
+    <button id="exportBtn">Export CSS</button>
+  </div>
+
+  <!-- Preview -->
+  <div class="preview">
+    <div id="grid">
+      <!-- 81 cells -->
+      <script>
+        for (let i = 0; i < 81; i++) {
+          document.write(`<div class="cell">${(i % 9) + 1}</div>`);
+        }
+      </script>
+    </div>
+  </div>
+
+  <textarea id="output" placeholder="Generated CSS will appear here"></textarea>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
