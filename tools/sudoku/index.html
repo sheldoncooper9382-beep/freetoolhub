@@ -2,57 +2,108 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sudoku Theme Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<div class="app">
-  <h1>Sudoku Theme Generator</h1>
-  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
+  <div class="app">
+    <h1>Sudoku Theme Generator</h1>
+    <p class="subtitle">Design custom Sudoku grid styles in real time</p>
 
-  <!-- Controls -->
-  <div class="controls">
-    <label>
-      Cell Background
-      <input type="color" id="cellBg">
-    </label>
+    <div class="layout">
+      <!-- CONTROLS -->
+      <div class="panel">
+        <label>
+          Cell Background
+          <input type="color" value="#2b0a52">
+        </label>
 
-    <label>
-      Grid Line Color
-      <input type="color" id="gridColor">
-    </label>
+        <label>
+          Grid Line Color
+          <input type="color" value="#cfc3ff">
+        </label>
 
-    <label>
-      Thick Line Size
-      <input type="range" min="1" max="6" value="3" id="thickSize">
-    </label>
+        <label>
+          Thick Line Size
+          <input type="range" min="2" max="6" value="4">
+        </label>
 
-    <div class="preset-buttons">
-      <button onclick="applyTheme('glass')">Glass</button>
-      <button onclick="applyTheme('neon')">Neon</button>
-      <button onclick="applyTheme('minimal')">Minimal</button>
+        <button class="btn glass">Glass</button>
+        <button class="btn neon">Neon</button>
+        <button class="btn minimal">Minimal</button>
+        <button class="btn export">Export CSS</button>
+      </div>
+
+      <!-- SUDOKU GRID -->
+      <div class="sudoku-wrap">
+        <table class="sudoku">
+          <tbody>
+            <!-- 9 rows -->
+            <!-- Numbers are placeholders -->
+            <!-- Replace later with JS -->
+            <!-- ROW 1 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 2 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 3 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+
+            <!-- ROW 4 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 5 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 6 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+
+            <!-- ROW 7 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 8 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+            <!-- ROW 9 -->
+            <tr>
+              <td>1</td><td>2</td><td>3</td>
+              <td>4</td><td>5</td><td>6</td>
+              <td>7</td><td>8</td><td>9</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <button id="exportBtn">Export CSS</button>
   </div>
 
-  <!-- Preview -->
-  <div class="preview">
-    <div id="grid">
-      <!-- 81 cells -->
-      <script>
-        for (let i = 0; i < 81; i++) {
-          document.write(`<div class="cell">${(i % 9) + 1}</div>`);
-        }
-      </script>
-    </div>
-  </div>
-
-  <textarea id="output" placeholder="Generated CSS will appear here"></textarea>
-</div>
-
-<script src="script.js"></script>
 </body>
 </html>
