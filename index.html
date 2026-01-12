@@ -1,21 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Tool Hub</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Sudoku Theme Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>Free Tool Hub</h1>
-    <p>50+ offline-ready web tools, all in one place</p>
-  </header>
 
-  <main id="tools-container">
-    <!-- Tools will be loaded here dynamically -->
-  </main>
+<div class="app">
+  <h1>Sudoku Theme Generator</h1>
+  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
 
-  <script src="main.js"></script>
+  <div class="layout">
+
+    <!-- CONTROL PANEL -->
+    <div class="panel">
+      <label>
+        Cell Background
+        <input type="color" id="cellBg" value="#7a28c8">
+      </label>
+
+      <label>
+        Grid Line Color
+        <input type="color" id="gridLine" value="#ffffff">
+      </label>
+
+      <label>
+        Text Color
+        <input type="color" id="textColor" value="#ffffff">
+      </label>
+
+      <label>
+        Thick Line Size
+        <input type="range" id="thickSize" min="2" max="8" value="4">
+      </label>
+
+      <button class="btn glass">Glass</button>
+      <button class="btn neon">Neon</button>
+      <button class="btn minimal">Minimal</button>
+      <button class="btn export">Export CSS</button>
+    </div>
+
+    <!-- SUDOKU GRID -->
+    <table class="sudoku">
+      <tbody>
+        <!-- 9 rows -->
+        <!-- Each cell just shows sample numbers -->
+        <!-- Perfect 9×9 grid -->
+        ${[...Array(9)].map(() =>
+          `<tr>${[1,2,3,4,5,6,7,8,9].map(n => `<td>${n}</td>`).join("")}</tr>`
+        ).join("")}
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
