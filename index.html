@@ -1,62 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sudoku Theme Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Free Tool Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+      opacity: 0.75;
+      margin-bottom: 40px;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .tool {
+      background: rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: white;
+      transition: transform 0.2s ease, background 0.2s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .tool:hover {
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.14);
+    }
+
+    .tool h2 {
+      margin-bottom: 8px;
+      font-size: 1.2rem;
+    }
+
+    .tool span {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+  </style>
 </head>
 <body>
 
-<div class="app">
-  <h1>Sudoku Theme Generator</h1>
-  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
+  <div class="container">
+    <h1>Free Tool Hub</h1>
+    <p>Simple powerful tools built for creators and developers</p>
 
-  <div class="layout">
+    <div class="tools">
 
-    <!-- CONTROL PANEL -->
-    <div class="panel">
-      <label>
-        Cell Background
-        <input type="color" id="cellBg" value="#7a28c8">
-      </label>
+      <a class="tool" href="sudoku.html">
+        <h2>Sudoku Theme Generator</h2>
+        <span>Design custom Sudoku grid styles</span>
+      </a>
 
-      <label>
-        Grid Line Color
-        <input type="color" id="gridLine" value="#ffffff">
-      </label>
+      <a class="tool" href="buttons.html">
+        <h2>CSS Button Generator</h2>
+        <span>Glass neon and animated buttons</span>
+      </a>
 
-      <label>
-        Text Color
-        <input type="color" id="textColor" value="#ffffff">
-      </label>
+      <a class="tool" href="gradient.html">
+        <h2>Text Gradient Tool</h2>
+        <span>Create animated gradient text</span>
+      </a>
 
-      <label>
-        Thick Line Size
-        <input type="range" id="thickSize" min="2" max="8" value="4">
-      </label>
+      <a class="tool" href="json.html">
+        <h2>JSON Formatter</h2>
+        <span>Validate format and repair JSON</span>
+      </a>
 
-      <button class="btn glass">Glass</button>
-      <button class="btn neon">Neon</button>
-      <button class="btn minimal">Minimal</button>
-      <button class="btn export">Export CSS</button>
     </div>
 
-    <!-- SUDOKU GRID -->
-    <table class="sudoku">
-      <tbody>
-        <!-- 9 rows -->
-        <!-- Each cell just shows sample numbers -->
-        <!-- Perfect 9×9 grid -->
-        ${[...Array(9)].map(() =>
-          `<tr>${[1,2,3,4,5,6,7,8,9].map(n => `<td>${n}</td>`).join("")}</tr>`
-        ).join("")}
-      </tbody>
-    </table>
-
+    <footer>
+      © Free Tool Hub
+    </footer>
   </div>
-</div>
 
-<script src="script.js"></script>
 </body>
 </html>
