@@ -1,67 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Text Gradient Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Ultimate Button Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Keep your existing CSS file -->
-  <link rel="stylesheet" href="style.css">
+<style>
+/* =========================
+   FreeToolHub Glass Theme
+========================= */
+:root {
+  --glass-bg: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.28);
+  --accent: #7dd3fc;
+  --accent2: #a855f7;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  color: var(--text);
+}
+
+/* =========================
+   App Container
+========================= */
+.app {
+  width: 900px;
+  max-width: 95%;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   Glass Panels
+========================= */
+.panel {
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.22),
+    rgba(255,255,255,0.06)
+  );
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+}
+
+/* =========================
+   Preset Buttons
+========================= */
+.presets {
+  display: grid;
+  gap: 10px;
+}
+
+.presets button {
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: rgba(255,255,255,0.7);
+  color: #020617;
+}
+
+/* =========================
+   Controls
+========================= */
+.control {
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+input[type="text"],
+input[type="range"],
+input[type="color"] {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* =========================
+   Preview Area
+========================= */
+.preview-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-bg {
+  padding: 60px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* =========================
+   Generated Button
+========================= */
+.generated-btn {
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  font-weight: 700;
+}
+
+/* =========================
+   Actions
+========================= */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+  font-weight: 700;
+}
+</style>
 </head>
+
 <body>
 
-  <h1 class="title">Text Gradient Generator</h1>
+<div class="app">
 
-  <div class="tool-wrapper">
-
-    <!-- LEFT: LIVE PREVIEW -->
-    <div class="preview-panel">
-      <div class="preview-box">
-        <span id="previewText">Gradient Text</span>
-      </div>
+  <!-- LEFT PANEL -->
+  <div class="panel">
+    <h2>🎨 Presets</h2>
+    <div class="presets">
+      <button onclick="preset('jelly')">Jelly Roll</button>
+      <button onclick="preset('3d')">3D Raised</button>
+      <button onclick="preset('glass')">Glassmorphic</button>
+      <button onclick="preset('neon')">Neon Glow</button>
+      <button onclick="preset('minimal')">Minimal Shadow</button>
     </div>
 
-    <!-- RIGHT: CONTROLS -->
-    <div class="controls-panel">
+    <h2 style="margin-top:20px">⚙ Controls</h2>
 
-      <label>Text</label>
-      <input type="text" id="textInput" value="Gradient Text">
+    <div class="control">
+      <label>Button Text</label>
+      <input type="text" id="text" value="FreeToolHub">
+    </div>
 
-      <label>Font Size (px)</label>
-      <input type="range" id="fontSize" min="16" max="160" value="72">
+    <div class="control">
+      <label>Border Radius</label>
+      <input type="range" id="radius" min="0" max="60" value="24">
+    </div>
 
-      <label>Font Weight</label>
-      <input type="range" id="fontWeight" min="100" max="900" step="100" value="700">
+    <div class="control">
+      <label>Padding</label>
+      <input type="range" id="padding" min="8" max="30" value="16">
+    </div>
 
-      <label>
-        <input type="checkbox" id="italicToggle">
-        Italic
-      </label>
+    <div class="control">
+      <label>Background Color</label>
+      <input type="color" id="bg" value="#7dd3fc">
+    </div>
 
-      <label>Gradient Direction</label>
-      <select id="direction">
-        <option value="to right">Left to Right</option>
-        <option value="to left">Right to Left</option>
-        <option value="to bottom">Top to Bottom</option>
-        <option value="to top">Bottom to Top</option>
-        <option value="45deg">Diagonal</option>
-      </select>
+    <div class="control">
+      <label>Text Color</label>
+      <input type="color" id="color" value="#020617">
+    </div>
 
-      <label>Colors</label>
-      <div id="colorList" class="color-list">
-        <input type="color" value="#ff77c6">
-        <input type="color" value="#8b7cff">
-        <input type="color" value="#4ade80">
-      </div>
+    <div class="control">
+      <label>Shadow Depth</label>
+      <input type="range" id="shadow" min="0" max="40" value="18">
+    </div>
 
-      <button id="addColor">Add Color</button>
-      <button id="removeColor">Remove Color</button>
-
-      <button id="copyCSS" class="primary">Copy CSS</button>
-
+    <div class="control">
+      <label>Glow</label>
+      <input type="range" id="glow" min="0" max="40" value="0">
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- RIGHT PANEL -->
+  <div class="panel preview-area">
+    <h2>👀 Live Preview</h2>
+    <div class="preview-bg">
+      <button class="generated-btn" id="btn">FreeToolHub</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="copyCSS()">Copy CSS</button>
+      <button onclick="copyHTML()">Copy HTML</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const btn = document.getElementById("btn");
+
+function update() {
+  btn.textContent = text.value;
+  btn.style.padding = `${padding.value}px ${padding.value * 1.6}px`;
+  btn.style.borderRadius = radius.value + "px";
+  btn.style.background = bg.value;
+  btn.style.color = color.value;
+
+  btn.style.boxShadow = `
+    0 ${shadow.value}px ${shadow.value * 2}px rgba(0,0,0,0.35),
+    0 0 ${glow.value}px ${bg.value}
+  `;
+}
+
+function preset(type) {
+  if (type === "jelly") {
+    bg.value = "#7dd3fc";
+    radius.value = 40;
+    shadow.value = 20;
+    glow.value = 10;
+  }
+  if (type === "3d") {
+    bg.value = "#22c55e";
+    radius.value = 12;
+    shadow.value = 30;
+    glow.value = 0;
+  }
+  if (type === "glass") {
+    bg.value = "rgba(255,255,255,0.25)";
+    color.value = "#ffffff";
+    radius.value = 24;
+    shadow.value = 20;
+    glow.value = 0;
+  }
+  if (type === "neon") {
+    bg.value = "#a855f7";
+    color.value = "#ffffff";
+    glow.value = 30;
+  }
+  if (type === "minimal") {
+    bg.value = "#e5e7eb";
+    color.value = "#020617";
+    shadow.value = 10;
+    glow.value = 0;
+  }
+  update();
+}
+
+function copyCSS() {
+  navigator.clipboard.writeText(btn.style.cssText);
+}
+
+function copyHTML() {
+  navigator.clipboard.writeText(
+    `<button style="${btn.style.cssText}">${btn.textContent}</button>`
+  );
+}
+
+document.querySelectorAll("input").forEach(i => i.addEventListener("input", update));
+update();
+</script>
+
 </body>
 </html>
