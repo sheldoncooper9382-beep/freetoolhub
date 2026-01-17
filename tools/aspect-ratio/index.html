@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Aspect Ratio Calculator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.28);
+  --accent: #7dd3fc;
+  --accent2: #a855f7;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  color: var(--text);
+  padding: 40px 0;
+}
+
+/* Layout */
+.app {
+  width: 1100px;
+  max-width: 96%;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 22px;
+}
+
+/* Glass Panels */
+.panel {
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+/* Controls */
+.control {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* Preview */
+.preview-box {
+  margin-top: 20px;
+  width: 100%;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.08);
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--accent2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+}
+
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-family: monospace;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- LEFT PANEL -->
+  <div class="panel">
+    <h2>📏 CSS Aspect Ratio Calculator</h2>
+
+    <div class="control">
+      <label>Width</label>
+      <input type="number" id="width" value="16">
+    </div>
+
+    <div class="control">
+      <label>Height</label>
+      <input type="number" id="height" value="9">
+    </div>
+
+    <div class="actions">
+      <button id="calculateBtn">Calculate Ratio</button>
+      <button onclick="copyCSS()">Copy CSS</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel">
+    <h2>👀 Live Preview</h2>
+    <div class="preview-box" id="preview">16:9</div>
+
+    <h2>📄 Generated CSS</h2>
+    <textarea id="outputCSS" readonly></textarea>
+  </div>
+
+</div>
+
+<script>
+const widthInput = document.getElementById("width");
+const heightInput = document.getElementById("height");
+const preview = document.getElementById("preview");
+const outputCSS = document.getElementById("outputCSS");
+const calculateBtn = document.getElementById("calculateBtn");
+
+function calculateAspectRatio() {
+  const w = parseFloat(widthInput.value);
+  const h = parseFloat(heightInput.value);
+  if (!w || !h) return;
+
+  const gcd = (a,b) => b ? gcd(b, a%b) : a;
+  const divisor = gcd(w,h);
+  const ratio = `${w/divisor}:${h/divisor}`;
+
+  // Preview box
+  preview.textContent = ratio;
+  preview.style.aspectRatio = `${w}/${h}`;
+
+  // Generate CSS
+  outputCSS.value = `/* Modern CSS */\naspect-ratio: ${w}/${h};\n/* Fallback for older browsers */\nwidth: 100%;\npadding-top: ${(h/w)*100}%;`;
+}
+
+// Copy CSS
+function copyCSS() {
+  navigator.clipboard.writeText(outputCSS.value);
+}
+
+// Event listeners
+calculateBtn.addEventListener("click", calculateAspectRatio);
+[widthInput,heightInput].forEach(el => el.addEventListener("input", calculateAspectRatio));
+
+// Initial calculation
+calculateAspectRatio();
+</script>
+
+</body>
+</html>
