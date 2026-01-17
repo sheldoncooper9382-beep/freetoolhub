@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SVG Icon Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --glass-bg: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.28);
+  --accent: #7dd3fc;
+  --accent2: #a855f7;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  color: var(--text);
+}
+
+/* Layout */
+.app {
+  width: 1100px;
+  max-width: 96%;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 22px;
+}
+
+/* Glass Panels */
+.panel {
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+/* Controls */
+.control {
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+input[type="color"],
+input[type="number"],
+select {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* Preview */
+.preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.preview-bg {
+  width: 100%;
+  padding: 80px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+svg {
+  width: var(--size, 100px);
+  height: var(--size, 100px);
+  fill: var(--fill, var(--accent));
+  stroke: var(--stroke, none);
+  stroke-width: var(--strokeWidth, 2);
+  transform: rotate(var(--rotate, 0deg));
+}
+
+/* Output */
+pre {
+  width: 100%;
+  background: rgba(0,0,0,0.45);
+  padding: 14px;
+  border-radius: 14px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- LEFT PANEL -->
+  <div class="panel">
+    <h2>🎨 SVG Controls</h2>
+
+    <div class="control">
+      <label>Shape</label>
+      <select id="shape">
+        <option value="circle">Circle</option>
+        <option value="square">Square</option>
+        <option value="triangle">Triangle</option>
+        <option value="star">Star</option>
+        <option value="heart">Heart</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Size (px)</label>
+      <input type="number" id="size" min="10" max="300" value="100">
+    </div>
+
+    <div class="control">
+      <label>Fill Color</label>
+      <input type="color" id="fill" value="#7dd3fc">
+    </div>
+
+    <div class="control">
+      <label>Stroke Color</label>
+      <input type="color" id="stroke" value="#ffffff">
+    </div>
+
+    <div class="control">
+      <label>Stroke Width</label>
+      <input type="number" id="strokeWidth" min="0" max="10" value="2">
+    </div>
+
+    <div class="control">
+      <label>Rotate (deg)</label>
+      <input type="number" id="rotate" min="0" max="360" value="0">
+    </div>
+
+    <div class="actions">
+      <button id="generateBtn">Generate Preview</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel preview-wrap">
+    <h2>👀 Live Preview</h2>
+
+    <div class="preview-bg" id="previewBg">
+      <svg id="svgPreview"></svg>
+    </div>
+
+    <h2>📄 SVG Code</h2>
+    <pre id="svgOutput"></pre>
+
+    <div class="actions">
+      <button onclick="copySVG()">Copy SVG Code</button>
+      <button onclick="copyHTML()">Copy HTML Embed</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const svgPreview = document.getElementById("svgPreview");
+const svgOutput = document.getElementById("svgOutput");
+const generateBtn = document.getElementById("generateBtn");
+
+function createSVG() {
+  const shape = document.getElementById("shape").value;
+  const size = document.getElementById("size").value;
+  const fill = document.getElementById("fill").value;
+  const stroke = document.getElementById("stroke").value;
+  const strokeWidth = document.getElementById("strokeWidth").value;
+  const rotate = document.getElementById("rotate").value;
+
+  let svgContent = "";
+  const s = size;
+  switch(shape) {
+    case "circle":
+      svgContent = `<circle cx="${s/2}" cy="${s/2}" r="${s/2 - strokeWidth}" />`;
+      break;
+    case "square":
+      svgContent = `<rect x="${strokeWidth}" y="${strokeWidth}" width="${s - 2*strokeWidth}" height="${s - 2*strokeWidth}" />`;
+      break;
+    case "triangle":
+      const h = s * Math.sqrt(3)/2;
+      svgContent = `<polygon points="${s/2},0 0,${h} ${s},${h}" />`;
+      break;
+    case "star":
+      // 5-point star
+      const cx = s/2, cy = s/2, r = s/2 - strokeWidth;
+      svgContent = `<polygon points="${
+        Array.from({length:5}).map((_,i)=>{
+          const angle = (i*72 - 90)*Math.PI/180;
+          return `${cx + r*Math.cos(angle)},${cy + r*Math.sin(angle)}`;
+        }).join(' ')
+      }"/>`;
+      break;
+    case "heart":
+      svgContent = `<path d="M${s/2},${s/4} 
+        C${s*0.15},0 0,${s*0.6} ${s/2},${s*0.9} 
+        C${s},${s*0.6} ${s*0.85},0 ${s/2},${s/4}" />`;
+      break;
+  }
+
+  svgPreview.innerHTML = svgContent;
+  svgPreview.style.setProperty("--size", s+"px");
+  svgPreview.style.setProperty("--fill", fill);
+  svgPreview.style.setProperty("--stroke", stroke);
+  svgPreview.style.setProperty("--strokeWidth", strokeWidth);
+  svgPreview.style.setProperty("--rotate", rotate+"deg");
+
+  // Build SVG string
+  const svgString = `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" transform="rotate(${rotate} ${s/2} ${s/2})">${svgContent}</svg>`;
+  svgOutput.textContent = svgString;
+}
+
+// Copy functions
+function copySVG() {
+  navigator.clipboard.writeText(svgOutput.textContent);
+}
+
+function copyHTML() {
+  navigator.clipboard.writeText(svgOutput.textContent);
+}
+
+// Event listeners
+generateBtn.addEventListener("click", createSVG);
+document.querySelectorAll("input, select").forEach(el =>
+  el.addEventListener("input", () => {
+    createSVG();
+  })
+);
+
+// Initial generation
+createSVG();
+</script>
+
+</body>
+</html>
