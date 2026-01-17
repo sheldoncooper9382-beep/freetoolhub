@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Glassmorphic Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* =========================
+   FreeToolHub Glass Theme
+========================= */
+:root {
+  --accent: #7dd3fc;
+  --accent2: #a855f7;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:
+    radial-gradient(circle at top left, #1e293b, #020617),
+    url("https://grainy-gradients.vercel.app/noise.svg");
+  color: var(--text);
+}
+
+/* =========================
+   Layout
+========================= */
+.app {
+  width: 1000px;
+  max-width: 96%;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   Glass Panels
+========================= */
+.panel {
+  padding: 22px;
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.22),
+    rgba(255,255,255,0.06)
+  );
+  backdrop-filter: blur(22px);
+  border: 1px solid rgba(255,255,255,0.28);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+/* =========================
+   Controls
+========================= */
+.control {
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+input[type="range"],
+input[type="color"],
+select {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* =========================
+   Preview Area
+========================= */
+.preview-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-bg {
+  width: 100%;
+  padding: 60px;
+  border-radius: 20px;
+  background:
+    linear-gradient(135deg, #22d3ee, #a855f7);
+}
+
+/* =========================
+   Generated Glass
+========================= */
+.glass-preview {
+  width: 320px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+/* =========================
+   Output
+========================= */
+pre {
+  width: 100%;
+  background: rgba(0,0,0,0.45);
+  padding: 14px;
+  border-radius: 14px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+/* =========================
+   Buttons
+========================= */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- LEFT PANEL -->
+  <div class="panel">
+    <h2>🧊 Glass Controls</h2>
+
+    <div class="control">
+      <label>Blur</label>
+      <input type="range" id="blur" min="0" max="30" value="18">
+    </div>
+
+    <div class="control">
+      <label>Background Opacity</label>
+      <input type="range" id="bg" min="0" max="1" step="0.01" value="0.18">
+    </div>
+
+    <div class="control">
+      <label>Border Opacity</label>
+      <input type="range" id="border" min="0" max="1" step="0.01" value="0.28">
+    </div>
+
+    <div class="control">
+      <label>Border Radius</label>
+      <input type="range" id="radius" min="0" max="40" value="22">
+    </div>
+
+    <div class="control">
+      <label>Shadow Depth</label>
+      <input type="range" id="shadow" min="0" max="60" value="40">
+    </div>
+
+    <div class="control">
+      <label>Glow</label>
+      <input type="range" id="glow" min="0" max="40" value="0">
+    </div>
+
+    <div class="control">
+      <label>Text Color</label>
+      <select id="textColor">
+        <option value="#ffffff">Light</option>
+        <option value="#020617">Dark</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel preview-wrap">
+    <h2>👀 Live Preview</h2>
+
+    <div class="preview-bg">
+      <div class="glass-preview" id="glass">
+        Glassmorphic UI
+      </div>
+    </div>
+
+    <h2>📄 CSS Output</h2>
+    <pre id="cssOutput"></pre>
+
+    <div class="actions">
+      <button onclick="copyCSS()">Copy CSS</button>
+      <button onclick="copyHTML()">Copy HTML</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const glass = document.getElementById("glass");
+const cssOutput = document.getElementById("cssOutput");
+
+function update() {
+  const blur = document.getElementById("blur").value;
+  const bg = document.getElementById("bg").value;
+  const border = document.getElementById("border").value;
+  const radius = document.getElementById("radius").value;
+  const shadow = document.getElementById("shadow").value;
+  const glow = document.getElementById("glow").value;
+  const textColor = document.getElementById("textColor").value;
+
+  glass.style.background = `rgba(255,255,255,${bg})`;
+  glass.style.backdropFilter = `blur(${blur}px)`;
+  glass.style.webkitBackdropFilter = `blur(${blur}px)`;
+  glass.style.border = `1px solid rgba(255,255,255,${border})`;
+  glass.style.borderRadius = radius + "px";
+  glass.style.color = textColor;
+  glass.style.boxShadow = `
+    0 ${shadow}px ${shadow * 1.5}px rgba(0,0,0,0.4),
+    0 0 ${glow}px rgba(255,255,255,0.6)
+  `;
+
+  cssOutput.textContent = `
+background: rgba(255,255,255,${bg});
+backdrop-filter: blur(${blur}px);
+-webkit-backdrop-filter: blur(${blur}px);
+border: 1px solid rgba(255,255,255,${border});
+border-radius: ${radius}px;
+box-shadow:
+  0 ${shadow}px ${shadow * 1.5}px rgba(0,0,0,0.4),
+  0 0 ${glow}px rgba(255,255,255,0.6);
+color: ${textColor};
+`.trim();
+}
+
+function copyCSS() {
+  navigator.clipboard.writeText(cssOutput.textContent);
+}
+
+function copyHTML() {
+  navigator.clipboard.writeText(
+    `<div style="${glass.style.cssText}">Glassmorphic UI</div>`
+  );
+}
+
+document.querySelectorAll("input, select").forEach(el =>
+  el.addEventListener("input", update)
+);
+
+update();
+</script>
+
+</body>
+</html>
