@@ -1,7 +1,7 @@
 :root {
   --board-size: 360px;
 
-  --cell-bg: rgba(120, 40, 200, 0.4);
+  --cell-bg: #7a28c8; /* default cell color */
   --line-color: #ffffff;
   --text-color: #ffffff;
 
@@ -86,7 +86,7 @@ body {
   border-collapse: collapse;
   table-layout: fixed;
   border: var(--thick-line) solid var(--line-color);
-  background: rgba(0,0,0,0.25);
+  background: var(--cell-bg);
   color: var(--text-color);
 }
 
@@ -101,6 +101,7 @@ body {
   background: var(--cell-bg);
   border: var(--thin-line) solid var(--line-color);
   padding: 0;
+  transition: background 0.2s, color 0.2s;
 }
 
 /* 3×3 GRID LINES */
