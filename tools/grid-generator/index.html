@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Grid Generator – FreeToolHub</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* =========================
+   FreeToolHub Glass Theme
+========================= */
+:root {
+  --glass-bg: rgba(255,255,255,0.14);
+  --glass-border: rgba(255,255,255,0.28);
+  --accent: #7dd3fc;
+  --accent2: #a855f7;
+  --text: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, Segoe UI, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top left, #1e293b, #020617);
+  color: var(--text);
+}
+
+/* =========================
+   App Layout
+========================= */
+.app {
+  width: 1050px;
+  max-width: 96%;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   Glass Panels
+========================= */
+.panel {
+  padding: 22px;
+  border-radius: 22px;
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.22),
+    rgba(255,255,255,0.06)
+  );
+  backdrop-filter: blur(22px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+/* =========================
+   Controls
+========================= */
+.control {
+  margin-bottom: 14px;
+}
+
+label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+select,
+input[type="range"],
+input[type="number"] {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px;
+  border-radius: 10px;
+  border: none;
+}
+
+/* =========================
+   Playground
+========================= */
+.playground {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.grid-area {
+  min-height: 300px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.12);
+  border: 1px dashed var(--glass-border);
+  display: grid;
+  gap: 12px;
+}
+
+.item {
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+}
+
+/* =========================
+   CSS Output
+========================= */
+pre {
+  background: rgba(0,0,0,0.45);
+  padding: 14px;
+  border-radius: 14px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+/* =========================
+   Buttons
+========================= */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #020617;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- LEFT: CONTROLS -->
+  <div class="panel">
+    <h2>⚙ Grid Controls</h2>
+
+    <div class="control">
+      <label>Columns (repeat)</label>
+      <input type="number" id="cols" min="1" max="12" value="3">
+    </div>
+
+    <div class="control">
+      <label>Rows (repeat)</label>
+      <input type="number" id="rows" min="1" max="12" value="3">
+    </div>
+
+    <div class="control">
+      <label>Column Width</label>
+      <select id="colSize">
+        <option value="1fr">1fr</option>
+        <option value="2fr">2fr</option>
+        <option value="minmax(150px,1fr)">minmax(150px, 1fr)</option>
+        <option value="auto">auto</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Row Height</label>
+      <select id="rowSize">
+        <option value="1fr">1fr</option>
+        <option value="auto">auto</option>
+        <option value="minmax(100px,auto)">minmax(100px, auto)</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>Gap</label>
+      <input type="range" id="gap" min="0" max="40" value="12">
+    </div>
+
+    <div class="control">
+      <label>justify-items</label>
+      <select id="justify">
+        <option>stretch</option>
+        <option>start</option>
+        <option>center</option>
+        <option>end</option>
+      </select>
+    </div>
+
+    <div class="control">
+      <label>align-items</label>
+      <select id="align">
+        <option>stretch</option>
+        <option>start</option>
+        <option>center</option>
+        <option>end</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- RIGHT: PREVIEW -->
+  <div class="panel playground">
+    <h2>👀 Live Preview</h2>
+
+    <div class="grid-area" id="grid">
+      <!-- items injected -->
+    </div>
+
+    <h2>📄 CSS Output</h2>
+    <pre id="cssOutput"></pre>
+
+    <div class="actions">
+      <button onclick="copyCSS()">Copy CSS</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const grid = document.getElementById("grid");
+const cssOutput = document.getElementById("cssOutput");
+
+function buildItems() {
+  grid.innerHTML = "";
+  const total = cols.value * rows.value;
+  for (let i = 1; i <= total; i++) {
+    const d = document.createElement("div");
+    d.className = "item";
+    d.textContent = i;
+    grid.appendChild(d);
+  }
+}
+
+function update() {
+  grid.style.gridTemplateColumns =
+    `repeat(${cols.value}, ${colSize.value})`;
+  grid.style.gridTemplateRows =
+    `repeat(${rows.value}, ${rowSize.value})`;
+  grid.style.gap = gap.value + "px";
+  grid.style.justifyItems = justify.value;
+  grid.style.alignItems = align.value;
+
+  cssOutput.textContent = `
+display: grid;
+grid-template-columns: repeat(${cols.value}, ${colSize.value});
+grid-template-rows: repeat(${rows.value}, ${rowSize.value});
+gap: ${gap.value}px;
+justify-items: ${justify.value};
+align-items: ${align.value};
+`.trim();
+}
+
+function copyCSS() {
+  navigator.clipboard.writeText(cssOutput.textContent);
+}
+
+document.querySelectorAll("select, input").forEach(el =>
+  el.addEventListener("input", () => {
+    buildItems();
+    update();
+  })
+);
+
+buildItems();
+update();
+</script>
+
+</body>
+</html>
