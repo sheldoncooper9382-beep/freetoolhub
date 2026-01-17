@@ -43,54 +43,20 @@
     </div>
 
     <!-- SUDOKU GRID -->
-  <table class="sudoku">
-  <tbody>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
+    <table class="sudoku">
+      <tbody>
+        <!-- 9x9 grid -->
+        <!-- Each row -->
+        ${[...Array(9)].map(() => `
+        <tr>
+          ${[...Array(9)].map(() => `<td>1</td>`).join("")}
+        </tr>`).join("")}
+      </tbody>
+    </table>
 
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
+  </div>
+</div>
 
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-    <tr>
-      <td>1</td><td>2</td><td>3</td>
-      <td>4</td><td>5</td><td>6</td>
-      <td>7</td><td>8</td><td>9</td>
-    </tr>
-  </tbody>
-</table>
+<script src="script.js"></script>
+</body>
+</html>
