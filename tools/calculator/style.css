@@ -1,0 +1,188 @@
+/*
+ * Stylesheet for the scientific calculator.  The colour palette and
+ * layout are chosen to maximise contrast and legibility in low‑light
+ * environments.  Buttons are grouped by category and sized for
+ * comfortable touch or mouse interaction.  Focus styles and clear
+ * button labelling support keyboard navigation and assistive
+ * technologies.  The history panel slides out from the right when
+ * toggled.
+ */
+
+/* Base document styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #0d0d0d;
+  color: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Calculator container */
+.calc-container {
+  width: 100%;
+  max-width: 420px;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  padding: 16px;
+  position: relative;
+}
+
+/* Display area */
+.display {
+  background-color: #0b0b0b;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.expression {
+  min-height: 24px;
+  font-size: 1rem;
+  color: #9e9e9e;
+  text-align: right;
+  word-wrap: break-word;
+  margin-bottom: 4px;
+}
+
+.result {
+  min-height: 32px;
+  font-size: 1.6rem;
+  color: #ffffff;
+  text-align: right;
+  word-wrap: break-word;
+}
+
+/* Button grid layout */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+/* Base button styling */
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 8px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s, transform 0.05s;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.btn:focus {
+  outline: 2px solid #86a2ff;
+  outline-offset: 2px;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn:active {
+  transform: scale(0.96);
+  filter: brightness(0.9);
+}
+
+/* Category colours */
+.digit-btn {
+  background-color: #2d2d2d;
+}
+
+.operator-btn {
+  background-color: #3a3a3a;
+}
+
+.function-btn {
+  background-color: #30305a;
+}
+
+.constant-btn {
+  background-color: #34533e;
+}
+
+.equals-btn {
+  background-color: #5a3030;
+  color: #ffffff;
+}
+
+/* History panel */
+/* History panel: initially hidden off canvas to the right.  When
+ * the 'open' class is applied it slides into view by changing the
+ * right property.  A fixed negative right offset equal to its width
+ * keeps it out of sight until toggled. */
+/* History panel: slides horizontally into view.  When hidden, the panel
+ * is shifted entirely to the right using transform.  The parent
+ * container does not need overflow hidden because the panel is
+ * positioned absolutely relative to the calculator and translated
+ * off screen. */
+/* History panel: hidden by default; becomes visible when the
+ * 'open' class is applied.  We forego sliding for simplicity and
+ * reliability across browsers. */
+.history-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  max-height: 80vh;
+  background-color: #202020;
+  color: #f0f0f0;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.history-panel.open {
+  display: block;
+}
+
+.history-panel h2 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+}
+
+#history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#history-list li {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+  font-size: 0.85rem;
+  line-height: 1.2;
+}
+
+#history-list li .expr {
+  color: #a0a0a0;
+  display: block;
+}
+
+#history-list li .res {
+  color: #ffffff;
+  font-weight: bold;
+}
