@@ -1,261 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Glassmorphic Scientific Calculator</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University‑Level Scientific Calculator</title>
+    <!--
+      This calculator implements a wide range of mathematical
+      operations suitable for university‑level mathematics.  It
+      includes core arithmetic, exponentiation, trigonometric
+      functions with degree/radian toggle, logarithms, factorials,
+      permutations/combinations, modular arithmetic and a number of
+      interactive tools (summation, product, derivative and
+      integration).  The UI is designed for high contrast and
+      accessibility.  All logic lives in calculator.js.
+    -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="calculator" class="calc-container" aria-label="Scientific calculator">
+      <!-- Display section showing the current expression and the result.  -->
+      <div class="display" role="region" aria-live="polite">
+        <div id="expression" class="expression">&nbsp;</div>
+        <div id="result" class="result">0</div>
+      </div>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+      <!-- Memory, mode and history controls -->
+      <div class="button-grid">
+        <!-- Row 1: Memory and mode toggles -->
+        <button class="btn function-btn" data-action="memoryClear" aria-label="Memory Clear (MC)">MC</button>
+        <button class="btn function-btn" data-action="memoryRecall" aria-label="Memory Recall (MR)">MR</button>
+        <button class="btn function-btn" data-action="memoryAdd" aria-label="Memory Plus (M+)">M+</button>
+        <button class="btn function-btn" data-action="memorySubtract" aria-label="Memory Minus (M-)">M-</button>
+        <button class="btn function-btn" data-action="toggleDegRad" aria-label="Toggle degree or radian mode">RAD</button>
+        <button class="btn function-btn" data-action="toggleHistory" aria-label="Toggle history panel">History</button>
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #141e30, #243b55);
-  font-family: system-ui, sans-serif;
-  color: #fff;
-}
+        <!-- Row 2: Clear and editing controls -->
+        <button class="btn function-btn" data-action="clear" aria-label="Clear all">C</button>
+        <button class="btn function-btn" data-action="clearEntry" aria-label="Clear entry">CE</button>
+        <button class="btn function-btn" data-action="backspace" aria-label="Backspace">←</button>
+        <button class="btn function-btn" data-action="negate" aria-label="Negate result">±</button>
+        <button class="btn function-btn" data-action="copyResult" aria-label="Copy result to clipboard">Copy</button>
+        <button class="btn operator-btn" data-value="mod" aria-label="Modulus operator">mod</button>
 
-/* ===== GLASS CONTAINER ===== */
-.calculator {
-  width: 340px;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
+        <!-- Row 3: Grouping and simple functions -->
+        <button class="btn operator-btn" data-value="(" aria-label="Left parenthesis">(</button>
+        <button class="btn operator-btn" data-value=")" aria-label="Right parenthesis">)</button>
+        <button class="btn function-btn" data-action="abs" aria-label="Absolute value">abs</button>
+        <button class="btn function-btn" data-action="sqrt" aria-label="Square root">√</button>
+        <button class="btn function-btn" data-action="square" aria-label="Square">x²</button>
+        <button class="btn function-btn" data-action="cube" aria-label="Cube">x³</button>
 
-/* ===== DISPLAY ===== */
-.display {
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 12px;
-  overflow-x: auto;
-}
+        <!-- Row 4: Trigonometric functions -->
+        <button class="btn function-btn" data-action="sin" aria-label="Sine">sin</button>
+        <button class="btn function-btn" data-action="cos" aria-label="Cosine">cos</button>
+        <button class="btn function-btn" data-action="tan" aria-label="Tangent">tan</button>
+        <button class="btn function-btn" data-action="asin" aria-label="Inverse sine">asin</button>
+        <button class="btn function-btn" data-action="acos" aria-label="Inverse cosine">acos</button>
+        <button class="btn function-btn" data-action="atan" aria-label="Inverse tangent">atan</button>
 
-#prev {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  min-height: 18px;
-}
+        <!-- Row 5: Logarithms, constants and special ops -->
+        <button class="btn function-btn" data-action="ln" aria-label="Natural logarithm">ln</button>
+        <button class="btn function-btn" data-action="log10" aria-label="Common logarithm">log</button>
+        <button class="btn constant-btn" data-value="pi" aria-label="Pi constant">π</button>
+        <button class="btn constant-btn" data-value="e" aria-label="Euler's number">e</button>
+        <button class="btn operator-btn" data-value="nPr" aria-label="Permutation operator">nPr</button>
+        <button class="btn operator-btn" data-value="nCr" aria-label="Combination operator">nCr</button>
 
-#display {
-  font-size: 1.6rem;
-  text-align: right;
-  word-wrap: break-word;
-}
+        <!-- Row 6: Digit row with division and exponent -->
+        <button class="btn digit-btn" data-value="7">7</button>
+        <button class="btn digit-btn" data-value="8">8</button>
+        <button class="btn digit-btn" data-value="9">9</button>
+        <button class="btn operator-btn" data-value="/">÷</button>
+        <button class="btn function-btn" data-action="nthRoot" aria-label="Nth root">ⁿ√x</button>
+        <button class="btn operator-btn" data-value="^" aria-label="Power operator">xʸ</button>
 
-/* ===== BUTTON GRID ===== */
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
+        <!-- Row 7: Middle digit row with multiplication and summation/product -->
+        <button class="btn digit-btn" data-value="4">4</button>
+        <button class="btn digit-btn" data-value="5">5</button>
+        <button class="btn digit-btn" data-value="6">6</button>
+        <button class="btn operator-btn" data-value="*">×</button>
+        <button class="btn function-btn" data-action="summation" aria-label="Summation">Σ</button>
+        <button class="btn function-btn" data-action="product" aria-label="Product">Π</button>
 
-button {
-  height: 52px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: white;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.1s ease, background 0.2s ease;
-}
+        <!-- Row 8: Lower digit row with subtraction and calculus operations -->
+        <button class="btn digit-btn" data-value="1">1</button>
+        <button class="btn digit-btn" data-value="2">2</button>
+        <button class="btn digit-btn" data-value="3">3</button>
+        <button class="btn operator-btn" data-value="-">−</button>
+        <button class="btn function-btn" data-action="derivative" aria-label="Derivative">d/dx</button>
+        <button class="btn function-btn" data-action="integral" aria-label="Integral">∫</button>
 
-button:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
+        <!-- Row 9: Final row with zero, decimal, equals, addition, answer recall and factorial -->
+        <button class="btn digit-btn" data-value="0">0</button>
+        <button class="btn digit-btn" data-value=".">.</button>
+        <button class="btn equals-btn" data-action="equals" aria-label="Equals">=</button>
+        <button class="btn operator-btn" data-value="+">+</button>
+        <button class="btn function-btn" data-action="answer" aria-label="Use previous answer">Ans</button>
+        <button class="btn function-btn" data-action="factorial" aria-label="Factorial">!</button>
+      </div>
 
-button:active {
-  transform: scale(0.96);
-}
+      <!-- History panel: hidden by default -->
+      <div id="history-panel" class="history-panel" aria-label="Calculation history" aria-hidden="true">
+        <h2>History</h2>
+        <ul id="history-list"></ul>
+      </div>
+    </div>
 
-.operator {
-  background: rgba(0, 140, 255, 0.35);
-}
-
-.equal {
-  background: rgba(0, 200, 120, 0.45);
-  grid-column: span 2;
-}
-
-.clear {
-  background: rgba(255, 80, 80, 0.45);
-}
-
-@media (max-width: 420px) {
-  .calculator {
-    width: 92%;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<div class="calculator">
-  <div class="display">
-    <div id="prev"></div>
-    <div id="display">0</div>
-  </div>
-
-  <div class="buttons">
-    <button class="clear" onclick="clearAll()">C</button>
-    <button onclick="backspace()">⌫</button>
-    <button onclick="append('(')">(</button>
-    <button onclick="append(')')">)</button>
-
-    <button onclick="append('sin(')">sin</button>
-    <button onclick="append('cos(')">cos</button>
-    <button onclick="append('tan(')">tan</button>
-    <button onclick="append('^')" class="operator">^</button>
-
-    <button onclick="append('7')">7</button>
-    <button onclick="append('8')">8</button>
-    <button onclick="append('9')">9</button>
-    <button onclick="append('/')" class="operator">÷</button>
-
-    <button onclick="append('4')">4</button>
-    <button onclick="append('5')">5</button>
-    <button onclick="append('6')">6</button>
-    <button onclick="append('*')" class="operator">×</button>
-
-    <button onclick="append('1')">1</button>
-    <button onclick="append('2')">2</button>
-    <button onclick="append('3')">3</button>
-    <button onclick="append('-')" class="operator">−</button>
-
-    <button onclick="append('0')">0</button>
-    <button onclick="append('.')">.</button>
-    <button onclick="append('+')" class="operator">+</button>
-    <button onclick="evaluateExpr()" class="equal">=</button>
-  </div>
-</div>
-
-<script>
-let expression = "0";
-let memory = 0;
-
-const display = document.getElementById("display");
-const prev = document.getElementById("prev");
-
-function update(prevText = "") {
-  display.textContent = expression;
-  prev.textContent = prevText;
-}
-
-function append(val) {
-  if (expression === "0" && /[0-9.(]/.test(val)) {
-    expression = val;
-  } else {
-    expression += val;
-  }
-  update();
-}
-
-function clearAll() {
-  expression = "0";
-  update("");
-}
-
-function backspace() {
-  expression = expression.length > 1 ? expression.slice(0, -1) : "0";
-  update();
-}
-
-function factorial(n) {
-  n = Number(n);
-  if (!Number.isInteger(n) || n < 0) return NaN;
-  let r = 1;
-  for (let i = 2; i <= n; i++) r *= i;
-  return r;
-}
-
-function toRadians(x) {
-  return x * Math.PI / 180;
-}
-
-function log10(x) {
-  return Math.log(x) / Math.LN10;
-}
-
-function autoCloseParens(expr) {
-  const open = (expr.match(/\(/g) || []).length;
-  const close = (expr.match(/\)/g) || []).length;
-  return expr + ")".repeat(Math.max(0, open - close));
-}
-
-function parseExpression(expr) {
-  let s = expr.replace(/\s+/g, "");
-
-  s = s.replace(/π/g, "Math.PI");
-  s = s.replace(/(^|[^a-zA-Z])e([^a-zA-Z]|$)/g, "$1Math.E$2");
-
-  s = s.replace(/sin\(/g, "Math.sin(toRadians(");
-  s = s.replace(/cos\(/g, "Math.cos(toRadians(");
-  s = s.replace(/tan\(/g, "Math.tan(toRadians(");
-
-  s = s.replace(/log\(/g, "log10(");
-  s = s.replace(/ln\(/g, "Math.log(");
-  s = s.replace(/sqrt\(/g, "Math.sqrt(");
-  s = s.replace(/abs\(/g, "Math.abs(");
-  s = s.replace(/exp\(/g, "Math.exp(");
-
-  while (/(\d+|\([^()]*\))!/.test(s)) {
-    s = s.replace(/(\d+|\([^()]*\))!/g, "factorial($1)");
-  }
-
-  s = s.replace(/\^/g, "**");
-
-  return autoCloseParens(s);
-}
-
-function evaluateExprToNumber(expr) {
-  return Function(
-    "factorial",
-    "toRadians",
-    "log10",
-    "Math",
-    `"use strict"; return (${parseExpression(expr)});`
-  )(factorial, toRadians, log10, Math);
-}
-
-function evaluateExpr() {
-  try {
-    const result = evaluateExprToNumber(expression);
-    if (!isFinite(result)) throw 0;
-    update(expression + " =");
-    expression = String(result);
-  } catch {
-    expression = "Error";
-    update("");
-    setTimeout(clearAll, 1000);
-  }
-}
-
-document.addEventListener("keydown", e => {
-  if ("0123456789.+-*/()^!".includes(e.key)) append(e.key);
-  if (e.key === "Enter") evaluateExpr();
-  if (e.key === "Backspace") backspace();
-  if (e.key === "Escape") clearAll();
-});
-
-update();
-</script>
-
-</body>
+    <script src="calculator.js"></script>
+  </body>
 </html>
