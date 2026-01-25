@@ -1,62 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Sudoku Theme Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
 
-<div class="app">
-  <h1>Sudoku Theme Generator</h1>
-  <p class="subtitle">Design custom Sudoku grid styles in real time</p>
-
-  <div class="layout">
-
-    <!-- CONTROL PANEL -->
-    <div class="panel">
-      <label>
-        Cell Background
-        <input type="color" id="cellBg" value="#7a28c8">
-      </label>
-
-      <label>
-        Grid Line Color
-        <input type="color" id="gridLine" value="#ffffff">
-      </label>
-
-      <label>
-        Text Color
-        <input type="color" id="textColor" value="#ffffff">
-      </label>
-
-      <label>
-        Thick Line Size
-        <input type="range" id="thickSize" min="2" max="8" value="4">
-      </label>
-
-      <button class="btn glass">Glass</button>
-      <button class="btn neon">Neon</button>
-      <button class="btn minimal">Minimal</button>
-      <button class="btn export">Export CSS</button>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">◻︎</div>
+      <div>
+        <h1>Sudoku Theme Generator</h1>
+        <p class="sub">Design neon, glass, rainbow & 3D Sudoku themes — export CSS instantly.</p>
+      </div>
     </div>
 
-    <!-- SUDOKU GRID -->
-    <table class="sudoku">
-      <tbody>
-        <!-- 9x9 grid -->
-        <!-- Each row -->
-        ${[...Array(9)].map(() => `
-        <tr>
-          ${[...Array(9)].map(() => `<td>1</td>`).join("")}
-        </tr>`).join("")}
-      </tbody>
-    </table>
+    <div class="top-actions">
+      <button class="btn btn-ghost" id="btnRandom">Randomize</button>
+      <button class="btn btn-ghost" id="btnSaveLocal">Save</button>
+      <button class="btn btn-primary" id="btnReset">Reset</button>
+    </div>
+  </header>
 
-  </div>
-</div>
+  <main class="layout">
+    <!-- Controls -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Theme</h2>
+        <div class="row">
+          <label class="field">
+            <span>Preset</span>
+            <select id="preset">
+              <option value="glassmorphic">Glassmorphic</option>
+              <option value="frosted">Frosted Glass</option>
+              <option value="neon">Neon</option>
+              <option value="rainbow">Rainbow (Animated)</option>
+              <option value="neumorphism">Neumorphism</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="minimal">Minimal</option>
+              <option value="paper">Paper</option>
+              <option value="arcade">Arcade</option>
+            </select>
+          </label>
 
-<script src="script.js"></script>
+          <label class="field">
+            <span>Font</span>
+            <select id="font">
+              <option value="system">System</option>
+              <option value="mono">Mono</option>
+              <option value="rounded">Rounded</option>
+              <option value="display">Display</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <label class="field">
+          <span>Background</span>
+          <input type="color" id="bgColor" value="#0b1020" />
+        </label>
+
+        <label class="field">
+          <span>Accent</span>
+          <input type="color" id="accent" value="#7dd3fc" />
+        </label>
+
+        <label class="field">
+          <span>Cell Background</span>
+          <input type="color" id="cellBg" value="#0f172a" />
+        </label>
+
+        <label class="field">
+          <span>Cell Text</span>
+          <input type="color" id="cellText" value="#e2e8f0" />
+        </label>
+
+        <label class="field">
+          <span>Grid Line</span>
+          <input type="color" id="lineColor" value="#94a3b8" />
+        </label>
+
+        <label class="field">
+          <span>Thick Line</span>
+          <input type="color" id="thickLineColor" value="#e2e8f0" />
+        </label>
+      </div>
+
+      <hr class="sep" />
+
+      <h3>Geometry</h3>
+      <div class="grid2">
+        <label class="field">
+          <span>Thin Line (px)</span>
+          <input type="range" id="thinW" min="1" max="6" value="1" />
+          <span class="val" id="thinWVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Thick Line (px)</span>
+          <input type="range" id="thickW" min="2" max="10" value="4" />
+          <span class="val" id="thickWVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Cell Radius (px)</span>
+          <input type="range" id="radius" min="0" max="16" value="8" />
+          <span class="val" id="radiusVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Cell Padding (px)</span>
+          <input type="range" id="cellPad" min="4" max="18" value="8" />
+          <span class="val" id="cellPadVal"></span>
+        </label>
+      </div>
+
+      <hr class="sep" />
+
+      <h3>Effects</h3>
+      <div class="toggles">
+        <label class="toggle">
+          <input type="checkbox" id="glass" checked />
+          <span>Glass Blur</span>
+        </label>
+
+        <label class="toggle">
+          <input type="checkbox" id="glow" checked />
+          <span>Neon Glow</span>
+        </label>
+
+        <label class="toggle">
+          <input type="checkbox" id="raised" checked />
+          <span>3D / Raised Surface</span>
+        </label>
+
+        <label class="toggle">
+          <input type="checkbox" id="rainbowAnim" />
+          <span>Rainbow Animation</span>
+        </label>
+      </div>
+
+      <div class="grid2">
+        <label class="field">
+          <span>Blur (px)</span>
+          <input type="range" id="blur" min="0" max="24" value="12" />
+          <span class="val" id="blurVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Glow (0–1)</span>
+          <input type="range" id="glowAmt" min="0" max="100" value="55" />
+          <span class="val" id="glowAmtVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Shadow Depth</span>
+          <input type="range" id="depth" min="0" max="24" value="14" />
+          <span class="val" id="depthVal"></span>
+        </label>
+
+        <label class="field">
+          <span>Background Gradient</span>
+          <select id="bgStyle">
+            <option value="radial">Radial</option>
+            <option value="aurora">Aurora</option>
+            <option value="linear">Linear</option>
+            <option value="solid">Solid</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="notice" id="contrastNote" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- Preview -->
+    <section class="preview">
+      <div class="preview-card">
+        <div class="preview-head">
+          <div>
+            <h2>Live Preview</h2>
+            <p class="sub2">Theme applies to grid + buttons. Export below.</p>
+          </div>
+          <div class="button-row">
+            <button class="sbtn sbtn-primary">Primary</button>
+            <button class="sbtn sbtn-secondary">Secondary</button>
+            <button class="sbtn sbtn-ghost">Ghost</button>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="sudoku" id="sudoku" aria-label="Sudoku preview board"></div>
+        </div>
+
+        <div class="exports">
+          <div class="export-box">
+            <div class="export-head">
+              <h3>Export CSS</h3>
+              <button class="btn btn-ghost" id="copyCss">Copy</button>
+            </div>
+            <textarea id="cssOut" spellcheck="false"></textarea>
+          </div>
+
+          <div class="export-box">
+            <div class="export-head">
+              <h3>Export / Import JSON</h3>
+              <div class="mini-actions">
+                <button class="btn btn-ghost" id="copyJson">Copy</button>
+                <button class="btn btn-ghost" id="applyJson">Apply</button>
+              </div>
+            </div>
+            <textarea id="jsonOut" spellcheck="false"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <footer class="foot">
+        <span>Tip: paste the exported CSS into your Sudoku site and apply the class <code>.sudoku-theme</code> to the container.</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
