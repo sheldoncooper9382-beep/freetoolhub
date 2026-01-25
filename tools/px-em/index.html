@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PX ⇄ EM Converter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">↔</div>
+        <div>
+          <h1>PX ⇄ EM Converter</h1>
+          <p class="sub">Convert px to em (and em to px) using a base font size.</p>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip">Glass UI</span>
+        <span class="chip">Instant</span>
+        <span class="chip">Copy</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: CONTROLS -->
+      <section class="panel">
+        <div class="panelHead">
+          <h2>🧮 Converter Controls</h2>
+          <p>Set your base (context) font size, then enter either px or em.</p>
+        </div>
+
+        <div class="grid2">
+          <label class="field">
+            <span>Base Font Size (px)</span>
+            <input id="basePx" type="number" step="0.1" value="16" />
+          </label>
+
+          <label class="field">
+            <span>Round To (decimals)</span>
+            <input id="roundTo" type="number" step="1" min="0" max="8" value="3" />
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <label class="field">
+          <span>PX</span>
+          <input id="pxIn" type="number" step="0.01" value="16" />
+        </label>
+
+        <label class="field">
+          <span>EM</span>
+          <input id="emIn" type="number" step="0.0001" value="1" />
+        </label>
+
+        <div class="actions">
+          <button id="swapBtn" class="btn subtle" type="button">⇄ Swap Values</button>
+          <button id="resetBtn" class="btn subtle" type="button">↺ Reset</button>
+          <button id="copyEmBtn" class="btn" type="button">Copy EM</button>
+          <button id="copyPxBtn" class="btn" type="button">Copy PX</button>
+        </div>
+
+        <div class="miniNote">
+          <strong>Formula:</strong>
+          <div class="mono">em = px ÷ base</div>
+          <div class="mono">px = em × base</div>
+        </div>
+      </section>
+
+      <!-- RIGHT: PREVIEW + OUTPUT -->
+      <section class="stack">
+        <section class="panel previewPanel">
+          <div class="panelHead row">
+            <h2>👀 Live Preview</h2>
+            <div class="pill" id="statusPill">Ready</div>
+          </div>
+
+          <div class="previewStage">
+            <div class="previewBox">
+              <div class="previewBadge">Preview</div>
+              <div class="previewTitle">Sample Text</div>
+              <div id="sampleText" class="previewText">
+                The quick brown fox jumps over the lazy dog.
+              </div>
+              <button class="previewBtn" type="button">Button</button>
+            </div>
+          </div>
+
+          <div class="previewMeta">
+            <div class="kv">
+              <span class="k">Base</span>
+              <span class="v" id="metaBase">16px</span>
+            </div>
+            <div class="kv">
+              <span class="k">PX</span>
+              <span class="v" id="metaPx">16px</span>
+            </div>
+            <div class="kv">
+              <span class="k">EM</span>
+              <span class="v mono" id="metaEm">1em</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panelHead row">
+            <h2>📄 Output</h2>
+            <button id="copyAllBtn" class="btn small" type="button">Copy</button>
+          </div>
+
+          <pre class="code"><code id="outCode"></code></pre>
+
+          <div class="hint">
+            Use <code>em</code> for sizing relative to the current element’s font-size (context).
+            If you want relative to root, use <code>rem</code>.
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>PX ⇄ EM Converter • Vanilla HTML/CSS/JS</span>
+      <span class="muted">Works on GitHub Pages</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
