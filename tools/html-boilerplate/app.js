@@ -97,16 +97,11 @@
     return pretty ? "  ".repeat(level) : "";
   }
 
-  function nl(pretty) {
-    return pretty ? "\n" : "";
-  }
-
   function buildHtml() {
     const v = readValues();
     const pretty = v.prettyIndent;
 
     const lines = [];
-    const N = () => lines.push("");
 
     lines.push("<!DOCTYPE html>");
     lines.push(`<html lang="${escapeAttr(v.lang)}">`);
@@ -143,13 +138,12 @@
   .container { width: min(1100px, calc(100% - 32px)); margin: 0 auto; }
   header, main, footer { padding: 24px 0; }
   a { color: inherit; }
+  .skip-link { position:absolute; left:-9999px; top:auto; }
+  .skip-link:focus{ left:16px; top:16px; padding:10px 12px; background:#000; color:#fff; z-index:999; }
 </style>`);
     }
 
-    // Push head lines with indentation
-    for (const h of head) {
-      lines.push(indent(1, pretty) + h);
-    }
+    for (const h of head) lines.push(indent(1, pretty) + h);
 
     lines.push("</head>");
     lines.push("<body>");
@@ -157,10 +151,8 @@
     if (v.includeSkipLink) {
       if (v.includeComments) lines.push(indent(1, pretty) + "<!-- Accessibility: skip link -->");
       lines.push(indent(1, pretty) + `<a class="skip-link" href="#main">Skip to content</a>`);
-      if (v.includeInlineStyle) {
-        // already styled by user; keep skip-link class minimal
-      } else {
-        if (v.includeComments) lines.push(indent(1, pretty) + "<!-- Add CSS for .skip-link in your stylesheet -->");
+      if (!v.includeInlineStyle && v.includeComments) {
+        lines.push(indent(1, pretty) + "<!-- Add CSS for .skip-link in your stylesheet -->");
       }
     }
 
@@ -174,24 +166,26 @@
     if (v.includeHeaderMainFooter) {
       if (wrapOpen) lines.push(indent(1, pretty) + wrapOpen);
 
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `<header>`);
-      if (v.includeComments) lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<!-- Site header -->`);
-      lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<h1>${escapeText(v.pageTitle)}</h1>`);
-      lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<p>${escapeText(v.description)}</p>`);
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `</header>`);
+      const baseLevel = 1 + (wrapOpen ? 1 : 0);
 
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `<main id="main">`);
-      if (v.includeComments) lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<!-- Main content -->`);
-      lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<section>`);
-      lines.push(indent(3 + (wrapOpen ? 1 : 0), pretty) + `<h2>Hello, world 👋</h2>`);
-      lines.push(indent(3 + (wrapOpen ? 1 : 0), pretty) + `<p>Edit this template to get started.</p>`);
-      lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `</section>`);
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `</main>`);
+      lines.push(indent(baseLevel, pretty) + `<header>`);
+      if (v.includeComments) lines.push(indent(baseLevel + 1, pretty) + `<!-- Site header -->`);
+      lines.push(indent(baseLevel + 1, pretty) + `<h1>${escapeText(v.pageTitle)}</h1>`);
+      lines.push(indent(baseLevel + 1, pretty) + `<p>${escapeText(v.description)}</p>`);
+      lines.push(indent(baseLevel, pretty) + `</header>`);
 
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `<footer>`);
-      if (v.includeComments) lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<!-- Site footer -->`);
-      lines.push(indent(2 + (wrapOpen ? 1 : 0), pretty) + `<small>&copy; ${new Date().getFullYear()} ${escapeText(v.pageTitle)}</small>`);
-      lines.push(indent(1 + (wrapOpen ? 1 : 0), pretty) + `</footer>`);
+      lines.push(indent(baseLevel, pretty) + `<main id="main">`);
+      if (v.includeComments) lines.push(indent(baseLevel + 1, pretty) + `<!-- Main content -->`);
+      lines.push(indent(baseLevel + 1, pretty) + `<section>`);
+      lines.push(indent(baseLevel + 2, pretty) + `<h2>Hello, world 👋</h2>`);
+      lines.push(indent(baseLevel + 2, pretty) + `<p>Edit this template to get started.</p>`);
+      lines.push(indent(baseLevel + 1, pretty) + `</section>`);
+      lines.push(indent(baseLevel, pretty) + `</main>`);
+
+      lines.push(indent(baseLevel, pretty) + `<footer>`);
+      if (v.includeComments) lines.push(indent(baseLevel + 1, pretty) + `<!-- Site footer -->`);
+      lines.push(indent(baseLevel + 1, pretty) + `<small>&copy; ${new Date().getFullYear()} ${escapeText(v.pageTitle)}</small>`);
+      lines.push(indent(baseLevel, pretty) + `</footer>`);
 
       if (wrapClose) lines.push(indent(1, pretty) + wrapClose);
     } else {
@@ -208,15 +202,22 @@
     lines.push("</body>");
     lines.push("</html>");
 
-    // If not pretty, compress minimal newlines
     return pretty ? lines.join("\n") : lines.join("").replaceAll("><", ">\n<");
   }
 
   function escapeAttr(s) {
-    return String(s).replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
+
   function escapeText(s) {
-    return String(s).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+    return String(s)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
 
   function readValues() {
@@ -259,16 +260,31 @@
     }
   }
 
+  function currentHtml() {
+    return buildHtml();
+  }
+
   function render() {
-    const html = buildHtml();
+    const html = currentHtml();
     outputCode.innerHTML = escapeHtml(html);
     charCount.textContent = `${html.length} chars`;
     updatePreview(html);
   }
 
+  // ✅ FIX: Inject a <base> tag so relative paths (style.css/app.js) work in iframe srcdoc
   function updatePreview(html) {
-    // Use srcdoc so preview does not need file access.
-    previewFrame.srcdoc = html;
+    const baseHref = location.href.replace(/[#?].*$/, "");
+    const baseTag = `<base href="${baseHref}">`;
+
+    let patched = html;
+
+    if (/<head[^>]*>/i.test(patched)) {
+      patched = patched.replace(/<head[^>]*>/i, (m) => `${m}\n  ${baseTag}`);
+    } else {
+      patched = `${baseTag}\n` + patched;
+    }
+
+    previewFrame.srcdoc = patched;
   }
 
   async function copyText(text) {
@@ -276,7 +292,6 @@
       await navigator.clipboard.writeText(text);
       showToast("Copied ✅");
     } catch {
-      // Fallback
       const ta = document.createElement("textarea");
       ta.value = text;
       ta.style.position = "fixed";
@@ -309,8 +324,7 @@
     showToast._t = setTimeout(() => toast.classList.remove("show"), 1400);
   }
 
-  // Tiny ZIP generator (no libs) — "store" only
-  // Enough for small starter bundles.
+  // Tiny ZIP generator (store only)
   function crc32(buf) {
     let crc = ~0;
     for (let i = 0; i < buf.length; i++) {
@@ -320,15 +334,11 @@
     return ~crc >>> 0;
   }
 
-  function strToU8(s) {
-    return new TextEncoder().encode(s);
-  }
-
+  function strToU8(s) { return new TextEncoder().encode(s); }
   function u16(n) { return [n & 255, (n >>> 8) & 255]; }
   function u32(n) { return [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255]; }
 
   function buildZip(files) {
-    // files: [{name, data(Uint8Array)}]
     const local = [];
     const central = [];
     let offset = 0;
@@ -338,60 +348,57 @@
       const data = f.data;
       const crc = crc32(data);
 
-      // Local file header
       const lh = [];
-      lh.push(...u32(0x04034b50)); // signature
-      lh.push(...u16(20)); // version needed
-      lh.push(...u16(0)); // flags
-      lh.push(...u16(0)); // compression 0=store
-      lh.push(...u16(0)); // mod time
-      lh.push(...u16(0)); // mod date
+      lh.push(...u32(0x04034b50));
+      lh.push(...u16(20));
+      lh.push(...u16(0));
+      lh.push(...u16(0));
+      lh.push(...u16(0));
+      lh.push(...u16(0));
       lh.push(...u32(crc));
-      lh.push(...u32(data.length)); // compressed size
-      lh.push(...u32(data.length)); // uncompressed size
+      lh.push(...u32(data.length));
+      lh.push(...u32(data.length));
       lh.push(...u16(nameU8.length));
-      lh.push(...u16(0)); // extra len
+      lh.push(...u16(0));
 
       local.push(new Uint8Array(lh), nameU8, data);
 
-      // Central directory header
       const ch = [];
-      ch.push(...u32(0x02014b50)); // signature
-      ch.push(...u16(20)); // version made by
-      ch.push(...u16(20)); // version needed
-      ch.push(...u16(0)); // flags
-      ch.push(...u16(0)); // compression
-      ch.push(...u16(0)); // mod time
-      ch.push(...u16(0)); // mod date
+      ch.push(...u32(0x02014b50));
+      ch.push(...u16(20));
+      ch.push(...u16(20));
+      ch.push(...u16(0));
+      ch.push(...u16(0));
+      ch.push(...u16(0));
+      ch.push(...u16(0));
       ch.push(...u32(crc));
       ch.push(...u32(data.length));
       ch.push(...u32(data.length));
       ch.push(...u16(nameU8.length));
-      ch.push(...u16(0)); // extra
-      ch.push(...u16(0)); // comment
-      ch.push(...u16(0)); // disk start
-      ch.push(...u16(0)); // internal attrs
-      ch.push(...u32(0)); // external attrs
-      ch.push(...u32(offset)); // local header offset
+      ch.push(...u16(0));
+      ch.push(...u16(0));
+      ch.push(...u16(0));
+      ch.push(...u16(0));
+      ch.push(...u32(0));
+      ch.push(...u32(offset));
 
       central.push(new Uint8Array(ch), nameU8);
 
       offset += lh.length + nameU8.length + data.length;
     }
 
-    // End of central directory
     const centralSize = central.reduce((n, part) => n + part.length, 0);
     const centralOffset = offset;
 
     const end = [];
-    end.push(...u32(0x06054b50)); // signature
-    end.push(...u16(0)); // disk
-    end.push(...u16(0)); // start disk
+    end.push(...u32(0x06054b50));
+    end.push(...u16(0));
+    end.push(...u16(0));
     end.push(...u16(files.length));
     end.push(...u16(files.length));
     end.push(...u32(centralSize));
     end.push(...u32(centralOffset));
-    end.push(...u16(0)); // comment len
+    end.push(...u16(0));
 
     const parts = [...local, ...central, new Uint8Array(end)];
     const total = parts.reduce((n, p) => n + p.length, 0);
@@ -425,7 +432,6 @@
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
 
-  // Events
   function wireInputs() {
     const all = Object.values(inputs);
     for (const el of all) {
@@ -434,26 +440,18 @@
     }
   }
 
-  function currentHtml() {
-    return buildHtml();
-  }
-
   copyHtmlBtn.addEventListener("click", () => copyText(currentHtml()));
   copyInlineBtn.addEventListener("click", () => copyText(currentHtml()));
   copyPreviewBtn.addEventListener("click", () => copyText(currentHtml()));
 
-  downloadHtmlBtn.addEventListener("click", () => {
-    downloadText("index.html", currentHtml());
-  });
+  downloadHtmlBtn.addEventListener("click", () => downloadText("index.html", currentHtml()));
 
   refreshPreviewBtn.addEventListener("click", () => {
     updatePreview(currentHtml());
     showToast("Preview refreshed");
   });
 
-  openPreviewBtn.addEventListener("click", () => {
-    openPreviewInNewTab(currentHtml());
-  });
+  openPreviewBtn.addEventListener("click", () => openPreviewInNewTab(currentHtml()));
 
   resetBtn.addEventListener("click", () => {
     setValues(DEFAULTS);
@@ -498,7 +496,6 @@
     });
   });
 
-  // Init
   wireInputs();
   setValues(DEFAULTS);
   render();
