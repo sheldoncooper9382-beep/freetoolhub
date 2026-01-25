@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HTML Boilerplate Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg"></div>
+
+  <header class="topbar glass">
+    <div class="brand">
+      <div class="logo">⌁</div>
+      <div>
+        <h1>HTML Boilerplate Generator</h1>
+        <p>Build a clean starter template + copy or download instantly.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="copyHtmlBtn" type="button">Copy HTML</button>
+      <button class="btn" id="downloadHtmlBtn" type="button">Download HTML</button>
+      <button class="btn btn-ghost" id="resetBtn" type="button">Reset</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="grid">
+      <!-- CONTROLS -->
+      <aside class="panel glass">
+        <h2>Options</h2>
+
+        <div class="group">
+          <label class="field">
+            <span>Page title</span>
+            <input id="pageTitle" type="text" value="My Website" />
+          </label>
+
+          <label class="field">
+            <span>Language</span>
+            <input id="lang" type="text" value="en" />
+          </label>
+
+          <label class="field">
+            <span>Description</span>
+            <input id="description" type="text" value="A modern static site." />
+          </label>
+
+          <label class="field">
+            <span>Theme color</span>
+            <input id="themeColor" type="text" value="#7dd3fc" />
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="group">
+          <h3>Meta & Head</h3>
+
+          <label class="check">
+            <input id="metaViewport" type="checkbox" checked />
+            <span>Viewport meta</span>
+          </label>
+
+          <label class="check">
+            <input id="metaCharset" type="checkbox" checked />
+            <span>Charset meta</span>
+          </label>
+
+          <label class="check">
+            <input id="metaDescription" type="checkbox" checked />
+            <span>Description meta</span>
+          </label>
+
+          <label class="check">
+            <input id="metaThemeColor" type="checkbox" checked />
+            <span>Theme-color meta</span>
+          </label>
+
+          <label class="check">
+            <input id="metaRobots" type="checkbox" />
+            <span>Robots meta (index,follow)</span>
+          </label>
+
+          <label class="check">
+            <input id="includeFavicon" type="checkbox" />
+            <span>Favicon link</span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="group">
+          <h3>Assets</h3>
+
+          <label class="check">
+            <input id="includeCss" type="checkbox" checked />
+            <span>Link CSS file</span>
+          </label>
+
+          <div class="row">
+            <label class="field">
+              <span>CSS path</span>
+              <input id="cssPath" type="text" value="style.css" />
+            </label>
+          </div>
+
+          <label class="check">
+            <input id="includeJs" type="checkbox" checked />
+            <span>Script JS file (defer)</span>
+          </label>
+
+          <div class="row">
+            <label class="field">
+              <span>JS path</span>
+              <input id="jsPath" type="text" value="app.js" />
+            </label>
+          </div>
+
+          <label class="check">
+            <input id="includeCdnFont" type="checkbox" />
+            <span>Google Font (Inter)</span>
+          </label>
+
+          <label class="check">
+            <input id="includePreconnect" type="checkbox" />
+            <span>Preconnect for Google Fonts</span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="group">
+          <h3>Body Scaffold</h3>
+
+          <label class="check">
+            <input id="includeHeaderMainFooter" type="checkbox" checked />
+            <span>Header / Main / Footer layout</span>
+          </label>
+
+          <label class="check">
+            <input id="includeSkipLink" type="checkbox" checked />
+            <span>Skip to content link (a11y)</span>
+          </label>
+
+          <label class="check">
+            <input id="includeNoscript" type="checkbox" />
+            <span>Noscript message</span>
+          </label>
+
+          <label class="check">
+            <input id="includeContainer" type="checkbox" checked />
+            <span>Centered container</span>
+          </label>
+
+          <label class="check">
+            <input id="includeInlineStyle" type="checkbox" />
+            <span>Inline minimal CSS (quick start)</span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="group">
+          <h3>Formatting</h3>
+          <label class="check">
+            <input id="prettyIndent" type="checkbox" checked />
+            <span>Pretty indent output</span>
+          </label>
+
+          <label class="check">
+            <input id="includeComments" type="checkbox" checked />
+            <span>Helpful comments</span>
+          </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="group">
+          <button class="btn btn-wide" id="copyPreviewBtn" type="button">Copy Preview</button>
+          <button class="btn btn-wide btn-ghost" id="downloadBundleBtn" type="button">Download Starter Bundle (.zip)</button>
+          <p class="hint">Bundle includes: index.html + optional style.css/app.js placeholders.</p>
+        </div>
+      </aside>
+
+      <!-- OUTPUT -->
+      <section class="output">
+        <div class="tabs">
+          <button class="tab active" data-tab="code" type="button">Generated HTML</button>
+          <button class="tab" data-tab="preview" type="button">Live Preview</button>
+        </div>
+
+        <div class="pane glass" id="codePane">
+          <div class="paneTop">
+            <div class="meta">
+              <span class="pill">Output</span>
+              <span class="pill" id="charCount">0 chars</span>
+            </div>
+            <div class="paneBtns">
+              <button class="btn btn-ghost" id="copyInlineBtn" type="button">Copy</button>
+            </div>
+          </div>
+
+          <pre class="code"><code id="outputCode"></code></pre>
+        </div>
+
+        <div class="pane glass hidden" id="previewPane">
+          <div class="paneTop">
+            <div class="meta">
+              <span class="pill">Preview</span>
+              <span class="pill">Sandboxed iframe</span>
+            </div>
+            <div class="paneBtns">
+              <button class="btn btn-ghost" id="refreshPreviewBtn" type="button">Refresh</button>
+              <button class="btn btn-ghost" id="openPreviewBtn" type="button">Open in New Tab</button>
+            </div>
+          </div>
+
+          <iframe id="previewFrame" title="HTML Preview" sandbox="allow-scripts allow-forms allow-popups"></iframe>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Built with vanilla HTML/CSS/JS — perfect for GitHub Pages.</span>
+  </footer>
+
+  <div class="toast" id="toast" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
