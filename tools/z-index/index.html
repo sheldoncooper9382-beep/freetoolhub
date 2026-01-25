@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CSS Z-Index Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">⧉</div>
+        <div>
+          <h1>CSS Z-Index Visualizer</h1>
+          <p class="sub">Understand stacking order with interactive layers, z-index, position, and stacking contexts.</p>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip">Glass UI</span>
+        <span class="chip">Drag Layers</span>
+        <span class="chip">CSS Output</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- LEFT: CONTROLS -->
+      <section class="panel">
+        <div class="panelHead">
+          <h2>🧱 Layers</h2>
+          <p>Add elements, change <code>z-index</code>, and see the real stacking order update.</p>
+        </div>
+
+        <div class="actions">
+          <button id="addBtn" class="btn" type="button">+ Add Layer</button>
+          <button id="resetBtn" class="btn subtle" type="button">↺ Reset</button>
+          <button id="helpBtn" class="btn subtle" type="button">?</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="field">
+          <span>Stage (container) stacking context</span>
+          <label class="toggle">
+            <input id="stageContext" type="checkbox" checked />
+            <span class="track"><span class="thumb"></span></span>
+            <span class="tlabel">Enable (position + z-index + isolation)</span>
+          </label>
+          <div class="miniNote">
+            Turning this on creates a stacking context on the stage (<code>isolation:isolate</code> + positioned). Great for learning why elements “won’t come forward”.
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panelHead row" style="margin-top:6px;">
+          <h2>📋 Stack Order</h2>
+          <div class="pill" id="stackPill">—</div>
+        </div>
+
+        <div id="stackList" class="stackList" aria-label="Stacking order list"></div>
+      </section>
+
+      <!-- RIGHT: PREVIEW + OUTPUT -->
+      <section class="stack">
+        <section class="panel previewPanel">
+          <div class="panelHead row">
+            <h2>👀 Live Stage</h2>
+            <div class="pill" id="activePill">No layer selected</div>
+          </div>
+
+          <div class="stageWrap">
+            <div id="stage" class="stage" aria-label="z-index stage"></div>
+          </div>
+
+          <div id="layerEditor" class="editor" hidden>
+            <div class="editorTop">
+              <div class="editorTitle">
+                <strong id="edName">Layer</strong>
+                <span class="muted">Edit selected layer</span>
+              </div>
+              <div class="editorBtns">
+                <button id="bringFrontBtn" class="btn small" type="button">Bring Front</button>
+                <button id="sendBackBtn" class="btn small subtle" type="button">Send Back</button>
+                <button id="dupBtn" class="btn small subtle" type="button">Duplicate</button>
+                <button id="delBtn" class="btn small danger" type="button">Delete</button>
+              </div>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span>Z-Index</span>
+                <input id="edZ" type="number" step="1" />
+              </label>
+
+              <label class="field">
+                <span>Position</span>
+                <select id="edPos">
+                  <option value="static">static</option>
+                  <option value="relative">relative</option>
+                  <option value="absolute" selected>absolute</option>
+                  <option value="fixed">fixed</option>
+                  <option value="sticky">sticky</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span>Opacity</span>
+                <input id="edOpacity" type="range" min="0.05" max="1" step="0.01" />
+              </label>
+              <label class="field">
+                <span>Transform (creates stacking context)</span>
+                <select id="edTransform">
+                  <option value="none">none</option>
+                  <option value="translateZ(0)">translateZ(0)</option>
+                  <option value="translateY(-6px)">translateY(-6px)</option>
+                  <option value="scale(1.02)">scale(1.02)</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span>Top (px)</span>
+                <input id="edTop" type="number" step="1" />
+              </label>
+              <label class="field">
+                <span>Left (px)</span>
+                <input id="edLeft" type="number" step="1" />
+              </label>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span>Width (px)</span>
+                <input id="edW" type="number" step="1" />
+              </label>
+              <label class="field">
+                <span>Height (px)</span>
+                <input id="edH" type="number" step="1" />
+              </label>
+            </div>
+
+            <div class="grid2">
+              <label class="field">
+                <span>Label</span>
+                <input id="edLabel" type="text" placeholder="Layer label..." />
+              </label>
+              <label class="field">
+                <span>Pointer Events</span>
+                <select id="edPointer">
+                  <option value="auto">auto</option>
+                  <option value="none">none</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="miniNote">
+              Note: <code>z-index</code> only applies to positioned elements (not <code>static</code>), and stacking contexts (like <code>transform</code>, <code>opacity</code>, <code>isolation</code>) can “trap” children.
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panelHead row">
+            <h2>📄 CSS Output</h2>
+            <button id="copyAllBtn" class="btn small" type="button">Copy</button>
+          </div>
+          <pre class="code"><code id="cssOut"></code></pre>
+          <div class="hint">
+            This output includes the stage + each layer’s class. Use it to reproduce the stacking behavior.
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Z-Index Visualizer • Vanilla HTML/CSS/JS</span>
+      <span class="muted">Works on GitHub Pages</span>
+    </footer>
+  </div>
+
+  <div id="helpModal" class="modal" hidden>
+    <div class="modalCard">
+      <div class="modalHead">
+        <strong>How stacking works (quick rules)</strong>
+        <button id="closeHelp" class="xbtn" type="button">✕</button>
+      </div>
+      <ul class="modalList">
+        <li><code>z-index</code> only affects positioned elements (<code>relative/absolute/fixed/sticky</code>), not <code>static</code>.</li>
+        <li>Higher <code>z-index</code> sits on top — but only within the same stacking context.</li>
+        <li>Stacking contexts can be created by: <code>transform</code>, <code>opacity &lt; 1</code>, <code>isolation:isolate</code>, <code>position + z-index</code>, etc.</li>
+        <li>If an element “won’t go above” another, it’s often trapped in a different stacking context.</li>
+      </ul>
+      <div class="modalActions">
+        <button id="closeHelp2" class="btn" type="button">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
