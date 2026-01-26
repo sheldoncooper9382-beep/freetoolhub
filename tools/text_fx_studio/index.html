@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Text FX Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div id="noise-overlay"></div>
+  <header class="topbar">
+    <div class="title">Text FX Studio</div>
+    <div class="actions">
+      <button id="randomBtn" class="btn">Randomize</button>
+      <button id="resetBtn" class="btn">Reset</button>
+      <div class="export-wrapper">
+        <button id="exportBtn" class="btn">Export ▼</button>
+        <div id="exportMenu" class="export-menu hidden" role="menu">
+          <button data-scale="1" class="export-option">Export 1x</button>
+          <button data-scale="2" class="export-option">Export 2x</button>
+          <button data-scale="4" class="export-option">Export 4x</button>
+          <button data-scale="1" data-transparent="true" class="export-option">Export Transparent</button>
+          <button id="copyBtn" class="export-option">Copy to Clipboard</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <aside class="panel controls">
+      <div class="control-group">
+        <label for="textInput">Text</label>
+        <textarea id="textInput" class="text-input" rows="3" placeholder="Enter your text"></textarea>
+      </div>
+      <div class="control-group">
+        <label for="fontSize">Font Size</label>
+        <input id="fontSize" data-key="fontSize" type="range" min="24" max="200" step="1">
+      </div>
+      <div class="control-group">
+        <label for="fontWeight">Font Weight</label>
+        <input id="fontWeight" data-key="fontWeight" type="range" min="100" max="900" step="100">
+      </div>
+      <div class="control-group">
+        <label for="lineHeight">Line Height</label>
+        <input id="lineHeight" data-key="lineHeight" type="range" min="1" max="2" step="0.05">
+      </div>
+      <div class="control-group">
+        <label for="letterSpacing">Letter Spacing</label>
+        <input id="letterSpacing" data-key="letterSpacing" type="range" min="-10" max="50" step="1">
+      </div>
+      <div class="control-group">
+        <label for="outlineSize">Outline Size</label>
+        <input id="outlineSize" data-key="outlineSize" type="range" min="0" max="20" step="0.5">
+      </div>
+      <div class="control-group">
+        <label for="shadowBlur">Shadow Blur</label>
+        <input id="shadowBlur" data-key="shadowBlur" type="range" min="0" max="100" step="1">
+      </div>
+      <div class="control-group">
+        <label for="shadowOffsetX">Shadow Offset X</label>
+        <input id="shadowOffsetX" data-key="shadowOffsetX" type="range" min="-100" max="100" step="1">
+      </div>
+      <div class="control-group">
+        <label for="shadowOffsetY">Shadow Offset Y</label>
+        <input id="shadowOffsetY" data-key="shadowOffsetY" type="range" min="-100" max="100" step="1">
+      </div>
+      <div class="control-group separator"></div>
+      <div class="control-group">
+        <label for="shineIntensity">Shine Intensity</label>
+        <input id="shineIntensity" data-key="shineIntensity" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group">
+        <label for="bevelDepth">Bevel Depth</label>
+        <input id="bevelDepth" data-key="bevelDepth" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group">
+        <label for="edgeSoftness">Edge Softness</label>
+        <input id="edgeSoftness" data-key="edgeSoftness" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group">
+        <label for="distortionAmount">Distortion Amount</label>
+        <input id="distortionAmount" data-key="distortionAmount" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group">
+        <label for="textureAmount">Texture Amount</label>
+        <input id="textureAmount" data-key="textureAmount" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group">
+        <label for="glowStrength">Glow Strength</label>
+        <input id="glowStrength" data-key="glowStrength" type="range" min="0" max="1" step="0.01">
+      </div>
+      <div class="control-group checkbox-group">
+        <label><input type="checkbox" id="transparentBg" data-key="backgroundTransparent"> Transparent Background</label>
+      </div>
+      <div class="control-group checkbox-group">
+        <label><input type="checkbox" id="lowPower" data-key="lowPowerMode"> Low Power Mode</label>
+      </div>
+      <div class="control-group">
+        <h2>Presets</h2>
+        <div id="presetsGrid" class="presets-grid"></div>
+      </div>
+    </aside>
+    <main class="panel preview">
+      <div class="device">
+        <canvas id="previewCanvas" width="800" height="600"></canvas>
+      </div>
+    </main>
+  </div>
+  <footer class="bottombar">
+    <div class="tips">Use the sliders to customize your effect.</div>
+    <div class="fps" id="fpsCounter">0&nbsp;fps</div>
+  </footer>
+</body>
+</html>
