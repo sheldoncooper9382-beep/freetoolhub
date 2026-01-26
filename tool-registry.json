@@ -93,7 +93,8 @@
   { "name": "Code Diff Viewer", "description": "Compare code versions visually", "icon": "🔀", "path": "tools/code-diff/" },
   { "name": "Sudoku Theme Generator", "description": "Generate Sudoku Faces","icon": "🔲", "path": "tools/sudoku/" },
  { "name": "Text Fx Generator", "description": "Generate Text Effects", "icon": "✨", "path": "tools/text-fx/" }
-}
+]
+
 
 
 
